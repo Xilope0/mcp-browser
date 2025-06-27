@@ -378,7 +378,7 @@ async def start_daemon_background(args):
     
     # Redirect stdout/stderr to log file
     log_dir = socket_path.parent / "logs"
-    log_dir.mkdir(exist_ok=True)
+    log_dir.mkdir(parents=True, exist_ok=True)
     log_file = log_dir / f"mcp-browser-{args.server or 'default'}.log"
     
     with open(log_file, 'a') as log:
