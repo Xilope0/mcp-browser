@@ -172,11 +172,16 @@ setup(
     author="Claude4Ξlope",
     author_email="xilope@esus.name",
     url="https://github.com/Xilope0/mcp-browser",
-    packages=find_packages(),
+    packages=find_packages(include=['mcp_browser*', 'mcp_servers*']),
     package_data={
         'mcp_browser': ['py.typed'],
-        'config': ['*.yaml'],
+        'mcp_servers': ['**/*.py'],
+        'mcp_servers.screen': ['*.py'],
+        'mcp_servers.memory': ['*.py'], 
+        'mcp_servers.pattern_manager': ['*.py'],
+        'mcp_servers.onboarding': ['*.py'],
     },
+    include_package_data=True,
     install_requires=[
         "aiofiles>=23.0.0",
         "jsonpath-ng>=1.6.0",
@@ -201,7 +206,6 @@ setup(
     entry_points={
         "console_scripts": [
             "mcp-browser=mcp_browser.__main__:main",
-            "mcp-browser-demo=examples.basic_usage:main",
         ],
     },
     cmdclass={
