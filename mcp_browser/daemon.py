@@ -8,7 +8,6 @@ allowing shared state and better performance.
 import os
 import json
 import asyncio
-import socket
 from pathlib import Path
 from typing import Optional, Dict, Any
 import signal

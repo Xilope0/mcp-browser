@@ -8,14 +8,11 @@ import sys
 import asyncio
 import argparse
 import json
-import signal
 from pathlib import Path
 from typing import Optional, Dict, Any
-import yaml
 
 from .proxy import MCPBrowser
 from .config import ConfigLoader
-from .default_configs import ConfigManager
 from .daemon import MCPBrowserDaemon, MCPBrowserClient, get_socket_path, is_daemon_running, kill_daemon_with_children
 from .logging_config import setup_logging, get_logger
 
@@ -695,7 +692,7 @@ Environment:
     subparsers = parser.add_subparsers(dest="command", help="MCP methods")
     
     # tools/list command
-    list_tools = subparsers.add_parser("tools-list", help="List available tools")
+    subparsers.add_parser("tools-list", help="List available tools")
     
     # tools/call command
     call_tool = subparsers.add_parser("tools-call", help="Call a tool")
@@ -703,14 +700,14 @@ Environment:
     call_tool.add_argument("arguments", help="Tool arguments as JSON")
     
     # resources/list command
-    list_resources = subparsers.add_parser("resources-list", help="List available resources")
+    subparsers.add_parser("resources-list", help="List available resources")
     
     # resources/read command
     read_resource = subparsers.add_parser("resources-read", help="Read a resource")
     read_resource.add_argument("uri", help="Resource URI")
     
     # prompts/list command
-    list_prompts = subparsers.add_parser("prompts-list", help="List available prompts")
+    subparsers.add_parser("prompts-list", help="List available prompts")
     
     # prompts/get command
     get_prompt = subparsers.add_parser("prompts-get", help="Get a prompt")
@@ -762,7 +759,7 @@ Environment:
     if args.log_level == "TRACE" and config_path is None:
         from .config import ConfigLoader
         loader = ConfigLoader()
-        config = loader.load()
+        loader.load()
         # TRACE level shows raw I/O
     
     browser = MCPBrowser(

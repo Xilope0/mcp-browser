@@ -9,7 +9,6 @@ This client can:
 4. Act as MCP server (stdin/stdout)
 """
 
-import os
 import sys
 import asyncio
 import argparse
@@ -22,7 +21,6 @@ from typing import Optional, Dict, Any
 from .proxy import MCPBrowser
 from .daemon import MCPBrowserClient, get_socket_path, is_daemon_running
 from .logging_config import setup_logging, get_logger
-from .config import ConfigLoader
 
 
 def start_daemon_if_needed(server_name: Optional[str] = None, timeout: float = 5.0) -> bool:
@@ -259,7 +257,7 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="Commands")
     
     # tools/list
-    tools_list = subparsers.add_parser("tools-list", help="List available tools")
+    subparsers.add_parser("tools-list", help="List available tools")
     
     # tools/call
     tools_call = subparsers.add_parser("tools-call", help="Call a tool")

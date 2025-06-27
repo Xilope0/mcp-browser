@@ -70,6 +70,16 @@ class JSONRPCTestClient:
 async def test_basic_flow():
     """Test basic JSON-RPC flow."""
     async with JSONRPCTestClient() as client:
+        # First initialize the connection
+        print("Initializing connection...")
+        init_response = await client.send_request("initialize", {
+            "protocolVersion": "2024-11-05",
+            "capabilities": {},
+            "clientInfo": {"name": "test-client", "version": "1.0.0"}
+        })
+        assert init_response.get("result", {}).get("protocolVersion") == "2024-11-05"
+        print("✓ Initialized successfully")
+        
         # Test 1: List tools (should show sparse tools)
         print("Test 1: Listing tools...")
         response = await client.send_request("tools/list")
