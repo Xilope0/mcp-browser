@@ -12,13 +12,14 @@ from pathlib import Path
 
 from .server import MCPServer
 from .config import MCPServerConfig
+from .logging_config import get_logger
 
 
 class MultiServerManager:
     """Manages multiple MCP servers."""
     
-    def __init__(self, debug: bool = False):
-        self.debug = debug
+    def __init__(self, logger=None):
+        self.logger = logger or get_logger(__name__)
         self.servers: Dict[str, MCPServer] = {}
         self.builtin_servers = self._get_builtin_servers()
         
@@ -52,15 +53,14 @@ class MultiServerManager:
     async def start_builtin_servers(self):
         """Start all built-in servers."""
         for name, config in self.builtin_servers.items():
-            if self.debug:
-                print(f"Starting built-in server: {name}")
+            self.logger.info(f"Starting built-in server: {name}")
             
-            server = MCPServer(config, debug=self.debug)
-            await server.start()
-            self.servers[name] = server
-            
-            # Initialize each server
+            server = MCPServer(config, logger=get_logger(__name__, name))
             try:
+                await server.start()
+                self.servers[name] = server
+                
+                # Initialize each server
                 await server.send_request("initialize", {
                     "protocolVersion": "0.1.0",
                     "capabilities": {},
@@ -69,16 +69,16 @@ class MultiServerManager:
                         "version": "0.1.0"
                     }
                 })
+                self.logger.info(f"Successfully initialized {name}")
             except Exception as e:
-                if self.debug:
-                    print(f"Failed to initialize {name}: {e}")
+                self.logger.error(f"Failed to initialize {name}: {e}")
     
     async def add_server(self, name: str, config: MCPServerConfig):
         """Add and start a custom server."""
         if name in self.servers:
             raise ValueError(f"Server {name} already exists")
         
-        server = MCPServer(config, debug=self.debug)
+        server = MCPServer(config, logger=get_logger(__name__, name))
         await server.start()
         self.servers[name] = server
         
@@ -113,8 +113,7 @@ class MultiServerManager:
                 all_tools.extend(tools)
                 
             except Exception as e:
-                if self.debug:
-                    print(f"Failed to get tools from {server_name}: {e}")
+                self.logger.warning(f"Failed to get tools from {server_name}: {e}")
         
         return all_tools
     
@@ -150,8 +149,7 @@ class MultiServerManager:
     async def stop_all(self):
         """Stop all servers."""
         for name, server in self.servers.items():
-            if self.debug:
-                print(f"Stopping server: {name}")
+            self.logger.info(f"Stopping server: {name}")
             await server.stop()
         
         self.servers.clear()

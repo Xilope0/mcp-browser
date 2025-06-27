@@ -28,7 +28,7 @@ except ImportError:
                 return False
 
 from .proxy import MCPBrowser
-from .utils import debug_print, debug_json
+from .logging_config import get_logger
 
 
 class MCPBrowserDaemon:
@@ -40,6 +40,7 @@ class MCPBrowserDaemon:
         self.server: Optional[asyncio.Server] = None
         self._running = False
         self._clients: set = set()
+        self.logger = get_logger(__name__)
         
     async def start(self):
         """Start the daemon server."""
@@ -69,8 +70,8 @@ class MCPBrowserDaemon:
         signal.signal(signal.SIGTERM, self._signal_handler)
         signal.signal(signal.SIGINT, self._signal_handler)
         
-        debug_print(f"MCP Browser daemon started on {self.socket_path}")
-        debug_print(f"PID: {os.getpid()}")
+        self.logger.info(f"MCP Browser daemon started on {self.socket_path}")
+        self.logger.info(f"PID: {os.getpid()}")
         
         # Initialize browser
         await self.browser.initialize()
@@ -81,7 +82,7 @@ class MCPBrowserDaemon:
     
     def _signal_handler(self, signum, frame):
         """Handle shutdown signals."""
-        debug_print(f"\nReceived signal {signum}, shutting down...")
+        self.logger.info(f"Received signal {signum}, shutting down...")
         self._running = False
         if self.server:
             self.server.close()
@@ -90,7 +91,7 @@ class MCPBrowserDaemon:
     async def _handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         """Handle a client connection."""
         client_addr = writer.get_extra_info('peername')
-        debug_print(f"Client connected: {client_addr}")
+        self.logger.debug(f"Client connected: {client_addr}")
         self._clients.add(writer)
         
         try:
@@ -112,12 +113,12 @@ class MCPBrowserDaemon:
         except asyncio.CancelledError:
             pass
         except Exception as e:
-            debug_print(f"Client error: {e}")
+            self.logger.error(f"Client error: {e}")
         finally:
             self._clients.discard(writer)
             writer.close()
             await writer.wait_closed()
-            debug_print(f"Client disconnected: {client_addr}")
+            self.logger.debug(f"Client disconnected: {client_addr}")
     
     async def _process_request(self, line: str, writer: asyncio.StreamWriter):
         """Process a JSON-RPC request from client."""
@@ -126,7 +127,7 @@ class MCPBrowserDaemon:
             
             # Add debug output if configured
             if self.browser.config and self.browser.config.debug:
-                debug_json("Daemon received", request)
+                self.logger.debug(f"Daemon received: {json.dumps(request)}")
             
             # Forward to browser
             response = await self.browser.call(request)
@@ -137,7 +138,7 @@ class MCPBrowserDaemon:
             await writer.drain()
             
             if self.browser.config and self.browser.config.debug:
-                debug_print(f"Daemon sent: {response_str.strip()}")
+                self.logger.debug(f"Daemon sent: {response_str.strip()}")
                 
         except json.JSONDecodeError as e:
             error_response = {

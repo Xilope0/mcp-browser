@@ -16,7 +16,7 @@ from .multi_server import MultiServerManager
 from .registry import ToolRegistry
 from .filter import MessageFilter, VirtualToolHandler
 from .buffer import JsonRpcBuffer
-from .utils import debug_print, debug_json
+from .logging_config import get_logger, TRACE
 
 
 class MCPBrowser:
@@ -50,6 +50,7 @@ class MCPBrowser:
         self._initialized = False
         self._response_buffer: Dict[Union[str, int], asyncio.Future] = {}
         self._next_id = 1
+        self.logger = get_logger(__name__)
         
     async def __aenter__(self):
         """Async context manager entry."""
@@ -77,12 +78,12 @@ class MCPBrowser:
         
         # Create multi-server manager if using built-in servers
         if self._enable_builtin_servers:
-            self.multi_server = MultiServerManager(debug=self.config.debug)
+            self.multi_server = MultiServerManager(logger=self.logger)
             await self.multi_server.start_builtin_servers()
         
         # Create main server if specified
         if server_name != "builtin-only":
-            self.server = MCPServer(server_config, debug=self.config.debug)
+            self.server = MCPServer(server_config, logger=get_logger(__name__, server_name))
             # Set up message handling
             self.server.add_message_handler(self._handle_server_message)
             # Start server
@@ -209,22 +210,21 @@ class MCPBrowser:
                 }
             }
         
-        # Debug output
-        if self.config.debug:
-            debug_json("MCP Browser sending", jsonrpc_object)
+        # Log at trace level for raw I/O
+        raw_request = json.dumps(jsonrpc_object)
+        self.logger.log(TRACE, f">>> {self._server_name}: {raw_request}")
         
         # Create future for response
         future = asyncio.Future()
         self._response_buffer[request_id] = future
         
         # Send to server
-        self.server.send_raw(json.dumps(jsonrpc_object))
+        self.server.send_raw(raw_request)
         
         # Wait for response
         try:
             response = await asyncio.wait_for(future, timeout=self.config.timeout)
-            if self.config.debug:
-                debug_json("MCP Browser received", response)
+            self.logger.log(TRACE, f"<<< {self._server_name}: {json.dumps(response)}")
             return response
         except asyncio.TimeoutError:
             del self._response_buffer[request_id]

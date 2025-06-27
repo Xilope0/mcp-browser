@@ -14,26 +14,37 @@ from pathlib import Path
 
 from .buffer import JsonRpcBuffer
 from .config import MCPServerConfig
-from .utils import debug_print, debug_json
+from .logging_config import get_logger, TRACE
+import logging
 
 
 class MCPServer:
     """Manages a single MCP server process."""
     
-    def __init__(self, config: MCPServerConfig, debug: bool = False):
+    def __init__(self, config: MCPServerConfig, logger: Optional[logging.Logger] = None):
         self.config = config
-        self.debug = debug
+        self.logger = logger or get_logger(__name__)
         self.process: Optional[subprocess.Popen] = None
         self.buffer = JsonRpcBuffer()
         self._running = False
         self._message_handlers: List[Callable[[dict], None]] = []
         self._next_id = 1
         self._pending_requests: Dict[Union[str, int], asyncio.Future] = {}
+        self._last_error_time: Optional[float] = None
+        self._offline_since: Optional[float] = None
         
     async def start(self):
         """Start the MCP server process."""
         if self.process:
             return
+        
+        # Check if server is marked as offline
+        import time
+        if self._offline_since:
+            offline_duration = time.time() - self._offline_since
+            if offline_duration < 1800:  # 30 minutes
+                self.logger.warning(f"Server has been offline for {offline_duration:.0f}s, skipping start")
+                raise RuntimeError(f"Server marked as offline since {offline_duration:.0f}s ago")
         
         # Prepare environment
         env = os.environ.copy()
@@ -46,26 +57,31 @@ class MCPServer:
         # Build command
         cmd = self.config.command + self.config.args
         
-        if self.debug:
-            debug_print(f"Starting MCP server: {' '.join(cmd)}")
+        self.logger.info(f"Starting MCP server: {' '.join(cmd)}")
         
-        # Start process
-        self.process = subprocess.Popen(
-            cmd,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE if self.debug else subprocess.DEVNULL,
-            env=env,
-            text=True,
-            bufsize=0  # Unbuffered
-        )
-        
-        self._running = True
-        
-        # Start reading outputs
-        asyncio.create_task(self._read_stdout())
-        if self.debug:
+        try:
+            # Start process
+            self.process = subprocess.Popen(
+                cmd,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                env=env,
+                text=True,
+                bufsize=0  # Unbuffered
+            )
+            
+            self._running = True
+            self._offline_since = None  # Clear offline state
+            
+            # Start reading outputs
+            asyncio.create_task(self._read_stdout())
             asyncio.create_task(self._read_stderr())
+            
+        except Exception as e:
+            self.logger.error(f"Failed to start server: {e}")
+            self._mark_offline()
+            raise
     
     async def stop(self):
         """Stop the MCP server process."""
@@ -82,6 +98,12 @@ class MCPServer:
                 self.process.kill()
             
             self.process = None
+    
+    def _mark_offline(self):
+        """Mark server as offline."""
+        import time
+        self._offline_since = time.time()
+        self.logger.warning(f"Server marked as offline")
     
     async def send_request(self, method: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
@@ -116,15 +138,18 @@ class MCPServer:
         self.process.stdin.write(request_str)
         self.process.stdin.flush()
         
-        if self.debug:
-            debug_print(f"Sent: {request_str.strip()}")
+        self.logger.log(TRACE, f">>> {request_str.strip()}")
         
-        # Wait for response
+        # Wait for response with appropriate timeout
+        timeout = 3.0 if method == "initialize" or method == "tools/list" else 30.0
+        
         try:
-            response = await asyncio.wait_for(future, timeout=30.0)
+            response = await asyncio.wait_for(future, timeout=timeout)
             return response
         except asyncio.TimeoutError:
             del self._pending_requests[request_id]
+            self.logger.error(f"Timeout waiting for response to {method} (timeout={timeout}s)")
+            self._mark_offline()
             raise TimeoutError(f"No response for request {request_id}")
     
     def send_raw(self, message: str):
@@ -135,8 +160,7 @@ class MCPServer:
         if not message.endswith('\n'):
             message += '\n'
         
-        if self.debug:
-            debug_print(f"MCP Server sending: {message.strip()}")
+        self.logger.log(TRACE, f">>> {message.strip()}")
         
         self.process.stdin.write(message)
         self.process.stdin.flush()
@@ -158,8 +182,8 @@ class MCPServer:
                     await self._handle_message(msg)
                     
             except Exception as e:
-                if self.debug:
-                    debug_print(f"Error reading stdout: {e}")
+                self.logger.error(f"Error reading stdout: {e}")
+                self._mark_offline()
                 break
     
     async def _read_stderr(self):
@@ -170,15 +194,15 @@ class MCPServer:
                 if not line:
                     break
                 
-                debug_print(f"MCP stderr: {line.strip()}")
+                if line.strip():
+                    self.logger.warning(f"stderr: {line.strip()}")
                     
             except Exception:
                 break
     
     async def _handle_message(self, message: dict):
         """Handle an incoming JSON-RPC message."""
-        if self.debug:
-            debug_json("Received", message)
+        self.logger.log(TRACE, f"<<< {json.dumps(message)}")
         
         # Check if it's a response to a pending request
         msg_id = message.get("id")
@@ -195,5 +219,4 @@ class MCPServer:
             try:
                 handler(message)
             except Exception as e:
-                if self.debug:
-                    debug_print(f"Handler error: {e}")
+                self.logger.error(f"Handler error: {e}")

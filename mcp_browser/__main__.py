@@ -17,7 +17,7 @@ from .proxy import MCPBrowser
 from .config import ConfigLoader
 from .default_configs import ConfigManager
 from .daemon import MCPBrowserDaemon, MCPBrowserClient, get_socket_path, is_daemon_running
-from .utils import debug_print, debug_json
+from .logging_config import setup_logging, get_logger
 
 
 def build_mcp_request(args) -> Dict[str, Any]:
@@ -106,9 +106,10 @@ def build_mcp_request(args) -> Dict[str, Any]:
 
 def format_mcp_response(args, request: Dict[str, Any], response: Dict[str, Any]):
     """Format and print MCP response based on command."""
+    logger = get_logger(__name__)
     if args.debug:
-        debug_json("Request", request)
-        debug_json("Response", response)
+        logger.debug(f"Request: {json.dumps(request)}")
+        logger.debug(f"Response: {json.dumps(response)}")
     
     # Format output based on command
     if args.command == "tools-list" and "result" in response:
@@ -152,7 +153,7 @@ def format_mcp_response(args, request: Dict[str, Any], response: Dict[str, Any])
         elif "error" in response:
             print(f"Error: {response['error'].get('message', 'Unknown error')}")
             if args.debug:
-                debug_json("Error details", response["error"])
+                logger.debug(f"Error details: {json.dumps(response['error'])}")
         else:
             print(json.dumps(response, indent=2))
 
@@ -543,6 +544,22 @@ async def interactive_mode_with_daemon(socket_path: Path):
 
 def main():
     """Main entry point."""
+    # Parse args first to check for log configuration
+    args_parser = argparse.ArgumentParser(add_help=False)
+    args_parser.add_argument("--debug", action="store_true")
+    args_parser.add_argument("--log-level")
+    args_parser.add_argument("--log-file")
+    early_args, _ = args_parser.parse_known_args()
+    
+    # Setup logging before anything else
+    log_file = Path(early_args.log_file) if early_args.log_file else None
+    setup_logging(
+        debug=early_args.debug,
+        log_file=log_file,
+        log_level=early_args.log_level
+    )
+    
+    # Now create the full parser
     parser = argparse.ArgumentParser(
         description="MCP Browser - Universal Model Context Protocol Interface",
         epilog="""
@@ -596,6 +613,9 @@ Environment:
                        help="Test connection to specified server")
     parser.add_argument("--debug", action="store_true",
                        help="Enable debug output")
+    parser.add_argument("--log-level", choices=["TRACE", "DEBUG", "INFO", "WARNING", "ERROR"],
+                       help="Set logging level")
+    parser.add_argument("--log-file", help="Log to file instead of stderr")
     parser.add_argument("--use-daemon", action="store_true",
                        help="Automatically use daemon if available")
     parser.add_argument("--daemon-start", action="store_true",
@@ -671,6 +691,14 @@ Environment:
     
     # Create browser
     config_path = Path(args.config) if args.config else None
+    
+    # Apply log level to config if set
+    if args.log_level == "TRACE" and config_path is None:
+        from .config import ConfigLoader
+        loader = ConfigLoader()
+        config = loader.load()
+        # TRACE level shows raw I/O
+    
     browser = MCPBrowser(
         server_name=args.server,
         config_path=config_path,
