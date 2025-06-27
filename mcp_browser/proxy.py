@@ -51,6 +51,9 @@ class MCPBrowser:
         self._response_buffer: Dict[Union[str, int], asyncio.Future] = {}
         self._next_id = 1
         self.logger = get_logger(__name__)
+        self._config_watcher = None
+        self._server_configs = {}
+        self._config_mtime = None
         
     async def __aenter__(self):
         """Async context manager entry."""
@@ -96,10 +99,18 @@ class MCPBrowser:
         # Initialize connection
         await self._initialize_connection()
         
+        # Start config file watcher
+        await self._start_config_watcher()
+        
+        # Store server configs for discovery
+        self._update_server_configs()
+        
         self._initialized = True
         
     async def close(self):
         """Close the browser and stop all MCP servers."""
+        if self._config_watcher:
+            self._config_watcher.cancel()
         if self.server:
             await self.server.stop()
         if self.multi_server:
@@ -394,6 +405,62 @@ class MCPBrowser:
         """Forward a request to the MCP server and get response."""
         # This is used by the virtual tool handler for mcp_call
         return await self.call(request)
+    
+    async def _start_config_watcher(self):
+        """Start watching the config file for changes."""
+        config_path = self.config_loader.config_path
+        if not config_path.exists():
+            return
+            
+        # Store initial mtime
+        self._config_mtime = config_path.stat().st_mtime
+        
+        async def watch_config():
+            """Watch for config file changes."""
+            while True:
+                try:
+                    await asyncio.sleep(2)  # Check every 2 seconds
+                    
+                    if not config_path.exists():
+                        continue
+                        
+                    current_mtime = config_path.stat().st_mtime
+                    if current_mtime != self._config_mtime:
+                        self.logger.info("Config file changed, reloading...")
+                        self._config_mtime = current_mtime
+                        
+                        # Reload config
+                        try:
+                            new_config = self.config_loader.load()
+                            self.config = new_config
+                            self._update_server_configs()
+                            self.logger.info("Config reloaded successfully")
+                        except Exception as e:
+                            self.logger.error(f"Failed to reload config: {e}")
+                            
+                except asyncio.CancelledError:
+                    break
+                except Exception as e:
+                    self.logger.error(f"Config watcher error: {e}")
+                    await asyncio.sleep(5)
+        
+        self._config_watcher = asyncio.create_task(watch_config())
+    
+    def _update_server_configs(self):
+        """Update server configurations for discovery."""
+        self._server_configs = {}
+        
+        if self.config and self.config.servers:
+            for name, server in self.config.servers.items():
+                self._server_configs[name] = {
+                    "name": name,
+                    "description": server.description or f"MCP server: {name}",
+                    "command": server.command,
+                    "available": True
+                }
+        
+        # Update registry metadata with server info
+        self.registry._metadata["servers"] = self._server_configs
 
 
 # Convenience function for simple usage

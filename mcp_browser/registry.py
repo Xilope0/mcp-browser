@@ -65,7 +65,8 @@ class ToolRegistry:
         search_data = {
             "tools": self.raw_tool_list,
             "tool_names": self.get_all_tool_names(),
-            "metadata": self._metadata
+            "metadata": self._metadata,
+            "servers": self._metadata.get("servers", {})
         }
         
         # Execute JSONPath query
@@ -85,11 +86,12 @@ class ToolRegistry:
         Returns only essential meta-tools for discovery.
         """
         tool_count = len(self.tools)
+        server_count = len(self._metadata.get("servers", {}))
         
         sparse_tools = [
             {
                 "name": "mcp_discover",
-                "description": f"Discover available tools using JSONPath. {tool_count} tools available.",
+                "description": f"Discover available tools and servers using JSONPath. {tool_count} tools from {server_count} servers available.",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
