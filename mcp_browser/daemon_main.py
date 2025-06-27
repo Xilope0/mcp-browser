@@ -35,6 +35,16 @@ async def run_daemon(args):
     # Create and run daemon
     daemon = MCPBrowserDaemon(browser, socket_path)
     
+    # Set up signal handlers
+    loop = asyncio.get_event_loop()
+    
+    def signal_handler(signum):
+        logger.info(f"Received signal {signum}")
+        asyncio.create_task(daemon.stop())
+    
+    for sig in (signal.SIGTERM, signal.SIGINT):
+        loop.add_signal_handler(sig, signal_handler, sig)
+    
     logger.info(f"Starting MCP Browser daemon on {socket_path}")
     
     try:
@@ -118,20 +128,17 @@ def main():
         os.setsid()
         
         # Redirect stdin/stdout/stderr
-        with open(os.devnull, 'r') as devnull:
-            os.dup2(devnull.fileno(), sys.stdin.fileno())
-        with open(os.devnull, 'w') as devnull:
-            os.dup2(devnull.fileno(), sys.stdout.fileno())
+        devnull_in = open(os.devnull, 'r')
+        devnull_out = open(os.devnull, 'w')
+        
+        os.dup2(devnull_in.fileno(), sys.stdin.fileno())
+        os.dup2(devnull_out.fileno(), sys.stdout.fileno())
         if not args.log_file:
-            os.dup2(devnull.fileno(), sys.stderr.fileno())
-    
-    # Set up signal handlers
-    def signal_handler(signum, frame):
-        logger.info(f"Received signal {signum}")
-        asyncio.create_task(daemon.stop())
-    
-    signal.signal(signal.SIGTERM, signal_handler)
-    signal.signal(signal.SIGINT, signal_handler)
+            os.dup2(devnull_out.fileno(), sys.stderr.fileno())
+        
+        # Close the original file handles after dup2
+        devnull_in.close()
+        devnull_out.close()
     
     # Run the daemon
     asyncio.run(run_daemon(args))
