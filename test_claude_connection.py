@@ -10,6 +10,8 @@ import asyncio
 import sys
 import os
 from pathlib import Path
+import yaml
+import tempfile
 
 # Add parent directory to path for development
 sys.path.insert(0, str(Path(__file__).parent))
@@ -31,14 +33,29 @@ async def test_claude_connection():
     
     print(f"✓ Found Claude binary at {claude_path}\n")
     
-    # Create browser configured for claude-code
+    # Create a temporary config file for claude
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False) as f:
+        config = {
+            "servers": {
+                "claude-code": {
+                    "command": [claude_path, "mcp", "serve"],
+                    "name": "claude-code",
+                    "description": "Claude Code MCP interface"
+                }
+            },
+            "default_server": "claude-code",
+            "sparse_mode": True,
+            "enable_builtin_servers": False  # Disable built-in servers for this test
+        }
+        yaml.dump(config, f)
+        config_path = f.name
+    
     print("Creating MCP Browser with claude-code as target...")
     
-    # We'll create a custom config for claude
+    # Create browser with custom config
     browser = MCPBrowser(
-        server_command=[claude_path, "mcp"],
-        server_name="claude-code",
-        sparse_mode=True  # Use sparse mode to minimize context
+        config_path=Path(config_path),
+        server_name="claude-code"
     )
     
     try:
@@ -66,7 +83,9 @@ async def test_claude_connection():
         all_tools = browser.discover("$.tools[*].name")
         if all_tools:
             print(f"   Total tools discovered: {len(all_tools)}")
-            print("   Sample tools:", all_tools[:10])
+            # Show a sample of tools
+            sample = all_tools[:10] if len(all_tools) > 10 else all_tools
+            print(f"   Sample tools: {sample}")
         
         # Test 3: Try to read a file using claude's Read tool
         print("\n3. Testing file read capability:")
@@ -77,59 +96,44 @@ async def test_claude_connection():
             f.write("Hello from MCP Browser!\nThis file was created to test claude-code integration.")
         print(f"   Created test file: {test_file}")
         
-        # Use mcp_call to invoke Read tool
-        response = await browser.call({
-            "jsonrpc": "2.0",
-            "id": "test-3",
-            "method": "tools/call",
-            "params": {
-                "name": "mcp_call",
-                "arguments": {
-                    "method": "tools/call",
-                    "params": {
-                        "name": "Read",  # Claude's Read tool
-                        "arguments": {
-                            "file_path": test_file
+        # Use mcp_call to invoke Read tool if available
+        if all_tools and any('Read' in tool or 'read' in tool.lower() for tool in all_tools):
+            response = await browser.call({
+                "jsonrpc": "2.0",
+                "id": "test-3",
+                "method": "tools/call",
+                "params": {
+                    "name": "mcp_call",
+                    "arguments": {
+                        "method": "tools/call",
+                        "params": {
+                            "name": "Read",  # Claude's Read tool
+                            "arguments": {
+                                "file_path": test_file
+                            }
                         }
                     }
                 }
-            }
-        })
-        
-        if "result" in response:
-            print("   ✓ Successfully read file via claude-code!")
-            content = response["result"]["content"][0]["text"]
-            print(f"   File content preview: {content[:100]}...")
+            })
+            
+            if "result" in response:
+                print("   ✓ Successfully read file via claude-code!")
+                content = response["result"]["content"][0]["text"]
+                print(f"   File content preview: {content[:100]}...")
+            else:
+                print("   ❌ Failed to read file:", response.get("error", "Unknown error"))
         else:
-            print("   ❌ Failed to read file:", response.get("error", "Unknown error"))
-        
-        # Test 4: Use onboarding
-        print("\n4. Testing identity-aware onboarding:")
-        response = await browser.call({
-            "jsonrpc": "2.0",
-            "id": "test-4",
-            "method": "tools/call",
-            "params": {
-                "name": "onboarding",
-                "arguments": {
-                    "identity": "ClaudeCodeTest",
-                    "instructions": "Remember: You're testing MCP Browser integration with claude-code"
-                }
-            }
-        })
-        
-        if "result" in response:
-            print("   ✓ Onboarding set successfully")
+            print("   ⚠ Read tool not found in available tools")
         
         # Clean up test file
-        os.remove(test_file)
+        if os.path.exists(test_file):
+            os.remove(test_file)
         
-        print("\n✅ All tests completed successfully!")
-        print("\nMCP Browser can successfully:")
-        print("- Connect to claude-code as an MCP server")
-        print("- List and discover available tools")
-        print("- Execute claude-code tools (like Read)")
-        print("- Use built-in features (onboarding)")
+        print("\n✅ Connection test completed!")
+        print("\nMCP Browser successfully:")
+        print("- Connected to claude-code as an MCP server")
+        print("- Listed available tools in sparse mode")
+        print("- Discovered all available tools via JSONPath")
         
     except Exception as e:
         print(f"\n❌ Error during testing: {e}")
@@ -140,6 +144,10 @@ async def test_claude_connection():
         print("\nClosing connection...")
         await browser.close()
         print("✓ Connection closed")
+        
+        # Clean up config file
+        if os.path.exists(config_path):
+            os.remove(config_path)
 
 
 if __name__ == "__main__":

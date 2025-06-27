@@ -1,0 +1,37 @@
+# Project Structure
+
+```
+./
+  setup.py
+  test_claude_connection.py
+  test_onboarding.py
+  docs/
+  examples/
+    ai_optimized.py
+    basic_usage.py
+    builtin_servers_demo.py
+    complete_demo.py
+  tests/
+    test_basic.py
+  config/
+  mcp_servers/
+    base.py
+    screen/
+      screen_server.py
+    memory/
+      memory_server.py
+    pattern_manager/
+      pattern_server.py
+    onboarding/
+      onboarding_server.py
+  mcp_browser/
+    __init__.py
+    __main__.py
+    buffer.py
+    config.py
+    filter.py
+    multi_server.py
+    proxy.py
+    registry.py
+    server.py
+```
