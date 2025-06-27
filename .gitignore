@@ -50,6 +50,8 @@ htmlcov/
 # Documentation
 docs/_build/
 site/
+*.html
+.tags
 
 # Package managers
 pip-log.txt
