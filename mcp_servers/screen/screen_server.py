@@ -189,9 +189,22 @@ class ScreenServer(BaseMCPServer):
             if result.returncode != 0:
                 return self.content_text(f"Failed to peek at session: {result.stderr}")
             
-            # Read the output
-            with open(tmp_path, 'r') as f:
-                content = f.read()
+            # Read the output with proper encoding handling
+            try:
+                with open(tmp_path, 'rb') as f:
+                    raw_content = f.read()
+                
+                # Try to decode with UTF-8, replacing invalid sequences
+                content = raw_content.decode('utf-8', errors='replace')
+            except Exception:
+                # Fallback to reading with latin-1 which accepts all bytes
+                with open(tmp_path, 'r', encoding='latin-1') as f:
+                    content = f.read()
+            
+            # Clean ANSI escape sequences
+            import re
+            ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+            content = ansi_escape.sub('', content)
             
             # Get last N lines
             output_lines = content.strip().split('\n')
