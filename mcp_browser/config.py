@@ -11,6 +11,8 @@ from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from .default_configs import ConfigManager
+
 
 @dataclass
 class MCPServerConfig:
@@ -52,23 +54,18 @@ class ConfigLoader:
     }
     
     def __init__(self, config_path: Optional[Path] = None):
-        self.config_path = config_path or self._find_config_file()
+        self.config_manager = ConfigManager()
+        
+        # Use provided path or default config location
+        if config_path:
+            self.config_path = config_path
+        else:
+            # Ensure default config exists
+            self.config_manager.ensure_config_directory()
+            self.config_path = self.config_manager.get_config_path()
+        
         self._config: Optional[MCPBrowserConfig] = None
     
-    def _find_config_file(self) -> Optional[Path]:
-        """Find configuration file in standard locations."""
-        locations = [
-            Path.cwd() / "mcp-browser.yaml",
-            Path.cwd() / ".mcp-browser" / "config.yaml",
-            Path.home() / ".mcp-browser" / "config.yaml",
-            Path(__file__).parent.parent / "config" / "default.yaml"
-        ]
-        
-        for loc in locations:
-            if loc.exists():
-                return loc
-        
-        return None
     
     def load(self) -> MCPBrowserConfig:
         """Load configuration from file or use defaults."""
