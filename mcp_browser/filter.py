@@ -5,17 +5,18 @@ Intercepts and modifies JSON-RPC messages to implement
 sparse mode and virtual tool injection.
 """
 
+import sys
 import json
 from typing import Dict, Any, Optional, List, Callable, Union
 from .registry import ToolRegistry
 
 
 class MessageFilter:
-    """Filter and transform JSON-RPC messages for sparse mode."""
+    """Filter and transform JSON-RPC messages to always show sparse tools."""
     
     def __init__(self, registry: ToolRegistry, sparse_mode: bool = True):
         self.registry = registry
-        self.sparse_mode = sparse_mode
+        # Ignore sparse_mode parameter - always use sparse mode
         self._handled_ids: set = set()
         
     def filter_outgoing(self, message: dict) -> Optional[dict]:
@@ -48,9 +49,8 @@ class MessageFilter:
             self._handled_ids.discard(message.get("id"))
             return None
         
-        # Intercept tools/list responses for sparse mode
-        if (self.sparse_mode and 
-            message.get("id") and 
+        # ALWAYS intercept tools/list responses to show only sparse tools
+        if (message.get("id") and 
             message.get("result", {}).get("tools")):
             return self._filter_tools_response(message)
         
@@ -66,7 +66,8 @@ class MessageFilter:
         # Replace with sparse tools
         message = message.copy()
         message["result"] = message["result"].copy()
-        message["result"]["tools"] = self.registry.get_sparse_tools()
+        sparse_tools = self.registry.get_sparse_tools()
+        message["result"]["tools"] = sparse_tools
         
         return message
     

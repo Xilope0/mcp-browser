@@ -5,184 +5,537 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	Development	//
 AIAssistant	examples/ai_optimized.py	/^class AIAssistant:$/;"	c
+BaseMCPServer	build/lib/mcp_servers/base.py	/^class BaseMCPServer(ABC):$/;"	c
 BaseMCPServer	mcp_servers/base.py	/^class BaseMCPServer(ABC):$/;"	c
+ConfigLoader	build/lib/mcp_browser/config.py	/^class ConfigLoader:$/;"	c
 ConfigLoader	mcp_browser/config.py	/^class ConfigLoader:$/;"	c
+ConfigManager	build/lib/mcp_browser/default_configs.py	/^class ConfigManager:$/;"	c
+ConfigManager	mcp_browser/default_configs.py	/^class ConfigManager:$/;"	c
+DEFAULT_CONFIG	build/lib/mcp_browser/config.py	/^    DEFAULT_CONFIG = {$/;"	v	class:ConfigLoader
 DEFAULT_CONFIG	mcp_browser/config.py	/^    DEFAULT_CONFIG = {$/;"	v	class:ConfigLoader
+DEFAULT_CONFIGS	build/lib/mcp_browser/default_configs.py	/^DEFAULT_CONFIGS = {$/;"	v
+DEFAULT_CONFIGS	mcp_browser/default_configs.py	/^DEFAULT_CONFIGS = {$/;"	v
+Decision	build/lib/mcp_servers/memory/memory_server.py	/^class Decision:$/;"	c
 Decision	mcp_servers/memory/memory_server.py	/^class Decision:$/;"	c
 GenerateAIDocs	setup.py	/^class GenerateAIDocs(Command):$/;"	c
+JSONRPCTestClient	tests/test_integration.py	/^class JSONRPCTestClient:$/;"	c
+JsonRpcBuffer	build/lib/mcp_browser/buffer.py	/^class JsonRpcBuffer:$/;"	c
 JsonRpcBuffer	mcp_browser/buffer.py	/^class JsonRpcBuffer:$/;"	c
+MCPBrowser	build/lib/mcp_browser/proxy.py	/^class MCPBrowser:$/;"	c
 MCPBrowser	mcp_browser/proxy.py	/^class MCPBrowser:$/;"	c
+MCPBrowserClient	build/lib/mcp_browser/daemon.py	/^class MCPBrowserClient:$/;"	c
+MCPBrowserClient	mcp_browser/daemon.py	/^class MCPBrowserClient:$/;"	c
+MCPBrowserConfig	build/lib/mcp_browser/config.py	/^class MCPBrowserConfig:$/;"	c
 MCPBrowserConfig	mcp_browser/config.py	/^class MCPBrowserConfig:$/;"	c
+MCPBrowserDaemon	build/lib/mcp_browser/daemon.py	/^class MCPBrowserDaemon:$/;"	c
+MCPBrowserDaemon	mcp_browser/daemon.py	/^class MCPBrowserDaemon:$/;"	c
+MCPServer	build/lib/mcp_browser/server.py	/^class MCPServer:$/;"	c
 MCPServer	mcp_browser/server.py	/^class MCPServer:$/;"	c
+MCPServerConfig	build/lib/mcp_browser/config.py	/^class MCPServerConfig:$/;"	c
 MCPServerConfig	mcp_browser/config.py	/^class MCPServerConfig:$/;"	c
+MemoryServer	build/lib/mcp_servers/memory/memory_server.py	/^class MemoryServer(BaseMCPServer):$/;"	c
 MemoryServer	mcp_servers/memory/memory_server.py	/^class MemoryServer(BaseMCPServer):$/;"	c
+MessageFilter	build/lib/mcp_browser/filter.py	/^class MessageFilter:$/;"	c
 MessageFilter	mcp_browser/filter.py	/^class MessageFilter:$/;"	c
+MultiServerManager	build/lib/mcp_browser/multi_server.py	/^class MultiServerManager:$/;"	c
 MultiServerManager	mcp_browser/multi_server.py	/^class MultiServerManager:$/;"	c
+OnboardingServer	build/lib/mcp_servers/onboarding/onboarding_server.py	/^class OnboardingServer(BaseMCPServer):$/;"	c
 OnboardingServer	mcp_servers/onboarding/onboarding_server.py	/^class OnboardingServer(BaseMCPServer):$/;"	c
+Pattern	build/lib/mcp_servers/memory/memory_server.py	/^class Pattern:$/;"	c
 Pattern	mcp_servers/memory/memory_server.py	/^class Pattern:$/;"	c
+PatternServer	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^class PatternServer(BaseMCPServer):$/;"	c
 PatternServer	mcp_servers/pattern_manager/pattern_server.py	/^class PatternServer(BaseMCPServer):$/;"	c
+RawIOFilter	build/lib/mcp_browser/logging_config.py	/^class RawIOFilter(logging.Filter):$/;"	c
+RawIOFilter	mcp_browser/logging_config.py	/^class RawIOFilter(logging.Filter):$/;"	c
+ScreenServer	build/lib/mcp_servers/screen/screen_server.py	/^class ScreenServer(BaseMCPServer):$/;"	c
 ScreenServer	mcp_servers/screen/screen_server.py	/^class ScreenServer(BaseMCPServer):$/;"	c
+ServerNameAdapter	build/lib/mcp_browser/logging_config.py	/^class ServerNameAdapter(logging.LoggerAdapter):$/;"	c
+ServerNameAdapter	mcp_browser/logging_config.py	/^class ServerNameAdapter(logging.LoggerAdapter):$/;"	c
+TRACE	build/lib/mcp_browser/logging_config.py	/^TRACE = 5$/;"	v
+TRACE	mcp_browser/logging_config.py	/^TRACE = 5$/;"	v
+Task	build/lib/mcp_servers/memory/memory_server.py	/^class Task:$/;"	c
 Task	mcp_servers/memory/memory_server.py	/^class Task:$/;"	c
+TestCommand	setup.py	/^class TestCommand(Command):$/;"	c
 TestMCPBrowser	tests/test_basic.py	/^class TestMCPBrowser:$/;"	c
 TestMessageFilter	tests/test_basic.py	/^class TestMessageFilter:$/;"	c
 TestToolRegistry	tests/test_basic.py	/^class TestToolRegistry:$/;"	c
+ToolRegistry	build/lib/mcp_browser/registry.py	/^class ToolRegistry:$/;"	c
 ToolRegistry	mcp_browser/registry.py	/^class ToolRegistry:$/;"	c
+VirtualToolHandler	build/lib/mcp_browser/filter.py	/^class VirtualToolHandler:$/;"	c
 VirtualToolHandler	mcp_browser/filter.py	/^class VirtualToolHandler:$/;"	c
+__aenter__	build/lib/mcp_browser/daemon.py	/^    async def __aenter__(self):$/;"	m	class:MCPBrowserClient	file:
+__aenter__	build/lib/mcp_browser/proxy.py	/^    async def __aenter__(self):$/;"	m	class:MCPBrowser	file:
+__aenter__	mcp_browser/daemon.py	/^    async def __aenter__(self):$/;"	m	class:MCPBrowserClient	file:
 __aenter__	mcp_browser/proxy.py	/^    async def __aenter__(self):$/;"	m	class:MCPBrowser	file:
+__aenter__	tests/test_integration.py	/^    async def __aenter__(self):$/;"	m	class:JSONRPCTestClient	file:
+__aexit__	build/lib/mcp_browser/daemon.py	/^    async def __aexit__(self, exc_type, exc_val, exc_tb):$/;"	m	class:MCPBrowserClient	file:
+__aexit__	build/lib/mcp_browser/proxy.py	/^    async def __aexit__(self, exc_type, exc_val, exc_tb):$/;"	m	class:MCPBrowser	file:
+__aexit__	mcp_browser/daemon.py	/^    async def __aexit__(self, exc_type, exc_val, exc_tb):$/;"	m	class:MCPBrowserClient	file:
 __aexit__	mcp_browser/proxy.py	/^    async def __aexit__(self, exc_type, exc_val, exc_tb):$/;"	m	class:MCPBrowser	file:
+__aexit__	tests/test_integration.py	/^    async def __aexit__(self, exc_type, exc_val, exc_tb):$/;"	m	class:JSONRPCTestClient	file:
+__all__	build/lib/mcp_browser/__init__.py	/^__all__ = ["MCPBrowser"]/;"	v
 __all__	mcp_browser/__init__.py	/^__all__ = ["MCPBrowser"]/;"	v
+__author__	build/lib/mcp_browser/__init__.py	/^__author__ = "Claude4Ξlope"$/;"	v
+__author__	mcp_browser/__init__.py	/^__author__ = "Claude4Ξlope"$/;"	v
+__email__	build/lib/mcp_browser/__init__.py	/^__email__ = "xilope@esus.name"$/;"	v
+__email__	mcp_browser/__init__.py	/^__email__ = "xilope@esus.name"$/;"	v
+__init__	build/lib/mcp_browser/buffer.py	/^    def __init__(self):$/;"	m	class:JsonRpcBuffer
+__init__	build/lib/mcp_browser/config.py	/^    def __init__(self, config_path: Optional[Path] = None):$/;"	m	class:ConfigLoader
+__init__	build/lib/mcp_browser/daemon.py	/^    def __init__(self, browser: MCPBrowser, socket_path: Path):$/;"	m	class:MCPBrowserDaemon
+__init__	build/lib/mcp_browser/daemon.py	/^    def __init__(self, socket_path: Path):$/;"	m	class:MCPBrowserClient
+__init__	build/lib/mcp_browser/default_configs.py	/^    def __init__(self, config_dir: Optional[Path] = None):$/;"	m	class:ConfigManager
+__init__	build/lib/mcp_browser/filter.py	/^    def __init__(self, registry: ToolRegistry, server_callback: Callable):$/;"	m	class:VirtualToolHandler
+__init__	build/lib/mcp_browser/filter.py	/^    def __init__(self, registry: ToolRegistry, sparse_mode: bool = True):$/;"	m	class:MessageFilter
+__init__	build/lib/mcp_browser/multi_server.py	/^    def __init__(self, logger=None):$/;"	m	class:MultiServerManager
+__init__	build/lib/mcp_browser/proxy.py	/^    def __init__(self, config_path: Optional[Path] = None, server_name: Optional[str] = None,$/;"	m	class:MCPBrowser
+__init__	build/lib/mcp_browser/registry.py	/^    def __init__(self):$/;"	m	class:ToolRegistry
+__init__	build/lib/mcp_browser/server.py	/^    def __init__(self, config: MCPServerConfig, logger: Optional[logging.Logger] = None):$/;"	m	class:MCPServer
+__init__	build/lib/mcp_servers/base.py	/^    def __init__(self, name: str, version: str = "1.0.0"):$/;"	m	class:BaseMCPServer
+__init__	build/lib/mcp_servers/memory/memory_server.py	/^    def __init__(self):$/;"	m	class:MemoryServer
+__init__	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    def __init__(self):$/;"	m	class:OnboardingServer
+__init__	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    def __init__(self):$/;"	m	class:PatternServer
+__init__	build/lib/mcp_servers/screen/screen_server.py	/^    def __init__(self):$/;"	m	class:ScreenServer
 __init__	examples/ai_optimized.py	/^    def __init__(self):$/;"	m	class:AIAssistant
 __init__	mcp_browser/buffer.py	/^    def __init__(self):$/;"	m	class:JsonRpcBuffer
 __init__	mcp_browser/config.py	/^    def __init__(self, config_path: Optional[Path] = None):$/;"	m	class:ConfigLoader
+__init__	mcp_browser/daemon.py	/^    def __init__(self, browser: MCPBrowser, socket_path: Path):$/;"	m	class:MCPBrowserDaemon
+__init__	mcp_browser/daemon.py	/^    def __init__(self, socket_path: Path):$/;"	m	class:MCPBrowserClient
+__init__	mcp_browser/default_configs.py	/^    def __init__(self, config_dir: Optional[Path] = None):$/;"	m	class:ConfigManager
 __init__	mcp_browser/filter.py	/^    def __init__(self, registry: ToolRegistry, server_callback: Callable):$/;"	m	class:VirtualToolHandler
 __init__	mcp_browser/filter.py	/^    def __init__(self, registry: ToolRegistry, sparse_mode: bool = True):$/;"	m	class:MessageFilter
-__init__	mcp_browser/multi_server.py	/^    def __init__(self, debug: bool = False):$/;"	m	class:MultiServerManager
+__init__	mcp_browser/multi_server.py	/^    def __init__(self, logger=None):$/;"	m	class:MultiServerManager
 __init__	mcp_browser/proxy.py	/^    def __init__(self, config_path: Optional[Path] = None, server_name: Optional[str] = None,$/;"	m	class:MCPBrowser
 __init__	mcp_browser/registry.py	/^    def __init__(self):$/;"	m	class:ToolRegistry
-__init__	mcp_browser/server.py	/^    def __init__(self, config: MCPServerConfig, debug: bool = False):$/;"	m	class:MCPServer
+__init__	mcp_browser/server.py	/^    def __init__(self, config: MCPServerConfig, logger: Optional[logging.Logger] = None):$/;"	m	class:MCPServer
 __init__	mcp_servers/base.py	/^    def __init__(self, name: str, version: str = "1.0.0"):$/;"	m	class:BaseMCPServer
 __init__	mcp_servers/memory/memory_server.py	/^    def __init__(self):$/;"	m	class:MemoryServer
 __init__	mcp_servers/onboarding/onboarding_server.py	/^    def __init__(self):$/;"	m	class:OnboardingServer
 __init__	mcp_servers/pattern_manager/pattern_server.py	/^    def __init__(self):$/;"	m	class:PatternServer
 __init__	mcp_servers/screen/screen_server.py	/^    def __init__(self):$/;"	m	class:ScreenServer
+__init__	tests/test_integration.py	/^    def __init__(self, timeout: float = 5.0):$/;"	m	class:JSONRPCTestClient
+__license__	build/lib/mcp_browser/__init__.py	/^__license__ = "GPLv3+"$/;"	v
+__license__	mcp_browser/__init__.py	/^__license__ = "GPLv3+"$/;"	v
+__version__	build/lib/mcp_browser/__init__.py	/^__version__ = "0.1.0"$/;"	v
 __version__	mcp_browser/__init__.py	/^__version__ = "0.1.0"$/;"	v
+_add_pattern	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    async def _add_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
 _add_pattern	mcp_servers/pattern_manager/pattern_server.py	/^    async def _add_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
+_calculate_checksum	build/lib/mcp_browser/default_configs.py	/^    def _calculate_checksum(self, filepath: Path) -> str:$/;"	m	class:ConfigManager
+_calculate_checksum	mcp_browser/default_configs.py	/^    def _calculate_checksum(self, filepath: Path) -> str:$/;"	m	class:ConfigManager
+_create_session	build/lib/mcp_servers/screen/screen_server.py	/^    async def _create_session(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
 _create_session	mcp_servers/screen/screen_server.py	/^    async def _create_session(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
+_decision_add	build/lib/mcp_servers/memory/memory_server.py	/^    async def _decision_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _decision_add	mcp_servers/memory/memory_server.py	/^    async def _decision_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
+_delete_onboarding	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    async def _delete_onboarding(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
 _delete_onboarding	mcp_servers/onboarding/onboarding_server.py	/^    async def _delete_onboarding(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
+_ensure_config_file	build/lib/mcp_browser/default_configs.py	/^    def _ensure_config_file(self, filename: str, config_data: Dict[str, str]) -> None:$/;"	m	class:ConfigManager
+_ensure_config_file	mcp_browser/default_configs.py	/^    def _ensure_config_file(self, filename: str, config_data: Dict[str, str]) -> None:$/;"	m	class:ConfigManager
+_execute_command	build/lib/mcp_servers/screen/screen_server.py	/^    async def _execute_command(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
 _execute_command	mcp_servers/screen/screen_server.py	/^    async def _execute_command(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
+_execute_pattern	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    async def _execute_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
 _execute_pattern	mcp_servers/pattern_manager/pattern_server.py	/^    async def _execute_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
+_export_onboarding	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    async def _export_onboarding(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
 _export_onboarding	mcp_servers/onboarding/onboarding_server.py	/^    async def _export_onboarding(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
+_filter_tools_response	build/lib/mcp_browser/filter.py	/^    def _filter_tools_response(self, message: dict) -> dict:$/;"	m	class:MessageFilter
 _filter_tools_response	mcp_browser/filter.py	/^    def _filter_tools_response(self, message: dict) -> dict:$/;"	m	class:MessageFilter
-_find_config_file	mcp_browser/config.py	/^    def _find_config_file(self) -> Optional[Path]:$/;"	m	class:ConfigLoader
+_format_onboarding	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    def _format_onboarding(self, identity: str, data: Dict[str, Any]) -> str:$/;"	m	class:OnboardingServer
 _format_onboarding	mcp_servers/onboarding/onboarding_server.py	/^    def _format_onboarding(self, identity: str, data: Dict[str, Any]) -> str:$/;"	m	class:OnboardingServer
+_forward_to_server	build/lib/mcp_browser/proxy.py	/^    async def _forward_to_server(self, request: dict) -> dict:$/;"	m	class:MCPBrowser
 _forward_to_server	mcp_browser/proxy.py	/^    async def _forward_to_server(self, request: dict) -> dict:$/;"	m	class:MCPBrowser
+_get_builtin_servers	build/lib/mcp_browser/multi_server.py	/^    def _get_builtin_servers(self) -> Dict[str, MCPServerConfig]:$/;"	m	class:MultiServerManager
 _get_builtin_servers	mcp_browser/multi_server.py	/^    def _get_builtin_servers(self) -> Dict[str, MCPServerConfig]:$/;"	m	class:MultiServerManager
+_handle_call	build/lib/mcp_browser/filter.py	/^    async def _handle_call(self, message: dict) -> dict:$/;"	m	class:VirtualToolHandler
 _handle_call	mcp_browser/filter.py	/^    async def _handle_call(self, message: dict) -> dict:$/;"	m	class:VirtualToolHandler
+_handle_client	build/lib/mcp_browser/daemon.py	/^    async def _handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):$/;"	m	class:MCPBrowserDaemon
+_handle_client	mcp_browser/daemon.py	/^    async def _handle_client(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):$/;"	m	class:MCPBrowserDaemon
+_handle_discover	build/lib/mcp_browser/filter.py	/^    async def _handle_discover(self, message: dict) -> dict:$/;"	m	class:VirtualToolHandler
 _handle_discover	mcp_browser/filter.py	/^    async def _handle_discover(self, message: dict) -> dict:$/;"	m	class:VirtualToolHandler
+_handle_message	build/lib/mcp_browser/server.py	/^    async def _handle_message(self, message: dict):$/;"	m	class:MCPServer
 _handle_message	mcp_browser/server.py	/^    async def _handle_message(self, message: dict):$/;"	m	class:MCPServer
+_handle_onboarding	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    async def _handle_onboarding(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
 _handle_onboarding	mcp_servers/onboarding/onboarding_server.py	/^    async def _handle_onboarding(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
+_handle_server_message	build/lib/mcp_browser/proxy.py	/^    def _handle_server_message(self, message: dict):$/;"	m	class:MCPBrowser
 _handle_server_message	mcp_browser/proxy.py	/^    def _handle_server_message(self, message: dict):$/;"	m	class:MCPBrowser
+_initialize_connection	build/lib/mcp_browser/proxy.py	/^    async def _initialize_connection(self):$/;"	m	class:MCPBrowser
 _initialize_connection	mcp_browser/proxy.py	/^    async def _initialize_connection(self):$/;"	m	class:MCPBrowser
+_kill_session	build/lib/mcp_servers/screen/screen_server.py	/^    async def _kill_session(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
 _kill_session	mcp_servers/screen/screen_server.py	/^    async def _kill_session(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
+_knowledge_add	build/lib/mcp_servers/memory/memory_server.py	/^    async def _knowledge_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _knowledge_add	mcp_servers/memory/memory_server.py	/^    async def _knowledge_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
+_knowledge_get	build/lib/mcp_servers/memory/memory_server.py	/^    async def _knowledge_get(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _knowledge_get	mcp_servers/memory/memory_server.py	/^    async def _knowledge_get(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
+_list_identities	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    async def _list_identities(self) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
 _list_identities	mcp_servers/onboarding/onboarding_server.py	/^    async def _list_identities(self) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
+_list_patterns	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    async def _list_patterns(self) -> Dict[str, Any]:$/;"	m	class:PatternServer
 _list_patterns	mcp_servers/pattern_manager/pattern_server.py	/^    async def _list_patterns(self) -> Dict[str, Any]:$/;"	m	class:PatternServer
+_list_sessions	build/lib/mcp_servers/screen/screen_server.py	/^    async def _list_sessions(self) -> Dict[str, Any]:$/;"	m	class:ScreenServer
 _list_sessions	mcp_servers/screen/screen_server.py	/^    async def _list_sessions(self) -> Dict[str, Any]:$/;"	m	class:ScreenServer
+_load_json	build/lib/mcp_servers/memory/memory_server.py	/^    def _load_json(self, filename: str, default: Any) -> Any:$/;"	m	class:MemoryServer
 _load_json	mcp_servers/memory/memory_server.py	/^    def _load_json(self, filename: str, default: Any) -> Any:$/;"	m	class:MemoryServer
+_load_memory	build/lib/mcp_servers/memory/memory_server.py	/^    def _load_memory(self):$/;"	m	class:MemoryServer
 _load_memory	mcp_servers/memory/memory_server.py	/^    def _load_memory(self):$/;"	m	class:MemoryServer
+_load_patterns	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    def _load_patterns(self) -> Dict[str, Dict[str, Any]]:$/;"	m	class:PatternServer
 _load_patterns	mcp_servers/pattern_manager/pattern_server.py	/^    def _load_patterns(self) -> Dict[str, Dict[str, Any]]:$/;"	m	class:PatternServer
+_mark_offline	build/lib/mcp_browser/server.py	/^    def _mark_offline(self):$/;"	m	class:MCPServer
+_mark_offline	mcp_browser/server.py	/^    def _mark_offline(self):$/;"	m	class:MCPServer
+_matches_pattern	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    def _matches_pattern(self, text: str, trigger: List[str]) -> bool:$/;"	m	class:PatternServer
 _matches_pattern	mcp_servers/pattern_manager/pattern_server.py	/^    def _matches_pattern(self, text: str, trigger: List[str]) -> bool:$/;"	m	class:PatternServer
+_memory_summary	build/lib/mcp_servers/memory/memory_server.py	/^    async def _memory_summary(self) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _memory_summary	mcp_servers/memory/memory_server.py	/^    async def _memory_summary(self) -> Dict[str, Any]:$/;"	m	class:MemoryServer
+_merge_configs	build/lib/mcp_browser/config.py	/^    def _merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]):$/;"	m	class:ConfigLoader
 _merge_configs	mcp_browser/config.py	/^    def _merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]):$/;"	m	class:ConfigLoader
+_pattern_add	build/lib/mcp_servers/memory/memory_server.py	/^    async def _pattern_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _pattern_add	mcp_servers/memory/memory_server.py	/^    async def _pattern_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
+_pattern_resolve	build/lib/mcp_servers/memory/memory_server.py	/^    async def _pattern_resolve(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _pattern_resolve	mcp_servers/memory/memory_server.py	/^    async def _pattern_resolve(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
+_peek_session	build/lib/mcp_servers/screen/screen_server.py	/^    async def _peek_session(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
 _peek_session	mcp_servers/screen/screen_server.py	/^    async def _peek_session(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
+_process_request	build/lib/mcp_browser/daemon.py	/^    async def _process_request(self, line: str, writer: asyncio.StreamWriter):$/;"	m	class:MCPBrowserDaemon
+_process_request	mcp_browser/daemon.py	/^    async def _process_request(self, line: str, writer: asyncio.StreamWriter):$/;"	m	class:MCPBrowserDaemon
+_process_response	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    async def _process_response(self, response: Any, context: Dict[str, Any]) -> str:$/;"	m	class:PatternServer
 _process_response	mcp_servers/pattern_manager/pattern_server.py	/^    async def _process_response(self, response: Any, context: Dict[str, Any]) -> str:$/;"	m	class:PatternServer
+_process_single_response	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    async def _process_single_response(self, response: str, context: Dict[str, Any]) -> str:$/;"	m	class:PatternServer
 _process_single_response	mcp_servers/pattern_manager/pattern_server.py	/^    async def _process_single_response(self, response: str, context: Dict[str, Any]) -> str:$/;"	m	class:PatternServer
+_project_switch	build/lib/mcp_servers/memory/memory_server.py	/^    async def _project_switch(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _project_switch	mcp_servers/memory/memory_server.py	/^    async def _project_switch(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
+_read_stderr	build/lib/mcp_browser/server.py	/^    async def _read_stderr(self):$/;"	m	class:MCPServer
 _read_stderr	mcp_browser/server.py	/^    async def _read_stderr(self):$/;"	m	class:MCPServer
+_read_stdout	build/lib/mcp_browser/server.py	/^    async def _read_stdout(self):$/;"	m	class:MCPServer
 _read_stdout	mcp_browser/server.py	/^    async def _read_stdout(self):$/;"	m	class:MCPServer
+_register_tools	build/lib/mcp_servers/memory/memory_server.py	/^    def _register_tools(self):$/;"	m	class:MemoryServer
+_register_tools	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    def _register_tools(self):$/;"	m	class:OnboardingServer
+_register_tools	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    def _register_tools(self):$/;"	m	class:PatternServer
+_register_tools	build/lib/mcp_servers/screen/screen_server.py	/^    def _register_tools(self):$/;"	m	class:ScreenServer
 _register_tools	mcp_servers/memory/memory_server.py	/^    def _register_tools(self):$/;"	m	class:MemoryServer
 _register_tools	mcp_servers/onboarding/onboarding_server.py	/^    def _register_tools(self):$/;"	m	class:OnboardingServer
 _register_tools	mcp_servers/pattern_manager/pattern_server.py	/^    def _register_tools(self):$/;"	m	class:PatternServer
 _register_tools	mcp_servers/screen/screen_server.py	/^    def _register_tools(self):$/;"	m	class:ScreenServer
+_remove_pattern	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    async def _remove_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
 _remove_pattern	mcp_servers/pattern_manager/pattern_server.py	/^    async def _remove_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
+_run_command	build/lib/mcp_servers/screen/screen_server.py	/^    async def _run_command(self, cmd: List[str]) -> subprocess.CompletedProcess:$/;"	m	class:ScreenServer
 _run_command	mcp_servers/screen/screen_server.py	/^    async def _run_command(self, cmd: List[str]) -> subprocess.CompletedProcess:$/;"	m	class:ScreenServer
+_sanitize_identity	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    def _sanitize_identity(self, identity: str) -> str:$/;"	m	class:OnboardingServer
 _sanitize_identity	mcp_servers/onboarding/onboarding_server.py	/^    def _sanitize_identity(self, identity: str) -> str:$/;"	m	class:OnboardingServer
+_save_json	build/lib/mcp_servers/memory/memory_server.py	/^    def _save_json(self, filename: str, data: Any):$/;"	m	class:MemoryServer
 _save_json	mcp_servers/memory/memory_server.py	/^    def _save_json(self, filename: str, data: Any):$/;"	m	class:MemoryServer
+_save_patterns	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    def _save_patterns(self):$/;"	m	class:PatternServer
 _save_patterns	mcp_servers/pattern_manager/pattern_server.py	/^    def _save_patterns(self):$/;"	m	class:PatternServer
+_signal_handler	build/lib/mcp_browser/daemon.py	/^    def _signal_handler(self, signum, frame):$/;"	m	class:MCPBrowserDaemon
+_signal_handler	mcp_browser/daemon.py	/^    def _signal_handler(self, signum, frame):$/;"	m	class:MCPBrowserDaemon
+_task_add	build/lib/mcp_servers/memory/memory_server.py	/^    async def _task_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _task_add	mcp_servers/memory/memory_server.py	/^    async def _task_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
+_task_list	build/lib/mcp_servers/memory/memory_server.py	/^    async def _task_list(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _task_list	mcp_servers/memory/memory_server.py	/^    async def _task_list(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
+_task_update	build/lib/mcp_servers/memory/memory_server.py	/^    async def _task_update(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _task_update	mcp_servers/memory/memory_server.py	/^    async def _task_update(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
+_test_pattern	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    async def _test_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
 _test_pattern	mcp_servers/pattern_manager/pattern_server.py	/^    async def _test_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
+add_message_handler	build/lib/mcp_browser/server.py	/^    def add_message_handler(self, handler: Callable[[dict], None]):$/;"	m	class:MCPServer
 add_message_handler	mcp_browser/server.py	/^    def add_message_handler(self, handler: Callable[[dict], None]):$/;"	m	class:MCPServer
+add_server	build/lib/mcp_browser/multi_server.py	/^    async def add_server(self, name: str, config: MCPServerConfig):$/;"	m	class:MultiServerManager
 add_server	mcp_browser/multi_server.py	/^    async def add_server(self, name: str, config: MCPServerConfig):$/;"	m	class:MultiServerManager
+append	build/lib/mcp_browser/buffer.py	/^    def append(self, data: str) -> List[dict]:$/;"	m	class:JsonRpcBuffer
 append	mcp_browser/buffer.py	/^    def append(self, data: str) -> List[dict]:$/;"	m	class:JsonRpcBuffer
+args	build/lib/mcp_browser/__main__.py	/^    args = parser.parse_args()$/;"	v
+args	mcp_browser/__main__.py	/^    args = parser.parse_args()$/;"	v
+async_main	build/lib/mcp_browser/__main__.py	/^async def async_main(browser: MCPBrowser):$/;"	f
 async_main	mcp_browser/__main__.py	/^async def async_main(browser: MCPBrowser):$/;"	f
-author	setup.py	/^    author="AI Assistant",$/;"	v
-author_email	setup.py	/^    author_email="ai@anthropic.com",$/;"	v
+author	setup.py	/^    author="Claude4Ξlope",$/;"	v
+author_email	setup.py	/^    author_email="xilope@esus.name",$/;"	v
+browser	build/lib/mcp_browser/__main__.py	/^    browser = MCPBrowser($/;"	v
+browser	mcp_browser/__main__.py	/^    browser = MCPBrowser($/;"	v
+build_mcp_request	build/lib/mcp_browser/__main__.py	/^def build_mcp_request(args) -> Dict[str, Any]:$/;"	f
+build_mcp_request	mcp_browser/__main__.py	/^def build_mcp_request(args) -> Dict[str, Any]:$/;"	f
+build_request	build/lib/mcp_browser/client_main.py	/^def build_request(args) -> Dict[str, Any]:$/;"	f
+build_request	mcp_browser/client_main.py	/^def build_request(args) -> Dict[str, Any]:$/;"	f
+call	build/lib/mcp_browser/daemon.py	/^    async def call(self, request: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MCPBrowserClient
+call	build/lib/mcp_browser/proxy.py	/^    async def call(self, jsonrpc_object: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MCPBrowser
+call	mcp_browser/daemon.py	/^    async def call(self, request: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MCPBrowserClient
 call	mcp_browser/proxy.py	/^    async def call(self, jsonrpc_object: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MCPBrowser
+call_tool	build/lib/mcp_browser/__main__.py	/^    call_tool = subparsers.add_parser("tools-call", help="Call a tool")$/;"	v
+call_tool	mcp_browser/__main__.py	/^    call_tool = subparsers.add_parser("tools-call", help="Call a tool")$/;"	v
 classifiers	setup.py	/^    classifiers=[$/;"	v
+clear	build/lib/mcp_browser/buffer.py	/^    def clear(self):$/;"	m	class:JsonRpcBuffer
 clear	mcp_browser/buffer.py	/^    def clear(self):$/;"	m	class:JsonRpcBuffer
+close	build/lib/mcp_browser/daemon.py	/^    async def close(self):$/;"	m	class:MCPBrowserClient
+close	build/lib/mcp_browser/proxy.py	/^    async def close(self):$/;"	m	class:MCPBrowser
 close	examples/ai_optimized.py	/^    async def close(self):$/;"	m	class:AIAssistant
+close	mcp_browser/daemon.py	/^    async def close(self):$/;"	m	class:MCPBrowserClient
 close	mcp_browser/proxy.py	/^    async def close(self):$/;"	m	class:MCPBrowser
 cmdclass	setup.py	/^    cmdclass={$/;"	v
+completion	build/lib/mcp_browser/__main__.py	/^    completion = subparsers.add_parser("completion", help="Get completion")$/;"	v
+completion	mcp_browser/__main__.py	/^    completion = subparsers.add_parser("completion", help="Get completion")$/;"	v
+config	build/lib/mcp_browser/__main__.py	/^        config = loader.load()$/;"	v
+config	mcp_browser/__main__.py	/^        config = loader.load()$/;"	v
+config_path	build/lib/mcp_browser/__main__.py	/^        config_path=config_path,$/;"	v
+config_path	build/lib/mcp_browser/__main__.py	/^    config_path = Path(args.config) if args.config else None$/;"	v
+config_path	mcp_browser/__main__.py	/^        config_path=config_path,$/;"	v
+config_path	mcp_browser/__main__.py	/^    config_path = Path(args.config) if args.config else None$/;"	v
+connect	build/lib/mcp_browser/daemon.py	/^    async def connect(self):$/;"	m	class:MCPBrowserClient
+connect	mcp_browser/daemon.py	/^    async def connect(self):$/;"	m	class:MCPBrowserClient
+content_text	build/lib/mcp_servers/base.py	/^    def content_text(self, text: str) -> Dict[str, Any]:$/;"	m	class:BaseMCPServer
 content_text	mcp_servers/base.py	/^    def content_text(self, text: str) -> Dict[str, Any]:$/;"	m	class:BaseMCPServer
+create_browser	build/lib/mcp_browser/proxy.py	/^async def create_browser(config_path: Optional[Path] = None, $/;"	f
 create_browser	mcp_browser/proxy.py	/^async def create_browser(config_path: Optional[Path] = None, $/;"	f
+debug_json	build/lib/mcp_browser/utils.py	/^def debug_json(label: str, data: Any):$/;"	f
+debug_print	build/lib/mcp_browser/utils.py	/^def debug_print(message: str):$/;"	f
 demo_builtin_servers	examples/builtin_servers_demo.py	/^async def demo_builtin_servers():$/;"	f
 demonstrate_mcp_browser	examples/complete_demo.py	/^async def demonstrate_mcp_browser():$/;"	f
 description	setup.py	/^    description = 'Generate documentation for AI navigation'$/;"	v	class:GenerateAIDocs
+description	setup.py	/^    description = 'Run unit and integration tests'$/;"	v	class:TestCommand
 description	setup.py	/^    description="A generic MCP browser with context optimization for AI systems",$/;"	v
+discover	build/lib/mcp_browser/proxy.py	/^    def discover(self, jsonpath: str) -> Any:$/;"	m	class:MCPBrowser
+discover	build/lib/mcp_browser/registry.py	/^    def discover(self, jsonpath: str) -> Union[List[Any], Any, None]:$/;"	m	class:ToolRegistry
 discover	mcp_browser/proxy.py	/^    def discover(self, jsonpath: str) -> Any:$/;"	m	class:MCPBrowser
 discover	mcp_browser/registry.py	/^    def discover(self, jsonpath: str) -> Union[List[Any], Any, None]:$/;"	m	class:ToolRegistry
+enable_builtin_servers	build/lib/mcp_browser/__main__.py	/^        enable_builtin_servers=not args.no_builtin$/;"	v
+enable_builtin_servers	mcp_browser/__main__.py	/^        enable_builtin_servers=not args.no_builtin$/;"	v
+ensure_config_directory	build/lib/mcp_browser/default_configs.py	/^    def ensure_config_directory(self) -> None:$/;"	m	class:ConfigManager
+ensure_config_directory	mcp_browser/default_configs.py	/^    def ensure_config_directory(self) -> None:$/;"	m	class:ConfigManager
 entry_points	setup.py	/^    entry_points={$/;"	v
 execute_user_request	examples/ai_optimized.py	/^    async def execute_user_request(self, user_request: str):$/;"	m	class:AIAssistant
 extras_require	setup.py	/^    extras_require={$/;"	v
+filter	build/lib/mcp_browser/logging_config.py	/^    def filter(self, record):$/;"	m	class:RawIOFilter
+filter	mcp_browser/logging_config.py	/^    def filter(self, record):$/;"	m	class:RawIOFilter
+filter_incoming	build/lib/mcp_browser/filter.py	/^    def filter_incoming(self, message: dict) -> Optional[dict]:$/;"	m	class:MessageFilter
 filter_incoming	mcp_browser/filter.py	/^    def filter_incoming(self, message: dict) -> Optional[dict]:$/;"	m	class:MessageFilter
+filter_outgoing	build/lib/mcp_browser/filter.py	/^    def filter_outgoing(self, message: dict) -> Optional[dict]:$/;"	m	class:MessageFilter
 filter_outgoing	mcp_browser/filter.py	/^    def filter_outgoing(self, message: dict) -> Optional[dict]:$/;"	m	class:MessageFilter
 finalize_options	setup.py	/^    def finalize_options(self):$/;"	m	class:GenerateAIDocs
+finalize_options	setup.py	/^    def finalize_options(self):$/;"	m	class:TestCommand
+format_mcp_response	build/lib/mcp_browser/__main__.py	/^def format_mcp_response(args, request: Dict[str, Any], response: Dict[str, Any]):$/;"	f
+format_mcp_response	mcp_browser/__main__.py	/^def format_mcp_response(args, request: Dict[str, Any], response: Dict[str, Any]):$/;"	f
+format_response	build/lib/mcp_browser/client_main.py	/^def format_response(args, response: Dict[str, Any]):$/;"	f
+format_response	mcp_browser/client_main.py	/^def format_response(args, response: Dict[str, Any]):$/;"	f
+formatter_class	build/lib/mcp_browser/__main__.py	/^        formatter_class=argparse.RawDescriptionHelpFormatter$/;"	v
+formatter_class	mcp_browser/__main__.py	/^        formatter_class=argparse.RawDescriptionHelpFormatter$/;"	v
 generate_api_summary	setup.py	/^    def generate_api_summary(self):$/;"	m	class:GenerateAIDocs
 generate_structure_doc	setup.py	/^    def generate_structure_doc(self):$/;"	m	class:GenerateAIDocs
+get_all_tool_names	build/lib/mcp_browser/registry.py	/^    def get_all_tool_names(self) -> List[str]:$/;"	m	class:ToolRegistry
 get_all_tool_names	mcp_browser/registry.py	/^    def get_all_tool_names(self) -> List[str]:$/;"	m	class:ToolRegistry
+get_all_tools	build/lib/mcp_browser/multi_server.py	/^    async def get_all_tools(self) -> List[Dict[str, Any]]:$/;"	m	class:MultiServerManager
 get_all_tools	mcp_browser/multi_server.py	/^    async def get_all_tools(self) -> List[Dict[str, Any]]:$/;"	m	class:MultiServerManager
+get_config_path	build/lib/mcp_browser/default_configs.py	/^    def get_config_path(self) -> Path:$/;"	m	class:ConfigManager
+get_config_path	mcp_browser/default_configs.py	/^    def get_config_path(self) -> Path:$/;"	m	class:ConfigManager
+get_logger	build/lib/mcp_browser/logging_config.py	/^def get_logger(name: str, server: Optional[str] = None) -> logging.Logger:$/;"	f
+get_logger	mcp_browser/logging_config.py	/^def get_logger(name: str, server: Optional[str] = None) -> logging.Logger:$/;"	f
+get_onboarding_path	build/lib/mcp_browser/default_configs.py	/^    def get_onboarding_path(self) -> Path:$/;"	m	class:ConfigManager
+get_onboarding_path	mcp_browser/default_configs.py	/^    def get_onboarding_path(self) -> Path:$/;"	m	class:ConfigManager
+get_onboarding_text	build/lib/mcp_browser/default_configs.py	/^    def get_onboarding_text(self, identity: Optional[str] = None) -> str:$/;"	m	class:ConfigManager
+get_onboarding_text	mcp_browser/default_configs.py	/^    def get_onboarding_text(self, identity: Optional[str] = None) -> str:$/;"	m	class:ConfigManager
+get_patterns_dir	build/lib/mcp_browser/default_configs.py	/^    def get_patterns_dir(self) -> Path:$/;"	m	class:ConfigManager
+get_patterns_dir	mcp_browser/default_configs.py	/^    def get_patterns_dir(self) -> Path:$/;"	m	class:ConfigManager
+get_prompt	build/lib/mcp_browser/__main__.py	/^    get_prompt = subparsers.add_parser("prompts-get", help="Get a prompt")$/;"	v
+get_prompt	mcp_browser/__main__.py	/^    get_prompt = subparsers.add_parser("prompts-get", help="Get a prompt")$/;"	v
+get_socket_path	build/lib/mcp_browser/daemon.py	/^def get_socket_path(server_name: Optional[str] = None) -> Path:$/;"	f
+get_socket_path	mcp_browser/daemon.py	/^def get_socket_path(server_name: Optional[str] = None) -> Path:$/;"	f
+get_sparse_tools	build/lib/mcp_browser/registry.py	/^    def get_sparse_tools(self) -> List[Dict[str, Any]]:$/;"	m	class:ToolRegistry
 get_sparse_tools	mcp_browser/registry.py	/^    def get_sparse_tools(self) -> List[Dict[str, Any]]:$/;"	m	class:ToolRegistry
+get_tool	build/lib/mcp_browser/registry.py	/^    def get_tool(self, name: str) -> Optional[Dict[str, Any]]:$/;"	m	class:ToolRegistry
 get_tool	mcp_browser/registry.py	/^    def get_tool(self, name: str) -> Optional[Dict[str, Any]]:$/;"	m	class:ToolRegistry
+handle_mcp_command	build/lib/mcp_browser/__main__.py	/^async def handle_mcp_command(args):$/;"	f
+handle_mcp_command	mcp_browser/__main__.py	/^async def handle_mcp_command(args):$/;"	f
+handle_request	build/lib/mcp_servers/base.py	/^    async def handle_request(self, request: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:BaseMCPServer
 handle_request	mcp_servers/base.py	/^    async def handle_request(self, request: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:BaseMCPServer
+handle_systemd_socket	build/lib/mcp_browser/daemon_main.py	/^def handle_systemd_socket():$/;"	f
+handle_systemd_socket	mcp_browser/daemon_main.py	/^def handle_systemd_socket():$/;"	f
+handle_tool_call	build/lib/mcp_browser/filter.py	/^    async def handle_tool_call(self, message: dict) -> Optional[dict]:$/;"	m	class:VirtualToolHandler
+handle_tool_call	build/lib/mcp_servers/base.py	/^    async def handle_tool_call(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:BaseMCPServer
+handle_tool_call	build/lib/mcp_servers/memory/memory_server.py	/^    async def handle_tool_call(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
+handle_tool_call	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    async def handle_tool_call(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
+handle_tool_call	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    async def handle_tool_call(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
+handle_tool_call	build/lib/mcp_servers/screen/screen_server.py	/^    async def handle_tool_call(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
 handle_tool_call	mcp_browser/filter.py	/^    async def handle_tool_call(self, message: dict) -> Optional[dict]:$/;"	m	class:VirtualToolHandler
 handle_tool_call	mcp_servers/base.py	/^    async def handle_tool_call(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:BaseMCPServer
 handle_tool_call	mcp_servers/memory/memory_server.py	/^    async def handle_tool_call(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 handle_tool_call	mcp_servers/onboarding/onboarding_server.py	/^    async def handle_tool_call(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
 handle_tool_call	mcp_servers/pattern_manager/pattern_server.py	/^    async def handle_tool_call(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
 handle_tool_call	mcp_servers/screen/screen_server.py	/^    async def handle_tool_call(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
+help	build/lib/mcp_browser/__main__.py	/^                       help="Automatically use daemon if available")$/;"	v
+help	build/lib/mcp_browser/__main__.py	/^                       help="Check daemon status")$/;"	v
+help	build/lib/mcp_browser/__main__.py	/^                       help="Disable built-in servers (screen, memory, patterns)")$/;"	v
+help	build/lib/mcp_browser/__main__.py	/^                       help="Disable sparse mode (show all tools)")$/;"	v
+help	build/lib/mcp_browser/__main__.py	/^                       help="Enable debug output")$/;"	v
+help	build/lib/mcp_browser/__main__.py	/^                       help="List available MCP servers from config")$/;"	v
+help	build/lib/mcp_browser/__main__.py	/^                       help="Set logging level")$/;"	v
+help	build/lib/mcp_browser/__main__.py	/^                       help="Show current configuration path and content")$/;"	v
+help	build/lib/mcp_browser/__main__.py	/^                       help="Show program version and exit")$/;"	v
+help	build/lib/mcp_browser/__main__.py	/^                       help="Start daemon in background")$/;"	v
+help	build/lib/mcp_browser/__main__.py	/^                       help="Stop running daemon")$/;"	v
+help	build/lib/mcp_browser/__main__.py	/^                       help="Test connection to specified server")$/;"	v
+help	mcp_browser/__main__.py	/^                       help="Automatically use daemon if available")$/;"	v
+help	mcp_browser/__main__.py	/^                       help="Check daemon status")$/;"	v
+help	mcp_browser/__main__.py	/^                       help="Disable built-in servers (screen, memory, patterns)")$/;"	v
+help	mcp_browser/__main__.py	/^                       help="Disable sparse mode (show all tools)")$/;"	v
+help	mcp_browser/__main__.py	/^                       help="Enable debug output")$/;"	v
+help	mcp_browser/__main__.py	/^                       help="List available MCP servers from config")$/;"	v
+help	mcp_browser/__main__.py	/^                       help="Set logging level")$/;"	v
+help	mcp_browser/__main__.py	/^                       help="Show current configuration path and content")$/;"	v
+help	mcp_browser/__main__.py	/^                       help="Show program version and exit")$/;"	v
+help	mcp_browser/__main__.py	/^                       help="Start daemon in background")$/;"	v
+help	mcp_browser/__main__.py	/^                       help="Stop running daemon")$/;"	v
+help	mcp_browser/__main__.py	/^                       help="Test connection to specified server")$/;"	v
+include_package_data	setup.py	/^    include_package_data=True,$/;"	v
+initialize	build/lib/mcp_browser/proxy.py	/^    async def initialize(self):$/;"	m	class:MCPBrowser
 initialize	examples/ai_optimized.py	/^    async def initialize(self):$/;"	m	class:AIAssistant
 initialize	mcp_browser/proxy.py	/^    async def initialize(self):$/;"	m	class:MCPBrowser
 initialize_options	setup.py	/^    def initialize_options(self):$/;"	m	class:GenerateAIDocs
+initialize_options	setup.py	/^    def initialize_options(self):$/;"	m	class:TestCommand
 install_requires	setup.py	/^    install_requires=[$/;"	v
+interactive_mode	build/lib/mcp_browser/__main__.py	/^async def interactive_mode(browser: MCPBrowser):$/;"	f
 interactive_mode	mcp_browser/__main__.py	/^async def interactive_mode(browser: MCPBrowser):$/;"	f
+interactive_mode_with_daemon	build/lib/mcp_browser/__main__.py	/^async def interactive_mode_with_daemon(socket_path: Path):$/;"	f
+interactive_mode_with_daemon	mcp_browser/__main__.py	/^async def interactive_mode_with_daemon(socket_path: Path):$/;"	f
+is_daemon_running	build/lib/mcp_browser/daemon.py	/^def is_daemon_running(socket_path: Path) -> bool:$/;"	f
+is_daemon_running	mcp_browser/daemon.py	/^def is_daemon_running(socket_path: Path) -> bool:$/;"	f
+is_virtual_tool	build/lib/mcp_browser/filter.py	/^    def is_virtual_tool(self, tool_name: str) -> bool:$/;"	m	class:MessageFilter
 is_virtual_tool	mcp_browser/filter.py	/^    def is_virtual_tool(self, tool_name: str) -> bool:$/;"	m	class:MessageFilter
+jsonrpc	build/lib/mcp_browser/__main__.py	/^    jsonrpc = subparsers.add_parser("jsonrpc", help="Send raw JSON-RPC request")$/;"	v
+jsonrpc	mcp_browser/__main__.py	/^    jsonrpc = subparsers.add_parser("jsonrpc", help="Send raw JSON-RPC request")$/;"	v
 keywords	setup.py	/^    keywords="mcp model-context-protocol ai llm tools json-rpc",$/;"	v
+kill_daemon_with_children	build/lib/mcp_browser/daemon.py	/^def kill_daemon_with_children(socket_path: Path) -> bool:$/;"	f
+kill_daemon_with_children	mcp_browser/daemon.py	/^def kill_daemon_with_children(socket_path: Path) -> bool:$/;"	f
+list_prompts	build/lib/mcp_browser/__main__.py	/^    list_prompts = subparsers.add_parser("prompts-list", help="List available prompts")$/;"	v
+list_prompts	mcp_browser/__main__.py	/^    list_prompts = subparsers.add_parser("prompts-list", help="List available prompts")$/;"	v
+list_resources	build/lib/mcp_browser/__main__.py	/^    list_resources = subparsers.add_parser("resources-list", help="List available resources")$/;"	v
+list_resources	mcp_browser/__main__.py	/^    list_resources = subparsers.add_parser("resources-list", help="List available resources")$/;"	v
+list_tools	build/lib/mcp_browser/__main__.py	/^    list_tools = subparsers.add_parser("tools-list", help="List available tools")$/;"	v
+list_tools	mcp_browser/__main__.py	/^    list_tools = subparsers.add_parser("tools-list", help="List available tools")$/;"	v
+load	build/lib/mcp_browser/config.py	/^    def load(self) -> MCPBrowserConfig:$/;"	m	class:ConfigLoader
 load	mcp_browser/config.py	/^    def load(self) -> MCPBrowserConfig:$/;"	m	class:ConfigLoader
-long_description	setup.py	/^    long_description = fh.read()$/;"	v	class:GenerateAIDocs
+load_config	build/lib/mcp_browser/default_configs.py	/^    def load_config(self) -> dict:$/;"	m	class:ConfigManager
+load_config	mcp_browser/default_configs.py	/^    def load_config(self) -> dict:$/;"	m	class:ConfigManager
+loader	build/lib/mcp_browser/__main__.py	/^        loader = ConfigLoader()$/;"	v
+loader	mcp_browser/__main__.py	/^        loader = ConfigLoader()$/;"	v
+long_description	setup.py	/^    long_description = fh.read()$/;"	v
 long_description	setup.py	/^    long_description=long_description,$/;"	v
 long_description_content_type	setup.py	/^    long_description_content_type="text\/markdown",$/;"	v
+main	build/lib/mcp_browser/__main__.py	/^def main():$/;"	f
+main	build/lib/mcp_browser/client_main.py	/^def main():$/;"	f
+main	build/lib/mcp_browser/daemon_main.py	/^def main():$/;"	f
 main	examples/ai_optimized.py	/^async def main():$/;"	f
 main	examples/basic_usage.py	/^async def main():$/;"	f
 main	mcp_browser/__main__.py	/^def main():$/;"	f
+main	mcp_browser/client_main.py	/^def main():$/;"	f
+main	mcp_browser/daemon_main.py	/^def main():$/;"	f
+main	tests/test_browser_functionality.py	/^def main():$/;"	f
+main	tests/test_integration.py	/^async def main():$/;"	f
+mark_handled	build/lib/mcp_browser/filter.py	/^    def mark_handled(self, request_id: Union[str, int]):$/;"	m	class:MessageFilter
 mark_handled	mcp_browser/filter.py	/^    def mark_handled(self, request_id: Union[str, int]):$/;"	m	class:MessageFilter
 name	setup.py	/^    name="mcp-browser",$/;"	v
 package_data	setup.py	/^    package_data={$/;"	v
-packages	setup.py	/^    packages=find_packages(),$/;"	v
+packages	setup.py	/^    packages=find_packages(include=['mcp_browser*', 'mcp_servers*']),$/;"	v
+pid_exists	build/lib/mcp_browser/daemon.py	/^        def pid_exists(pid):$/;"	m	class:psutil
+pid_exists	mcp_browser/daemon.py	/^        def pid_exists(pid):$/;"	m	class:psutil
+process	build/lib/mcp_browser/logging_config.py	/^    def process(self, msg, kwargs):$/;"	m	class:ServerNameAdapter
+process	mcp_browser/logging_config.py	/^    def process(self, msg, kwargs):$/;"	m	class:ServerNameAdapter
+psutil	build/lib/mcp_browser/daemon.py	/^    class psutil:$/;"	c
+psutil	mcp_browser/daemon.py	/^    class psutil:$/;"	c
+read_resource	build/lib/mcp_browser/__main__.py	/^    read_resource = subparsers.add_parser("resources-read", help="Read a resource")$/;"	v
+read_resource	mcp_browser/__main__.py	/^    read_resource = subparsers.add_parser("resources-read", help="Read a resource")$/;"	v
+register_tool	build/lib/mcp_servers/base.py	/^    def register_tool(self, name: str, description: str, input_schema: Dict[str, Any], $/;"	m	class:BaseMCPServer
 register_tool	mcp_servers/base.py	/^    def register_tool(self, name: str, description: str, input_schema: Dict[str, Any], $/;"	m	class:BaseMCPServer
+route_tool_call	build/lib/mcp_browser/multi_server.py	/^    async def route_tool_call(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MultiServerManager
 route_tool_call	mcp_browser/multi_server.py	/^    async def route_tool_call(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MultiServerManager
+run	build/lib/mcp_browser/client_main.py	/^        async def run():$/;"	f	function:main
+run	build/lib/mcp_servers/base.py	/^    async def run(self):$/;"	m	class:BaseMCPServer
+run	mcp_browser/client_main.py	/^        async def run():$/;"	f	function:main
 run	mcp_servers/base.py	/^    async def run(self):$/;"	m	class:BaseMCPServer
 run	setup.py	/^    def run(self):$/;"	m	class:GenerateAIDocs
+run	setup.py	/^    def run(self):$/;"	m	class:TestCommand
+run_command	build/lib/mcp_browser/client_main.py	/^async def run_command(args, request: Dict[str, Any]):$/;"	f
+run_command	mcp_browser/client_main.py	/^async def run_command(args, request: Dict[str, Any]):$/;"	f
+run_daemon	build/lib/mcp_browser/daemon_main.py	/^async def run_daemon(args):$/;"	f
+run_daemon	mcp_browser/daemon_main.py	/^async def run_daemon(args):$/;"	f
+run_daemon_mode	build/lib/mcp_browser/__main__.py	/^async def run_daemon_mode(browser: MCPBrowser, socket_path: Path):$/;"	f
+run_daemon_mode	mcp_browser/__main__.py	/^async def run_daemon_mode(browser: MCPBrowser, socket_path: Path):$/;"	f
+run_mcp_server_mode	build/lib/mcp_browser/client_main.py	/^async def run_mcp_server_mode(args):$/;"	f
+run_mcp_server_mode	mcp_browser/client_main.py	/^async def run_mcp_server_mode(args):$/;"	f
+run_server_mode	build/lib/mcp_browser/__main__.py	/^async def run_server_mode(browser: MCPBrowser):$/;"	f
 run_server_mode	mcp_browser/__main__.py	/^async def run_server_mode(browser: MCPBrowser):$/;"	f
+run_server_mode_with_daemon	build/lib/mcp_browser/__main__.py	/^async def run_server_mode_with_daemon(socket_path: Path):$/;"	f
+run_server_mode_with_daemon	mcp_browser/__main__.py	/^async def run_server_mode_with_daemon(socket_path: Path):$/;"	f
+save_config	build/lib/mcp_browser/default_configs.py	/^    def save_config(self, config: dict) -> None:$/;"	m	class:ConfigManager
+save_config	mcp_browser/default_configs.py	/^    def save_config(self, config: dict) -> None:$/;"	m	class:ConfigManager
+send_raw	build/lib/mcp_browser/server.py	/^    def send_raw(self, message: str):$/;"	m	class:MCPServer
 send_raw	mcp_browser/server.py	/^    def send_raw(self, message: str):$/;"	m	class:MCPServer
+send_request	build/lib/mcp_browser/server.py	/^    async def send_request(self, method: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:$/;"	m	class:MCPServer
 send_request	mcp_browser/server.py	/^    async def send_request(self, method: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:$/;"	m	class:MCPServer
+send_request	tests/test_integration.py	/^    async def send_request(self, method: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:$/;"	m	class:JSONRPCTestClient
+server	build/lib/mcp_servers/memory/memory_server.py	/^    server = MemoryServer()$/;"	v	class:MemoryServer
+server	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    server = OnboardingServer()$/;"	v	class:OnboardingServer
+server	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    server = PatternServer()$/;"	v	class:PatternServer
+server	build/lib/mcp_servers/screen/screen_server.py	/^    server = ScreenServer()$/;"	v	class:ScreenServer
 server	mcp_servers/memory/memory_server.py	/^    server = MemoryServer()$/;"	v	class:MemoryServer
 server	mcp_servers/onboarding/onboarding_server.py	/^    server = OnboardingServer()$/;"	v	class:OnboardingServer
 server	mcp_servers/pattern_manager/pattern_server.py	/^    server = PatternServer()$/;"	v	class:PatternServer
 server	mcp_servers/screen/screen_server.py	/^    server = ScreenServer()$/;"	v	class:ScreenServer
+server_name	build/lib/mcp_browser/__main__.py	/^        server_name=args.server,$/;"	v
+server_name	mcp_browser/__main__.py	/^        server_name=args.server,$/;"	v
+set_metadata	build/lib/mcp_browser/registry.py	/^    def set_metadata(self, key: str, value: Any):$/;"	m	class:ToolRegistry
 set_metadata	mcp_browser/registry.py	/^    def set_metadata(self, key: str, value: Any):$/;"	m	class:ToolRegistry
-simulate_response	tests/test_basic.py	/^            async def simulate_response():$/;"	f	function:TestMCPBrowser.test_call_method
+set_onboarding_text	build/lib/mcp_browser/default_configs.py	/^    def set_onboarding_text(self, text: str, identity: Optional[str] = None) -> None:$/;"	m	class:ConfigManager
+set_onboarding_text	mcp_browser/default_configs.py	/^    def set_onboarding_text(self, text: str, identity: Optional[str] = None) -> None:$/;"	m	class:ConfigManager
+setup_logging	build/lib/mcp_browser/logging_config.py	/^def setup_logging(debug: bool = False, log_file: Optional[Path] = None, $/;"	f
+setup_logging	mcp_browser/logging_config.py	/^def setup_logging(debug: bool = False, log_file: Optional[Path] = None, $/;"	f
+show_available_servers	build/lib/mcp_browser/__main__.py	/^def show_available_servers(config_path: Optional[str] = None):$/;"	f
+show_available_servers	mcp_browser/__main__.py	/^def show_available_servers(config_path: Optional[str] = None):$/;"	f
+show_configuration	build/lib/mcp_browser/__main__.py	/^def show_configuration(config_path: Optional[str] = None):$/;"	f
+show_configuration	mcp_browser/__main__.py	/^def show_configuration(config_path: Optional[str] = None):$/;"	f
+show_daemon_status	build/lib/mcp_browser/__main__.py	/^def show_daemon_status(args):$/;"	f
+show_daemon_status	mcp_browser/__main__.py	/^def show_daemon_status(args):$/;"	f
+signal_handler	build/lib/mcp_browser/daemon_main.py	/^    def signal_handler(signum):$/;"	f	function:run_daemon
+signal_handler	mcp_browser/daemon_main.py	/^    def signal_handler(signum):$/;"	f	function:run_daemon
+socket_path	build/lib/mcp_browser/__main__.py	/^        socket_path = get_socket_path(args.server)$/;"	v
+socket_path	mcp_browser/__main__.py	/^        socket_path = get_socket_path(args.server)$/;"	v
+start	build/lib/mcp_browser/daemon.py	/^    async def start(self):$/;"	m	class:MCPBrowserDaemon
+start	build/lib/mcp_browser/server.py	/^    async def start(self):$/;"	m	class:MCPServer
+start	mcp_browser/daemon.py	/^    async def start(self):$/;"	m	class:MCPBrowserDaemon
 start	mcp_browser/server.py	/^    async def start(self):$/;"	m	class:MCPServer
+start_builtin_servers	build/lib/mcp_browser/multi_server.py	/^    async def start_builtin_servers(self):$/;"	m	class:MultiServerManager
 start_builtin_servers	mcp_browser/multi_server.py	/^    async def start_builtin_servers(self):$/;"	m	class:MultiServerManager
+start_daemon_background	build/lib/mcp_browser/__main__.py	/^async def start_daemon_background(args):$/;"	f
+start_daemon_background	mcp_browser/__main__.py	/^async def start_daemon_background(args):$/;"	f
+start_daemon_if_needed	build/lib/mcp_browser/client_main.py	/^def start_daemon_if_needed(server_name: Optional[str] = None, timeout: float = 5.0) -> bool:$/;"	f
+start_daemon_if_needed	mcp_browser/client_main.py	/^def start_daemon_if_needed(server_name: Optional[str] = None, timeout: float = 5.0) -> bool:$/;"	f
+stop	build/lib/mcp_browser/daemon.py	/^    async def stop(self):$/;"	m	class:MCPBrowserDaemon
+stop	build/lib/mcp_browser/server.py	/^    async def stop(self):$/;"	m	class:MCPServer
+stop	mcp_browser/daemon.py	/^    async def stop(self):$/;"	m	class:MCPBrowserDaemon
 stop	mcp_browser/server.py	/^    async def stop(self):$/;"	m	class:MCPServer
+stop_all	build/lib/mcp_browser/multi_server.py	/^    async def stop_all(self):$/;"	m	class:MultiServerManager
 stop_all	mcp_browser/multi_server.py	/^    async def stop_all(self):$/;"	m	class:MultiServerManager
-test_call_method	tests/test_basic.py	/^    async def test_call_method(self):$/;"	m	class:TestMCPBrowser
-test_claude_connection	test_claude_connection.py	/^async def test_claude_connection():$/;"	f
+stop_daemon	build/lib/mcp_browser/__main__.py	/^def stop_daemon(args):$/;"	f
+stop_daemon	mcp_browser/__main__.py	/^def stop_daemon(args):$/;"	f
+subparsers	build/lib/mcp_browser/__main__.py	/^    subparsers = parser.add_subparsers(dest="command", help="MCP methods")$/;"	v
+subparsers	mcp_browser/__main__.py	/^    subparsers = parser.add_subparsers(dest="command", help="MCP methods")$/;"	v
+test_basic_flow	tests/test_integration.py	/^async def test_basic_flow():$/;"	f
+test_brave_search_integration	tests/test_brave_search.py	/^async def test_brave_search_integration():$/;"	f
+test_browser_without_servers	tests/test_basic.py	/^    async def test_browser_without_servers(self):$/;"	m	class:TestMCPBrowser
+test_browser_without_servers	tests/test_browser_functionality.py	/^async def test_browser_without_servers():$/;"	f
+test_claude_connection	tests/test_claude_connection.py	/^async def test_claude_connection():$/;"	f
 test_discover_jsonpath	tests/test_basic.py	/^    def test_discover_jsonpath(self):$/;"	m	class:TestToolRegistry
-test_discover_method	tests/test_basic.py	/^    async def test_discover_method(self):$/;"	m	class:TestMCPBrowser
 test_duplicate_error_filtering	tests/test_basic.py	/^    def test_duplicate_error_filtering(self):$/;"	m	class:TestMessageFilter
-test_initialization	tests/test_basic.py	/^    async def test_initialization(self):$/;"	m	class:TestMCPBrowser
-test_onboarding	test_onboarding.py	/^async def test_onboarding():$/;"	f
+test_error_handling	tests/test_integration.py	/^async def test_error_handling():$/;"	f
+test_message_filter	tests/test_simple.py	/^def test_message_filter():$/;"	f
+test_onboarding	tests/test_onboarding.py	/^async def test_onboarding():$/;"	f
+test_server_connection	build/lib/mcp_browser/__main__.py	/^async def test_server_connection(browser: MCPBrowser, server_name: Optional[str] = None):$/;"	f
+test_server_connection	mcp_browser/__main__.py	/^async def test_server_connection(browser: MCPBrowser, server_name: Optional[str] = None):$/;"	f
+test_sparse_mode	tests/test_simple.py	/^def test_sparse_mode():$/;"	f
 test_sparse_mode_filtering	tests/test_basic.py	/^    def test_sparse_mode_filtering(self):$/;"	m	class:TestMessageFilter
 test_sparse_tools	tests/test_basic.py	/^    def test_sparse_tools(self):$/;"	m	class:TestToolRegistry
+test_tool_registry	tests/test_simple.py	/^def test_tool_registry():$/;"	f
 test_update_tools	tests/test_basic.py	/^    def test_update_tools(self):$/;"	m	class:TestToolRegistry
+test_virtual_tool_handling	tests/test_basic.py	/^    async def test_virtual_tool_handling(self):$/;"	m	class:TestMCPBrowser
+to_json	build/lib/mcp_browser/registry.py	/^    def to_json(self) -> str:$/;"	m	class:ToolRegistry
 to_json	mcp_browser/registry.py	/^    def to_json(self) -> str:$/;"	m	class:ToolRegistry
+trace	build/lib/mcp_browser/logging_config.py	/^def trace(self, message, *args, **kwargs):$/;"	f
+trace	mcp_browser/logging_config.py	/^def trace(self, message, *args, **kwargs):$/;"	f
+update_checksums	build/lib/mcp_browser/default_configs.py	/^def update_checksums():$/;"	f
+update_checksums	mcp_browser/default_configs.py	/^def update_checksums():$/;"	f
+update_tools	build/lib/mcp_browser/registry.py	/^    def update_tools(self, tools: List[Dict[str, Any]]):$/;"	m	class:ToolRegistry
 update_tools	mcp_browser/registry.py	/^    def update_tools(self, tools: List[Dict[str, Any]]):$/;"	m	class:ToolRegistry
-url	setup.py	/^    url="https:\/\/github.com\/anthropics\/mcp-browser",$/;"	v
+url	setup.py	/^    url="https:\/\/github.com\/Xilope0\/mcp-browser",$/;"	v
 user_options	setup.py	/^    user_options = []$/;"	v	class:GenerateAIDocs
+user_options	setup.py	/^    user_options = []$/;"	v	class:TestCommand
+version	build/lib/mcp_browser/__main__.py	/^                       version=f"%(prog)s {__version__}",$/;"	v
+version	mcp_browser/__main__.py	/^                       version=f"%(prog)s {__version__}",$/;"	v
 version	setup.py	/^    version="0.1.0",$/;"	v

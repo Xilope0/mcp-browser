@@ -62,7 +62,7 @@ class MultiServerManager:
                 
                 # Initialize each server
                 await server.send_request("initialize", {
-                    "protocolVersion": "0.1.0",
+                    "protocolVersion": "2024-11-05",
                     "capabilities": {},
                     "clientInfo": {
                         "name": "mcp-browser",
@@ -84,7 +84,7 @@ class MultiServerManager:
         
         # Initialize
         await server.send_request("initialize", {
-            "protocolVersion": "0.1.0",
+            "protocolVersion": "2024-11-05",
             "capabilities": {},
             "clientInfo": {
                 "name": "mcp-browser",
@@ -148,8 +148,14 @@ class MultiServerManager:
     
     async def stop_all(self):
         """Stop all servers."""
-        for name, server in self.servers.items():
+        # Create a copy of the dictionary to avoid iteration errors
+        servers_copy = dict(self.servers)
+        
+        for name, server in servers_copy.items():
             self.logger.info(f"Stopping server: {name}")
-            await server.stop()
+            try:
+                await server.stop()
+            except Exception as e:
+                self.logger.error(f"Error stopping server {name}: {e}")
         
         self.servers.clear()

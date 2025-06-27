@@ -4,6 +4,7 @@ Logging configuration for MCP Browser.
 
 import logging
 import sys
+import os
 from pathlib import Path
 from typing import Optional
 from datetime import datetime
@@ -17,7 +18,8 @@ class ServerNameAdapter(logging.LoggerAdapter):
         return f"[{server}] {msg}", kwargs
 
 
-def setup_logging(debug: bool = False, log_file: Optional[Path] = None, log_level: Optional[str] = None):
+def setup_logging(debug: bool = False, log_file: Optional[Path] = None, 
+                  log_level: Optional[str] = None, use_syslog: bool = False):
     """
     Configure logging for MCP Browser.
     
@@ -25,6 +27,7 @@ def setup_logging(debug: bool = False, log_file: Optional[Path] = None, log_leve
         debug: Enable debug logging
         log_file: Optional file to write logs to
         log_level: Override log level (DEBUG, INFO, WARNING, ERROR)
+        use_syslog: Use syslog instead of console/file (for server mode)
     """
     # Determine log level
     if log_level:
@@ -52,16 +55,51 @@ def setup_logging(debug: bool = False, log_file: Optional[Path] = None, log_leve
     # Remove existing handlers
     root_logger.handlers.clear()
     
-    # Console handler (stderr)
-    console_handler = logging.StreamHandler(sys.stderr)
-    console_handler.setFormatter(formatter)
-    root_logger.addHandler(console_handler)
-    
-    # File handler if requested
-    if log_file:
+    if use_syslog:
+        # Use syslog for server mode - NEVER write to stdout/stderr
+        from logging.handlers import SysLogHandler
+        try:
+            # Try Unix socket first (most common on Linux)
+            syslog_handler = SysLogHandler(
+                facility=SysLogHandler.LOG_DAEMON,
+                address='/dev/log'
+            )
+        except (OSError, FileNotFoundError):
+            # Fall back to UDP socket (for macOS, some Linux distros)
+            try:
+                syslog_handler = SysLogHandler(
+                    facility=SysLogHandler.LOG_DAEMON,
+                    address=('localhost', 514)
+                )
+            except Exception:
+                # If syslog is not available, log to a file instead
+                import tempfile
+                fallback_log = Path(tempfile.gettempdir()) / 'mcp-browser-server.log'
+                file_handler = logging.FileHandler(fallback_log, mode='a')
+                file_handler.setFormatter(formatter)
+                root_logger.addHandler(file_handler)
+                return
+        
+        # Syslog has its own format, but we can prepend our app name
+        syslog_formatter = logging.Formatter('mcp-browser[%(process)d]: %(name)s - %(levelname)s - %(message)s')
+        syslog_handler.setFormatter(syslog_formatter)
+        root_logger.addHandler(syslog_handler)
+    elif log_file:
+        # File handler if requested
         file_handler = logging.FileHandler(log_file, mode='a')
         file_handler.setFormatter(formatter)
         root_logger.addHandler(file_handler)
+        
+        # Only add console handler if not logging to /dev/null
+        if str(log_file) != '/dev/null':
+            console_handler = logging.StreamHandler(sys.stderr)
+            console_handler.setFormatter(formatter)
+            root_logger.addHandler(console_handler)
+    else:
+        # Console handler (stderr) only if no file specified
+        console_handler = logging.StreamHandler(sys.stderr)
+        console_handler.setFormatter(formatter)
+        root_logger.addHandler(console_handler)
     
     # Set levels for specific loggers
     # Suppress some noisy libraries unless in debug mode

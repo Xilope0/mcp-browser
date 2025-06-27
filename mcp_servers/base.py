@@ -105,58 +105,83 @@ class BaseMCPServer(ABC):
         """Run the MCP server, reading from stdin and writing to stdout."""
         self._running = True
         
-        # Platform-specific non-blocking setup
+        # Log server startup
+        print(f"DEBUG: {self.name} server starting", file=sys.stderr, flush=True)
+        
+        # Use asyncio for stdin reading
+        loop = asyncio.get_event_loop()
+        stdin_reader = asyncio.StreamReader()
+        stdin_protocol = asyncio.StreamReaderProtocol(stdin_reader)
+        
         try:
-            import fcntl
-            import os
-            flags = fcntl.fcntl(sys.stdin.fileno(), fcntl.F_GETFL)
-            fcntl.fcntl(sys.stdin.fileno(), fcntl.F_SETFL, flags | os.O_NONBLOCK)
-        except ImportError:
-            # Windows doesn't have fcntl
-            pass
+            # Connect stdin to async reader
+            await loop.connect_read_pipe(lambda: stdin_protocol, sys.stdin)
+        except Exception as e:
+            print(f"ERROR: {self.name} failed to setup async stdin: {e}", file=sys.stderr, flush=True)
+            return
         
-        buffer = ""
-        
+        # Main server loop
         while self._running:
             try:
-                # Try to read available data
-                chunk = sys.stdin.read(4096)
-                if not chunk:
-                    # EOF reached
+                # Read a line with timeout to prevent hanging
+                line = await asyncio.wait_for(
+                    stdin_reader.readline(),
+                    timeout=None  # No timeout - we want to wait indefinitely for commands
+                )
+                
+                if not line:
+                    # Empty bytes means EOF
+                    print(f"DEBUG: {self.name} detected EOF on stdin", file=sys.stderr, flush=True)
                     break
-                buffer += chunk
                 
-                # Process complete lines
-                while '\n' in buffer:
-                    line, buffer = buffer.split('\n', 1)
-                    line = line.strip()
+                # Decode and process line
+                line_str = line.decode('utf-8').strip()
+                if not line_str:
+                    continue
+                
+                print(f"DEBUG: {self.name} received: {line_str}", file=sys.stderr, flush=True)
+                
+                try:
+                    request = json.loads(line_str)
+                    response = await self.handle_request(request)
+                    response_str = json.dumps(response)
+                    print(f"DEBUG: {self.name} sending: {response_str}", file=sys.stderr, flush=True)
+                    print(response_str, flush=True)
+                except json.JSONDecodeError as e:
+                    print(f"ERROR: {self.name} JSON decode error: {e}", file=sys.stderr, flush=True)
+                    error_response = {
+                        "jsonrpc": "2.0",
+                        "id": None,
+                        "error": {
+                            "code": -32700,
+                            "message": "Parse error"
+                        }
+                    }
+                    print(json.dumps(error_response), flush=True)
+                except Exception as e:
+                    print(f"ERROR: {self.name} request handling error: {e}", file=sys.stderr, flush=True)
+                    error_response = {
+                        "jsonrpc": "2.0",
+                        "id": None,
+                        "error": {
+                            "code": -32603,
+                            "message": str(e)
+                        }
+                    }
+                    print(json.dumps(error_response), flush=True)
                     
-                    if line:
-                        try:
-                            request = json.loads(line)
-                            response = await self.handle_request(request)
-                            print(json.dumps(response), flush=True)
-                        except json.JSONDecodeError:
-                            pass
-                        except Exception as e:
-                            error_response = {
-                                "jsonrpc": "2.0",
-                                "id": None,
-                                "error": {
-                                    "code": -32700,
-                                    "message": "Parse error"
-                                }
-                            }
-                            print(json.dumps(error_response), flush=True)
-                
-            except BlockingIOError:
-                # No data available, sleep briefly
-                await asyncio.sleep(0.01)
-            except EOFError:
-                # stdin closed
+            except asyncio.CancelledError:
+                print(f"DEBUG: {self.name} cancelled", file=sys.stderr, flush=True)
                 break
             except KeyboardInterrupt:
+                print(f"DEBUG: {self.name} interrupted", file=sys.stderr, flush=True)
                 break
+            except Exception as e:
+                print(f"ERROR: {self.name} unexpected error: {e}", file=sys.stderr, flush=True)
+                # Continue running despite errors
+                await asyncio.sleep(0.1)
+        
+        print(f"DEBUG: {self.name} server exiting", file=sys.stderr, flush=True)
     
     def content_text(self, text: str) -> Dict[str, Any]:
         """Helper to create text content response."""

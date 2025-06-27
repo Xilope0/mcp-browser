@@ -3,33 +3,84 @@
 ```
 ./
   setup.py
-  test_claude_connection.py
-  test_onboarding.py
+  mcp_browser.egg-info/
+  systemd/
+  build/
+    lib/
+      mcp_servers/
+        __init__.py
+        base.py
+        screen/
+          __init__.py
+          screen_server.py
+        memory/
+          __init__.py
+          memory_server.py
+        pattern_manager/
+          __init__.py
+          pattern_server.py
+        onboarding/
+          __init__.py
+          onboarding_server.py
+      mcp_browser/
+        __init__.py
+        __main__.py
+        buffer.py
+        client_main.py
+        config.py
+        daemon.py
+        daemon_main.py
+        default_configs.py
+        filter.py
+        logging_config.py
+        multi_server.py
+        proxy.py
+        registry.py
+        server.py
+        utils.py
+    bdist.linux-x86_64/
   docs/
   examples/
     ai_optimized.py
     basic_usage.py
     builtin_servers_demo.py
     complete_demo.py
+  dist/
   tests/
     test_basic.py
+    test_brave_search.py
+    test_browser_functionality.py
+    test_claude_connection.py
+    test_integration.py
+    test_onboarding.py
+    test_simple.py
   config/
   mcp_servers/
+    __init__.py
     base.py
     screen/
+      __init__.py
       screen_server.py
     memory/
+      __init__.py
       memory_server.py
     pattern_manager/
+      __init__.py
       pattern_server.py
     onboarding/
+      __init__.py
       onboarding_server.py
   mcp_browser/
     __init__.py
     __main__.py
     buffer.py
+    client_main.py
     config.py
+    daemon.py
+    daemon_main.py
+    default_configs.py
     filter.py
+    logging_config.py
     multi_server.py
     proxy.py
     registry.py

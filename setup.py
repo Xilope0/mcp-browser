@@ -205,9 +205,9 @@ setup(
     python_requires=">=3.8",
     entry_points={
         "console_scripts": [
-            "mcp-browser=mcp_browser.client_main:main",
+            "mcp-browser=mcp_browser.__main__:main",
             "mcp-browser-daemon=mcp_browser.daemon_main:main",
-            "mcp-browser-legacy=mcp_browser.__main__:main",
+            "mcp-browser-client=mcp_browser.client_main:main",
         ],
     },
     cmdclass={

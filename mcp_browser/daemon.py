@@ -275,3 +275,72 @@ def is_daemon_running(socket_path: Path) -> bool:
         return psutil.pid_exists(pid)
     except (ValueError, psutil.Error):
         return False
+
+
+def kill_daemon_with_children(socket_path: Path) -> bool:
+    """Kill the daemon and all its child processes."""
+    pid_file = socket_path.with_suffix('.pid')
+    if not pid_file.exists():
+        return False
+    
+    try:
+        pid = int(pid_file.read_text().strip())
+        
+        # Try to use psutil to kill the process tree
+        if hasattr(psutil, 'Process'):
+            try:
+                parent = psutil.Process(pid)
+                children = parent.children(recursive=True)
+                
+                # Kill children first
+                for child in children:
+                    try:
+                        child.terminate()
+                    except psutil.NoSuchProcess:
+                        pass
+                
+                # Kill parent
+                parent.terminate()
+                
+                # Wait a bit for graceful termination
+                import time
+                time.sleep(0.5)
+                
+                # Force kill any remaining processes
+                for child in children:
+                    try:
+                        child.kill()
+                    except psutil.NoSuchProcess:
+                        pass
+                
+                try:
+                    parent.kill()
+                except psutil.NoSuchProcess:
+                    pass
+                    
+                return True
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                pass
+        
+        # Fallback to simple kill
+        try:
+            os.kill(pid, signal.SIGTERM)
+            import time
+            time.sleep(0.5)
+            os.kill(pid, signal.SIGKILL)
+        except OSError:
+            pass
+            
+        return True
+    except (ValueError, OSError):
+        return False
+    finally:
+        # Clean up socket and PID file
+        try:
+            socket_path.unlink()
+        except FileNotFoundError:
+            pass
+        try:
+            pid_file.unlink()
+        except FileNotFoundError:
+            pass

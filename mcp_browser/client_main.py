@@ -274,11 +274,22 @@ def main():
     
     # Setup logging
     log_file = Path(args.log_file) if args.log_file else None
+    
+    # In server mode, use syslog unless a log file is specified
+    use_syslog = args.mode == "server" and not log_file
+    
     setup_logging(
         debug=args.debug,
         log_file=log_file,
-        log_level=args.log_level
+        log_level=args.log_level,
+        use_syslog=use_syslog
     )
+    
+    # Log startup message
+    logger = get_logger(__name__)
+    if args.mode == "server":
+        logger.debug("mcp-browser client started in server mode")
+
     
     # Handle modes
     if args.mode == "server":

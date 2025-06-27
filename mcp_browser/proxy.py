@@ -129,9 +129,6 @@ class MCPBrowser:
                 }
             })
         """
-        if not self._initialized:
-            await self.initialize()
-        
         # Ensure request has an ID
         if "id" not in jsonrpc_object:
             jsonrpc_object = jsonrpc_object.copy()
@@ -139,6 +136,32 @@ class MCPBrowser:
             self._next_id += 1
         
         request_id = jsonrpc_object["id"]
+        
+        # Handle initialize request specially when acting as a server
+        if jsonrpc_object.get("method") == "initialize":
+            # Initialize ourselves if needed
+            if not self._initialized:
+                await self.initialize()
+            
+            # Return our capabilities
+            return {
+                "jsonrpc": "2.0",
+                "id": request_id,
+                "result": {
+                    "protocolVersion": "2024-11-05",
+                    "capabilities": {
+                        "tools": {}
+                    },
+                    "serverInfo": {
+                        "name": "mcp-browser",
+                        "version": "0.1.0"
+                    }
+                }
+            }
+        
+        # Initialize if needed for other requests
+        if not self._initialized:
+            await self.initialize()
         
         # Check if this is a virtual tool call
         if jsonrpc_object.get("method") == "tools/call":
@@ -173,16 +196,21 @@ class MCPBrowser:
             # In builtin-only mode, try to route to multi-server
             if self.multi_server:
                 # Try to route based on method
-                if jsonrpc_object.get("method") == "tools/list":
-                    # Apply filter to multi-server tools
+                method = jsonrpc_object.get("method")
+                
+                if method == "tools/list":
+                    # Get all tools and apply sparse filter
                     tools = await self.multi_server.get_all_tools()
-                    filtered_tools = self.filter.filter_outgoing({
+                    response = {
                         "jsonrpc": "2.0",
                         "id": request_id,
                         "result": {"tools": tools}
-                    })
-                    return filtered_tools
-                elif jsonrpc_object.get("method") == "tools/call":
+                    }
+                    # Always filter to show only sparse tools
+                    filtered_response = self.filter.filter_incoming(response)
+                    return filtered_response
+                    
+                elif method == "tools/call":
                     # Route tool call to multi-server
                     tool_name = jsonrpc_object.get("params", {}).get("name")
                     args = jsonrpc_object.get("params", {}).get("arguments", {})
@@ -199,6 +227,57 @@ class MCPBrowser:
                             "id": request_id,
                             "error": {"code": -32603, "message": str(e)}
                         }
+                
+                elif method == "prompts/list":
+                    # No prompts in builtin-only mode
+                    return {
+                        "jsonrpc": "2.0",
+                        "id": request_id,
+                        "result": {"prompts": []}
+                    }
+                
+                elif method == "prompts/get":
+                    # No prompts available
+                    return {
+                        "jsonrpc": "2.0",
+                        "id": request_id,
+                        "error": {"code": -32602, "message": "Prompt not found"}
+                    }
+                
+                elif method == "resources/list":
+                    # No resources in builtin-only mode
+                    return {
+                        "jsonrpc": "2.0",
+                        "id": request_id,
+                        "result": {"resources": []}
+                    }
+                
+                elif method == "resources/read":
+                    # No resources available
+                    return {
+                        "jsonrpc": "2.0",
+                        "id": request_id,
+                        "error": {"code": -32602, "message": "Resource not found"}
+                    }
+                
+                elif method == "completion/complete":
+                    # No completions in builtin-only mode
+                    return {
+                        "jsonrpc": "2.0",
+                        "id": request_id,
+                        "result": {"completion": {"values": []}}
+                    }
+                
+                else:
+                    # Unknown method
+                    return {
+                        "jsonrpc": "2.0",
+                        "id": request_id,
+                        "error": {
+                            "code": -32601,
+                            "message": f"Method '{method}' not found"
+                        }
+                    }
             
             # No server available
             return {
@@ -269,7 +348,7 @@ class MCPBrowser:
             
         # Send initialize request directly to server
         init_response = await self.server.send_request("initialize", {
-            "protocolVersion": "0.1.0",
+            "protocolVersion": "2024-11-05",
             "capabilities": {},
             "clientInfo": {
                 "name": "mcp-browser",
