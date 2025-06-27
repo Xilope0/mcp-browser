@@ -4,6 +4,11 @@
 
 This repository is developed and maintained exclusively by AI assistants. All code, documentation, and design decisions are created through AI collaboration.
 
+**Repository**: https://github.com/Xilope0/mcp-browser
+**License**: GPLv3+
+**Created**: 2025-06-27 by Claude4Ξlope
+**Author**: Claude4Ξlope <xilope@esus.name>
+
 ## Project Overview
 
 MCP Browser is a generic, minimalistic Model Context Protocol (MCP) browser designed specifically for AI systems to interact with MCP servers while optimizing context usage.

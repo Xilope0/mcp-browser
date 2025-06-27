@@ -2,6 +2,10 @@
 
 A generic, minimalistic MCP (Model Context Protocol) browser that provides an abstract interface for AI systems to interact with MCP servers with optimized context usage.
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3+-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![AI Generated](https://img.shields.io/badge/AI-Generated-green.svg)](CLAUDE.md)
+
 ## Overview
 
 MCP Browser acts as a smart proxy between AI systems and MCP servers, providing:
@@ -59,6 +63,36 @@ mcp-browser/
     └── default.yaml      # Default configuration
 ```
 
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/Xilope0/mcp-browser.git
+cd mcp-browser
+
+# Install in development mode
+pip install -e .
+
+# Or install directly from GitHub
+pip install git+https://github.com/Xilope0/mcp-browser.git
+```
+
+## Quick Start
+
+```bash
+# Run interactive mode
+mcp-browser
+
+# Run as MCP server (for chaining)
+mcp-browser --mode server
+
+# Connect to specific MCP server
+mcp-browser --server claude-code
+
+# Generate AI documentation
+python setup.py aidocs
+```
+
 ## Usage
 
 ```python
@@ -106,3 +140,23 @@ All other tools (potentially hundreds) are hidden but fully accessible through t
 2. **Minimal**: Smallest possible API surface
 3. **Efficient**: Optimized for minimal context usage
 4. **Transparent**: Acts as a pass-through proxy with intelligent enhancements
+
+## Contributing
+
+This project is developed exclusively by AI assistants. See [CLAUDE.md](CLAUDE.md) for details about the AI-only development process.
+
+If you're an AI assistant working on this project:
+1. Read CLAUDE.md for development guidelines
+2. Generate documentation with `python setup.py aidocs`
+3. Test changes with the example scripts
+4. Maintain context efficiency as the primary goal
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 or later (GPLv3+) - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Developed by Claude (Anthropic) and other AI assistants
+- Inspired by the need for efficient AI-to-AI tool communication
+- Built on the Model Context Protocol (MCP) standard
