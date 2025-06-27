@@ -4,6 +4,13 @@
 
 MCP Browser is a generic, minimalistic proxy for the Model Context Protocol (MCP) that provides an abstract interface optimized for AI systems. It acts as an intelligent intermediary between AI clients and MCP servers, implementing context optimization strategies inspired by claude-composer.
 
+### Process Architecture
+
+- **MCP Browser**: Python library that runs in your application process
+- **MCP Server**: Separate subprocess spawned by MCP Browser (e.g., `claude mcp serve`)
+- **Working Directory**: MCP servers inherit the working directory from where MCP Browser is initialized
+- **File Paths**: Always use absolute paths when passing file arguments to tools
+
 ## Design Principles
 
 ### 1. **Minimalism**
@@ -32,13 +39,13 @@ MCP Browser is a generic, minimalistic proxy for the Model Context Protocol (MCP
 
 ```
 ┌─────────────────┐
-│   AI Client     │
+│   AI Client     │  <- Your AI application (runs in your project directory)
 │  (uses 2 methods)│
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
-│   MCP Browser   │
+│   MCP Browser   │  <- Python library (runs in same process as client)
 │  ┌───────────┐  │
 │  │   Proxy   │  │
 │  ├───────────┤  │
@@ -47,11 +54,11 @@ MCP Browser is a generic, minimalistic proxy for the Model Context Protocol (MCP
 │  │  Filter   │  │
 │  └───────────┘  │
 └────────┬────────┘
-         │
+         │ (spawns subprocess)
          ▼
 ┌─────────────────┐
-│   MCP Server    │
-│  (any server)   │
+│   MCP Server    │  <- Separate process (e.g., claude mcp serve)
+│  (any server)   │     Working directory: inherits from MCP Browser
 └─────────────────┘
 ```
 
@@ -125,12 +132,16 @@ The browser returns only meta-tools:
 
 1. Client uses `mcp_discover` to explore tools:
    ```python
+   # Working directory: your project root
+   # Process: AI client using MCP Browser
    browser.discover("$.tools[?(@.name contains 'file')]")
    # Returns all file-related tools
    ```
 
 2. Client uses `mcp_call` to execute any tool:
    ```python
+   # Working directory: your project root
+   # Process: AI client -> MCP Browser -> MCP Server
    await browser.call({
      "method": "tools/call",
      "params": {
@@ -139,7 +150,9 @@ The browser returns only meta-tools:
          "method": "tools/call",
          "params": {
            "name": "Read",
-           "arguments": {"path": "/tmp/file.txt"}
+           "arguments": {
+             "file_path": "/absolute/path/to/file.txt"  # Always use absolute paths
+           }
          }
        }
      }
@@ -173,6 +186,9 @@ Browser -> Client: ["tool1", "tool2", ...]
 
 ### Server Configuration
 ```yaml
+# File location: ~/.mcp-browser/config.yaml or .mcp-browser/config.yaml
+# Working directory: Configuration is loaded relative to where you run MCP Browser
+
 servers:
   my_server:
     command: ["python", "-m", "my_mcp_server"]
@@ -180,6 +196,7 @@ servers:
     env:
       API_KEY: "${API_KEY}"
     description: "My custom MCP server"
+    # Note: Server process inherits working directory from MCP Browser
 ```
 
 ## Key Innovations

@@ -128,11 +128,11 @@ def main():
     args = parser.parse_args()
     
     # Create browser
+    config_path = Path(args.config) if args.config else None
     browser = MCPBrowser(
         server_name=args.server,
-        config_path=args.config,
-        sparse_mode=not args.no_sparse,
-        enable_builtin=not args.no_builtin
+        config_path=config_path,
+        enable_builtin_servers=not args.no_builtin
     )
     
     # Run in appropriate mode

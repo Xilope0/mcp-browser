@@ -214,18 +214,17 @@ class MCPBrowser:
     
     async def _initialize_connection(self):
         """Initialize MCP connection and populate tool registry."""
-        # Send initialize request
-        init_response = await self.call({
-            "jsonrpc": "2.0",
-            "id": "init",
-            "method": "initialize",
-            "params": {
-                "protocolVersion": "0.1.0",
-                "capabilities": {},
-                "clientInfo": {
-                    "name": "mcp-browser",
-                    "version": "0.1.0"
-                }
+        # Only initialize if we have a server
+        if not self.server:
+            return
+            
+        # Send initialize request directly to server
+        init_response = await self.server.send_request("initialize", {
+            "protocolVersion": "0.1.0",
+            "capabilities": {},
+            "clientInfo": {
+                "name": "mcp-browser",
+                "version": "0.1.0"
             }
         })
         
@@ -234,15 +233,14 @@ class MCPBrowser:
         
         # Get tool list from main server
         if self.server:
-            tools_response = await self.call({
-                "jsonrpc": "2.0",
-                "id": "tools",
-                "method": "tools/list",
-                "params": {}
-            })
+            tools_response = await self.server.send_request("tools/list", {})
             
             if "error" in tools_response:
                 raise RuntimeError(f"Failed to list tools: {tools_response['error']}")
+                
+            # Update registry with tools
+            if "result" in tools_response and "tools" in tools_response["result"]:
+                self.registry.update_tools(tools_response["result"]["tools"])
         
         # Also get tools from multi-server if enabled
         if self.multi_server:

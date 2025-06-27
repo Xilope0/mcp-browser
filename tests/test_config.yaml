@@ -1,0 +1,31 @@
+# Test configuration for MCP Browser tests
+
+servers:
+  # Brave Search MCP server for testing
+  brave-search:
+    command: ["npx", "-y", "@modelcontextprotocol/server-brave-search"]
+    name: "brave-search"
+    description: "Brave Search MCP server"
+    env:
+      BRAVE_API_KEY: "test-key"  # Will need real key for actual tests
+      
+  # Built-in only mode (no external server)
+  builtin-only:
+    command: null
+    name: "builtin-only"
+    description: "Only use built-in servers"
+
+# Use builtin-only for tests by default
+default_server: "builtin-only"
+
+# Enable sparse mode
+sparse_mode: true
+
+# Enable built-in servers
+enable_builtin_servers: true
+
+# Disable debug for tests
+debug: false
+
+# Shorter timeout for tests
+timeout: 10.0

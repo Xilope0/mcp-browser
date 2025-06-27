@@ -9,6 +9,7 @@ import os
 import sys
 import subprocess
 from pathlib import Path
+import asyncio
 
 
 class GenerateAIDocs(Command):
@@ -114,6 +115,49 @@ class GenerateAIDocs(Command):
             f.write('\n'.join(api_summary))
 
 
+class TestCommand(Command):
+    """Run all tests including integration tests."""
+    description = 'Run unit and integration tests'
+    user_options = []
+    
+    def initialize_options(self):
+        pass
+    
+    def finalize_options(self):
+        pass
+    
+    def run(self):
+        """Run all tests."""
+        print("Running MCP Browser Tests")
+        print("=" * 50)
+        
+        # Run pytest for unit tests
+        print("\nRunning unit tests with pytest...")
+        try:
+            subprocess.run([sys.executable, '-m', 'pytest', 'tests/', '-v', 
+                          '--ignore=tests/test_integration.py'], check=True)
+            print("✓ Unit tests passed")
+        except subprocess.CalledProcessError:
+            print("✗ Unit tests failed")
+            sys.exit(1)
+        except FileNotFoundError:
+            print("⚠ pytest not installed. Run: pip install -e .[dev]")
+            sys.exit(1)
+        
+        # Run integration tests
+        print("\nRunning integration tests...")
+        try:
+            # Run integration test directly
+            subprocess.run([sys.executable, 'tests/test_integration.py'], check=True)
+            print("✓ Integration tests passed")
+        except subprocess.CalledProcessError:
+            print("✗ Integration tests failed")
+            sys.exit(1)
+        
+        print("\n" + "=" * 50)
+        print("✅ All tests passed!")
+
+
 # Read long description
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -162,6 +206,7 @@ setup(
     },
     cmdclass={
         'aidocs': GenerateAIDocs,
+        'test': TestCommand,
     },
     classifiers=[
         "Development Status :: 3 - Alpha",

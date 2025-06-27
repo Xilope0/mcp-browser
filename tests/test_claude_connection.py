@@ -4,6 +4,15 @@ Test MCP Browser connection to claude-code.
 
 This script tests if MCP Browser can successfully connect to claude-code
 as an MCP target and perform basic operations like reading a file.
+
+Working Directory:
+  This script should be run from the mcp-browser directory:
+  $ cd /path/to/mcp-browser
+  $ python test_claude_connection.py
+
+Requirements:
+  - Claude Code must be installed and available in PATH or at a configured location
+  - Write permissions to create temporary test files
 """
 
 import asyncio
@@ -12,23 +21,54 @@ import os
 from pathlib import Path
 import yaml
 import tempfile
+import shutil
 
 # Add parent directory to path for development
 sys.path.insert(0, str(Path(__file__).parent))
 
 from mcp_browser import MCPBrowser
+import pytest
 
 
+@pytest.mark.asyncio 
 async def test_claude_connection():
     """Test connection to claude-code via MCP."""
     
     print("=== Testing MCP Browser Connection to Claude Code ===\n")
+    print(f"Working directory: {os.getcwd()}")
+    print(f"Script location: {Path(__file__).resolve()}\n")
     
-    # Check if claude binary exists
-    claude_path = "/usr/local/bin/claude"
-    if not os.path.exists(claude_path):
-        print(f"❌ Claude binary not found at {claude_path}")
-        print("Please ensure Claude Code is installed")
+    # Try to find claude binary in multiple locations
+    claude_path = None
+    
+    # Check common locations and PATH
+    possible_paths = [
+        shutil.which("claude"),  # Check PATH first
+        "/usr/local/bin/claude",
+        "/usr/bin/claude",
+        os.path.expanduser("~/.local/bin/claude"),
+        os.path.expanduser("~/bin/claude"),
+    ]
+    
+    # Also check CLAUDE_PATH environment variable
+    if "CLAUDE_PATH" in os.environ:
+        possible_paths.insert(0, os.environ["CLAUDE_PATH"])
+    
+    for path in possible_paths:
+        if path and os.path.exists(path):
+            claude_path = path
+            break
+    
+    if not claude_path:
+        print("❌ Claude binary not found")
+        print("\nTried the following locations:")
+        for path in possible_paths:
+            if path:
+                print(f"  - {path}")
+        print("\nPlease ensure Claude Code is installed and either:")
+        print("  1. Available in your PATH")
+        print("  2. Set CLAUDE_PATH environment variable")
+        print("  3. Installed in a standard location")
         return
     
     print(f"✓ Found Claude binary at {claude_path}\n")
@@ -89,7 +129,10 @@ async def test_claude_connection():
         
         # Test 3: Try to read a file using claude's Read tool
         print("\n3. Testing file read capability:")
-        test_file = "/tmp/mcp_test.txt"
+        # Create test file in temp directory with more descriptive name
+        test_dir = tempfile.gettempdir()
+        test_file = os.path.join(test_dir, f"mcp_browser_test_{os.getpid()}.txt")
+        print(f"   Test directory: {test_dir}")
         
         # First create a test file
         with open(test_file, 'w') as f:
@@ -151,7 +194,13 @@ async def test_claude_connection():
 
 
 if __name__ == "__main__":
-    print("\nNote: This test requires claude-code to be installed at /usr/local/bin/claude")
-    print("If claude is installed elsewhere, update the path in the script.\n")
+    print("\nMCP Browser - Claude Code Connection Test")
+    print("==========================================")
+    print("\nThis test verifies that MCP Browser (acting as an MCP client)")
+    print("can connect to Claude Code (acting as an MCP server).")
+    print("\nThe test will:")
+    print("  1. Search for claude binary in PATH and common locations")
+    print("  2. Start claude in MCP server mode")
+    print("  3. Test communication using MCP protocol\n")
     
     asyncio.run(test_claude_connection())

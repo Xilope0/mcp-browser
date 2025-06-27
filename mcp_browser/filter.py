@@ -6,7 +6,7 @@ sparse mode and virtual tool injection.
 """
 
 import json
-from typing import Dict, Any, Optional, List, Callable
+from typing import Dict, Any, Optional, List, Callable, Union
 from .registry import ToolRegistry
 
 

@@ -59,9 +59,14 @@ mcp-browser/
 │   └── onboarding/       # Identity-aware onboarding
 ├── tests/
 ├── docs/
+│   ├── DESIGN.md         # Architecture and design details
+│   ├── WORKING_DIRECTORIES.md  # Working directory and process guide
+│   └── ...
 └── config/
     └── default.yaml      # Default configuration
 ```
+
+**Important**: See [docs/WORKING_DIRECTORIES.md](docs/WORKING_DIRECTORIES.md) for detailed information about working directories, process architecture, and file path handling.
 
 ## Installation
 

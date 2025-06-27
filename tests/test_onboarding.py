@@ -11,15 +11,18 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from mcp_browser import MCPBrowser
+import pytest
 
 
+@pytest.mark.asyncio
 async def test_onboarding():
     """Test onboarding functionality."""
     
     print("Testing MCP Browser Onboarding...\n")
     
-    # Create browser with only built-in servers
-    browser = MCPBrowser(server_name="builtin-only")
+    # Use test config
+    config_path = Path(__file__).parent / "test_config.yaml"
+    browser = MCPBrowser(config_path=config_path, server_name="builtin-only")
     
     try:
         await browser.initialize()

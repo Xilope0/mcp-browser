@@ -7,6 +7,15 @@ This example shows:
 2. Tool discovery using JSONPath
 3. Tool execution via mcp_call
 4. Direct JSON-RPC calls
+
+Working Directory:
+  Run this example from any directory. MCP servers will inherit
+  the working directory from where you run this script.
+  
+  $ cd /your/project
+  $ python /path/to/complete_demo.py
+  
+Note: Always use absolute paths when passing file arguments to tools.
 """
 
 import asyncio
