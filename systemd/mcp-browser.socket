@@ -1,0 +1,9 @@
+[Unit]
+Description=MCP Browser Socket
+
+[Socket]
+ListenStream=/run/mcp-browser/mcp-browser.sock
+SocketMode=0666
+
+[Install]
+WantedBy=sockets.target

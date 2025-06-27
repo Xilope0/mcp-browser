@@ -121,31 +121,33 @@ class BaseMCPServer(ABC):
             try:
                 # Try to read available data
                 chunk = sys.stdin.read(4096)
-                if chunk:
-                    buffer += chunk
+                if not chunk:
+                    # EOF reached
+                    break
+                buffer += chunk
+                
+                # Process complete lines
+                while '\n' in buffer:
+                    line, buffer = buffer.split('\n', 1)
+                    line = line.strip()
                     
-                    # Process complete lines
-                    while '\n' in buffer:
-                        line, buffer = buffer.split('\n', 1)
-                        line = line.strip()
-                        
-                        if line:
-                            try:
-                                request = json.loads(line)
-                                response = await self.handle_request(request)
-                                print(json.dumps(response), flush=True)
-                            except json.JSONDecodeError:
-                                pass
-                            except Exception as e:
-                                error_response = {
-                                    "jsonrpc": "2.0",
-                                    "id": None,
-                                    "error": {
-                                        "code": -32700,
-                                        "message": "Parse error"
-                                    }
+                    if line:
+                        try:
+                            request = json.loads(line)
+                            response = await self.handle_request(request)
+                            print(json.dumps(response), flush=True)
+                        except json.JSONDecodeError:
+                            pass
+                        except Exception as e:
+                            error_response = {
+                                "jsonrpc": "2.0",
+                                "id": None,
+                                "error": {
+                                    "code": -32700,
+                                    "message": "Parse error"
                                 }
-                                print(json.dumps(error_response), flush=True)
+                            }
+                            print(json.dumps(error_response), flush=True)
                 
             except BlockingIOError:
                 # No data available, sleep briefly

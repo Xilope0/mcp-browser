@@ -1,0 +1,17 @@
+[Unit]
+Description=MCP Browser Daemon
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/mcp-browser-daemon --pid-file /run/mcp-browser/mcp-browser.pid
+PIDFile=/run/mcp-browser/mcp-browser.pid
+RuntimeDirectory=mcp-browser
+RuntimeDirectoryMode=0755
+User=nobody
+Group=nogroup
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
