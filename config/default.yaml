@@ -1,0 +1,42 @@
+# Default MCP Browser Configuration
+
+# MCP Server definitions
+servers:
+  # Default in-memory server for testing
+  memory:
+    command: ["npx", "-y", "@modelcontextprotocol/server-memory"]
+    name: "memory"
+    description: "In-memory MCP server for testing"
+    
+  # Filesystem server example
+  filesystem:
+    command: ["npx", "-y", "@modelcontextprotocol/server-filesystem"]
+    args: ["--directory", "/tmp"]
+    name: "filesystem"
+    description: "Filesystem MCP server"
+    env:
+      MCP_VERBOSE: "true"
+      
+  # Python-based MCP server example
+  python_example:
+    command: ["python", "-m", "mcp.server.example"]
+    name: "python_example"
+    description: "Example Python MCP server"
+
+# Default server to use
+default_server: "memory"
+
+# Enable sparse mode for context optimization
+sparse_mode: true
+
+# Enable built-in servers (screen, memory, patterns, onboarding)
+enable_builtin_servers: true
+
+# Debug mode (shows MCP communication)
+debug: false
+
+# Buffer size for reading server output
+buffer_size: 65536
+
+# Request timeout in seconds
+timeout: 30.0
