@@ -16,7 +16,7 @@ import yaml
 from .proxy import MCPBrowser
 from .config import ConfigLoader
 from .default_configs import ConfigManager
-from .daemon import MCPBrowserDaemon, MCPBrowserClient, get_socket_path, is_daemon_running
+from .daemon import MCPBrowserDaemon, MCPBrowserClient, get_socket_path, is_daemon_running, kill_daemon_with_children
 from .logging_config import setup_logging, get_logger
 
 
@@ -362,8 +362,14 @@ async def start_daemon_background(args):
     socket_path = get_socket_path(args.server)
     
     if is_daemon_running(socket_path):
-        print(f"Daemon already running for server: {args.server or 'default'}")
-        return
+        print(f"Killing existing daemon for server: {args.server or 'default'}")
+        if kill_daemon_with_children(socket_path):
+            print("Existing daemon and children killed successfully")
+            # Wait a moment for cleanup
+            import time
+            time.sleep(0.5)
+        else:
+            print("Warning: Failed to kill existing daemon cleanly")
     
     # Fork to background
     pid = os.fork()
@@ -376,29 +382,49 @@ async def start_daemon_background(args):
     # Detach from terminal
     os.setsid()
     
+    # Second fork to prevent zombie processes
+    try:
+        pid = os.fork()
+        if pid > 0:
+            # First child exits, orphaning the daemon
+            sys.exit(0)
+    except OSError as e:
+        print(f"Fork #2 failed: {e}", file=sys.stderr)
+        sys.exit(1)
+    
+    # Close file descriptors
+    sys.stdin.close()
+    sys.stdout.close()
+    sys.stderr.close()
+    
     # Redirect stdout/stderr to log file
     log_dir = socket_path.parent / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_file = log_dir / f"mcp-browser-{args.server or 'default'}.log"
     
-    with open(log_file, 'a') as log:
-        sys.stdout = log
-        sys.stderr = log
-        
-        # Create browser
-        config_path = Path(args.config) if args.config else None
-        browser = MCPBrowser(
-            server_name=args.server,
-            config_path=config_path,
-            enable_builtin_servers=not args.no_builtin
-        )
-        
-        # Run daemon
+    # Open new file descriptors
+    sys.stdin = open(os.devnull, 'r')
+    sys.stdout = open(log_file, 'a', buffering=1)
+    sys.stderr = sys.stdout
+    
+    # Create browser
+    config_path = Path(args.config) if args.config else None
+    browser = MCPBrowser(
+        server_name=args.server,
+        config_path=config_path,
+        enable_builtin_servers=not args.no_builtin
+    )
+    
+    # Run daemon
+    try:
         asyncio.run(run_daemon_mode(browser, socket_path))
+    except Exception as e:
+        print(f"Daemon error: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 def stop_daemon(args):
-    """Stop running daemon."""
+    """Stop running daemon and all child processes."""
     socket_path = get_socket_path(args.server)
     
     if not is_daemon_running(socket_path):
@@ -408,8 +434,12 @@ def stop_daemon(args):
     pid_file = socket_path.with_suffix('.pid')
     try:
         pid = int(pid_file.read_text().strip())
-        os.kill(pid, signal.SIGTERM)
-        print(f"Sent SIGTERM to daemon (PID: {pid})")
+        print(f"Stopping daemon (PID: {pid}) and all child processes...")
+        
+        if kill_daemon_with_children(socket_path):
+            print("Daemon and all children stopped successfully")
+        else:
+            print("Warning: Daemon may not have been stopped cleanly")
     except Exception as e:
         print(f"Error stopping daemon: {e}")
 
@@ -431,28 +461,39 @@ async def run_server_mode(browser: MCPBrowser):
     """Run MCP Browser as an MCP server (stdin/stdout)."""
     import sys
     
-    await browser.initialize()
+    # Don't initialize here - let it happen lazily when Claude sends initialize request
+    # This prevents timeout issues when the browser tries to connect to upstream servers
     
-    # Read JSON-RPC from stdin, write to stdout
-    buffer = ""
+    # Read JSON-RPC from stdin line by line
     while True:
         try:
-            chunk = sys.stdin.read(4096)
-            if not chunk:
+            line = sys.stdin.readline()
+            if not line:  # EOF
                 break
                 
-            buffer += chunk
-            while '\n' in buffer:
-                line, buffer = buffer.split('\n', 1)
-                if line.strip():
-                    try:
-                        request = json.loads(line)
-                        response = await browser.call(request)
-                        print(json.dumps(response))
-                        sys.stdout.flush()
-                    except json.JSONDecodeError:
-                        pass
-                        
+            line = line.strip()
+            if not line:  # Empty line
+                continue
+                
+            try:
+                request = json.loads(line)
+                response = await browser.call(request)
+                print(json.dumps(response))
+                sys.stdout.flush()
+            except json.JSONDecodeError as e:
+                # Send error response for malformed JSON
+                error_response = {
+                    "jsonrpc": "2.0",
+                    "id": None,
+                    "error": {
+                        "code": -32700,
+                        "message": "Parse error",
+                        "data": str(e)
+                    }
+                }
+                print(json.dumps(error_response))
+                sys.stdout.flush()
+                
         except KeyboardInterrupt:
             break
         except EOFError:
@@ -464,25 +505,35 @@ async def run_server_mode_with_daemon(socket_path: Path):
     import sys
     
     async with MCPBrowserClient(socket_path) as client:
-        # Read JSON-RPC from stdin, forward to daemon, write to stdout
-        buffer = ""
+        # Read JSON-RPC from stdin line by line, forward to daemon
         while True:
             try:
-                chunk = sys.stdin.read(4096)
-                if not chunk:
+                line = sys.stdin.readline()
+                if not line:  # EOF
                     break
                     
-                buffer += chunk
-                while '\n' in buffer:
-                    line, buffer = buffer.split('\n', 1)
-                    if line.strip():
-                        try:
-                            request = json.loads(line)
-                            response = await client.call(request)
-                            print(json.dumps(response))
-                            sys.stdout.flush()
-                        except json.JSONDecodeError:
-                            pass
+                line = line.strip()
+                if not line:  # Empty line
+                    continue
+                    
+                try:
+                    request = json.loads(line)
+                    response = await client.call(request)
+                    print(json.dumps(response))
+                    sys.stdout.flush()
+                except json.JSONDecodeError as e:
+                    # Send error response for malformed JSON
+                    error_response = {
+                        "jsonrpc": "2.0",
+                        "id": None,
+                        "error": {
+                            "code": -32700,
+                            "message": "Parse error",
+                            "data": str(e)
+                        }
+                    }
+                    print(json.dumps(error_response))
+                    sys.stdout.flush()
                             
             except KeyboardInterrupt:
                 break
@@ -552,16 +603,28 @@ def main():
     early_args, _ = args_parser.parse_known_args()
     
     # Setup logging before anything else
+    # IMPORTANT: In server mode, we must not log to stderr as it may interfere
+    # Determine if we're in server mode early
+    is_server_mode = "--mode" in sys.argv and "server" in sys.argv
+    
     log_file = Path(early_args.log_file) if early_args.log_file else None
+    
+    # In server mode, use syslog unless a log file is specified
+    use_syslog = is_server_mode and not log_file
+    
     setup_logging(
         debug=early_args.debug,
         log_file=log_file,
-        log_level=early_args.log_level
+        log_level=early_args.log_level,
+        use_syslog=use_syslog
     )
+    
+    # Import version
+    from . import __version__
     
     # Now create the full parser
     parser = argparse.ArgumentParser(
-        description="MCP Browser - Universal Model Context Protocol Interface",
+        description=f"MCP Browser v{__version__} - Universal Model Context Protocol Interface",
         epilog="""
 Examples:
   # Interactive mode
@@ -624,6 +687,9 @@ Environment:
                        help="Stop running daemon")
     parser.add_argument("--daemon-status", action="store_true",
                        help="Check daemon status")
+    parser.add_argument("--version", "-v", action="version",
+                       version=f"%(prog)s {__version__}",
+                       help="Show program version and exit")
     
     # MCP method commands
     subparsers = parser.add_subparsers(dest="command", help="MCP methods")
