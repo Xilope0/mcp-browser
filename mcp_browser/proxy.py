@@ -16,6 +16,7 @@ from .multi_server import MultiServerManager
 from .registry import ToolRegistry
 from .filter import MessageFilter, VirtualToolHandler
 from .buffer import JsonRpcBuffer
+from .utils import debug_print, debug_json
 
 
 class MCPBrowser:
@@ -166,6 +167,52 @@ class MCPBrowser:
                         "error": {"code": -32603, "message": str(e)}
                     }
         
+        # Check if we have a server
+        if not self.server:
+            # In builtin-only mode, try to route to multi-server
+            if self.multi_server:
+                # Try to route based on method
+                if jsonrpc_object.get("method") == "tools/list":
+                    # Apply filter to multi-server tools
+                    tools = await self.multi_server.get_all_tools()
+                    filtered_tools = self.filter.filter_outgoing({
+                        "jsonrpc": "2.0",
+                        "id": request_id,
+                        "result": {"tools": tools}
+                    })
+                    return filtered_tools
+                elif jsonrpc_object.get("method") == "tools/call":
+                    # Route tool call to multi-server
+                    tool_name = jsonrpc_object.get("params", {}).get("name")
+                    args = jsonrpc_object.get("params", {}).get("arguments", {})
+                    try:
+                        result = await self.multi_server.route_tool_call(tool_name, args)
+                        return {
+                            "jsonrpc": "2.0",
+                            "id": request_id,
+                            "result": result
+                        }
+                    except Exception as e:
+                        return {
+                            "jsonrpc": "2.0",
+                            "id": request_id,
+                            "error": {"code": -32603, "message": str(e)}
+                        }
+            
+            # No server available
+            return {
+                "jsonrpc": "2.0",
+                "id": request_id,
+                "error": {
+                    "code": -32603,
+                    "message": "No MCP server available"
+                }
+            }
+        
+        # Debug output
+        if self.config.debug:
+            debug_json("MCP Browser sending", jsonrpc_object)
+        
         # Create future for response
         future = asyncio.Future()
         self._response_buffer[request_id] = future
@@ -176,6 +223,8 @@ class MCPBrowser:
         # Wait for response
         try:
             response = await asyncio.wait_for(future, timeout=self.config.timeout)
+            if self.config.debug:
+                debug_json("MCP Browser received", response)
             return response
         except asyncio.TimeoutError:
             del self._response_buffer[request_id]

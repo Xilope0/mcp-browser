@@ -14,6 +14,7 @@ from pathlib import Path
 
 from .buffer import JsonRpcBuffer
 from .config import MCPServerConfig
+from .utils import debug_print, debug_json
 
 
 class MCPServer:
@@ -46,7 +47,7 @@ class MCPServer:
         cmd = self.config.command + self.config.args
         
         if self.debug:
-            print(f"Starting MCP server: {' '.join(cmd)}")
+            debug_print(f"Starting MCP server: {' '.join(cmd)}")
         
         # Start process
         self.process = subprocess.Popen(
@@ -116,7 +117,7 @@ class MCPServer:
         self.process.stdin.flush()
         
         if self.debug:
-            print(f"Sent: {request_str.strip()}")
+            debug_print(f"Sent: {request_str.strip()}")
         
         # Wait for response
         try:
@@ -133,6 +134,9 @@ class MCPServer:
         
         if not message.endswith('\n'):
             message += '\n'
+        
+        if self.debug:
+            debug_print(f"MCP Server sending: {message.strip()}")
         
         self.process.stdin.write(message)
         self.process.stdin.flush()
@@ -155,7 +159,7 @@ class MCPServer:
                     
             except Exception as e:
                 if self.debug:
-                    print(f"Error reading stdout: {e}")
+                    debug_print(f"Error reading stdout: {e}")
                 break
     
     async def _read_stderr(self):
@@ -166,7 +170,7 @@ class MCPServer:
                 if not line:
                     break
                 
-                print(f"MCP stderr: {line.strip()}")
+                debug_print(f"MCP stderr: {line.strip()}")
                     
             except Exception:
                 break
@@ -174,7 +178,7 @@ class MCPServer:
     async def _handle_message(self, message: dict):
         """Handle an incoming JSON-RPC message."""
         if self.debug:
-            print(f"Received: {json.dumps(message)}")
+            debug_json("Received", message)
         
         # Check if it's a response to a pending request
         msg_id = message.get("id")
@@ -192,4 +196,4 @@ class MCPServer:
                 handler(message)
             except Exception as e:
                 if self.debug:
-                    print(f"Handler error: {e}")
+                    debug_print(f"Handler error: {e}")
