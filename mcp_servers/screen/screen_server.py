@@ -115,6 +115,62 @@ class ScreenServer(BaseMCPServer):
                 "required": ["session"]
             }
         )
+        
+        # Enable multiuser mode
+        self.register_tool(
+            name="enable_multiuser",
+            description="Enable multiuser mode for a screen session",
+            input_schema={
+                "type": "object",
+                "properties": {
+                    "session": {
+                        "type": "string",
+                        "description": "Name of the screen session"
+                    }
+                },
+                "required": ["session"]
+            }
+        )
+        
+        # Attach to multiuser session
+        self.register_tool(
+            name="attach_multiuser",
+            description="Attach to a multiuser screen session (for external use)",
+            input_schema={
+                "type": "object",
+                "properties": {
+                    "session": {
+                        "type": "string",
+                        "description": "Name of the screen session"
+                    },
+                    "user": {
+                        "type": "string",
+                        "description": "Optional username for access control"
+                    }
+                },
+                "required": ["session"]
+            }
+        )
+        
+        # Add user to multiuser session
+        self.register_tool(
+            name="add_user",
+            description="Add a user to a multiuser screen session",
+            input_schema={
+                "type": "object",
+                "properties": {
+                    "session": {
+                        "type": "string",
+                        "description": "Name of the screen session"
+                    },
+                    "user": {
+                        "type": "string",
+                        "description": "Username to add"
+                    }
+                },
+                "required": ["session", "user"]
+            }
+        )
     
     async def handle_tool_call(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
         """Handle screen tool calls."""
@@ -129,6 +185,12 @@ class ScreenServer(BaseMCPServer):
             return await self._list_sessions()
         elif tool_name == "kill_session":
             return await self._kill_session(arguments)
+        elif tool_name == "enable_multiuser":
+            return await self._enable_multiuser(arguments)
+        elif tool_name == "attach_multiuser":
+            return await self._attach_multiuser(arguments)
+        elif tool_name == "add_user":
+            return await self._add_user(arguments)
         else:
             raise Exception(f"Unknown tool: {tool_name}")
     
@@ -258,6 +320,51 @@ class ScreenServer(BaseMCPServer):
             return self.content_text(f"Killed screen session '{session}'")
         else:
             return self.content_text(f"Failed to kill session: {result.stderr}")
+    
+    async def _enable_multiuser(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        """Enable multiuser mode for a screen session."""
+        session = args["session"]
+        
+        # Enable multiuser mode
+        cmd = ["screen", "-S", session, "-X", "multiuser", "on"]
+        result = await self._run_command(cmd)
+        
+        if result.returncode == 0:
+            return self.content_text(f"Enabled multiuser mode for session '{session}'")
+        else:
+            return self.content_text(f"Failed to enable multiuser mode: {result.stderr}")
+    
+    async def _attach_multiuser(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        """Provide instructions for attaching to a multiuser session."""
+        session = args["session"]
+        user = args.get("user", "")
+        
+        # Check if session exists and is multiuser
+        check_result = await self._run_command(["screen", "-ls", session])
+        if session not in check_result.stdout:
+            return self.content_text(f"Session '{session}' not found")
+        
+        # Provide attach command
+        if user:
+            attach_cmd = f"screen -x {user}/{session}"
+        else:
+            attach_cmd = f"screen -x {session}"
+        
+        return self.content_text(f"To attach to multiuser session '{session}', run: {attach_cmd}")
+    
+    async def _add_user(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        """Add a user to a multiuser screen session."""
+        session = args["session"]
+        user = args["user"]
+        
+        # Add user to session access control list
+        cmd = ["screen", "-S", session, "-X", "acladd", user]
+        result = await self._run_command(cmd)
+        
+        if result.returncode == 0:
+            return self.content_text(f"Added user '{user}' to session '{session}'")
+        else:
+            return self.content_text(f"Failed to add user: {result.stderr}")
     
     async def _run_command(self, cmd: List[str]) -> subprocess.CompletedProcess:
         """Run a command and return the result."""
