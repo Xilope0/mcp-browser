@@ -158,6 +158,105 @@ class TestCommand(Command):
         print("✅ All tests passed!")
 
 
+class GenerateApiDocs(Command):
+    """Generate comprehensive MCP API documentation for AI consumption."""
+    description = 'Generate JSON API documentation of all MCP servers and tools'
+    user_options = []
+    
+    def initialize_options(self):
+        pass
+    
+    def finalize_options(self):
+        pass
+    
+    def run(self):
+        """Generate comprehensive MCP API documentation."""
+        print("Generating MCP API Documentation...")
+        
+        import asyncio
+        from datetime import datetime
+        
+        async def generate_docs():
+            # Import here to avoid circular dependencies
+            from mcp_browser import MCPBrowser
+            from pathlib import Path
+            
+            try:
+                # Initialize MCP Browser with built-in servers
+                browser = MCPBrowser(enable_builtin_servers=True)
+                
+                # Wait for initialization and force tool discovery
+                await asyncio.sleep(3)
+                
+                # Try to trigger tool discovery
+                if hasattr(browser, 'discover_tools'):
+                    await browser.discover_tools()
+                elif hasattr(browser, 'multi_server') and browser.multi_server:
+                    # Force refresh of tools from built-in servers
+                    await browser.multi_server.refresh_tools()
+                
+                # Get comprehensive API documentation
+                api_doc = browser.registry.get_full_api_documentation()
+                api_doc["generation_timestamp"] = datetime.now().isoformat()
+                
+                # Add runtime server information
+                if hasattr(browser, 'multi_server') and browser.multi_server:
+                    server_status = {}
+                    for name, server in browser.multi_server.servers.items():
+                        server_status[name] = {
+                            "status": "active" if server.is_running() else "inactive",
+                            "pid": getattr(server, 'process', {}).get('pid') if hasattr(server, 'process') else None
+                        }
+                    api_doc["runtime_status"] = server_status
+                
+                # Write to file
+                output_file = Path("mcp_api_documentation.json")
+                with open(output_file, 'w') as f:
+                    import json
+                    json.dump(api_doc, f, indent=2)
+                
+                print(f"✓ Generated comprehensive MCP API documentation")
+                print(f"✓ Output: {output_file.absolute()}")
+                print(f"✓ Total servers: {api_doc['total_servers']}")
+                print(f"✓ Total tools: {api_doc['total_tools']}")
+                
+                # Also print summary for immediate use
+                print("\n" + "=" * 60)
+                print("QUICK REFERENCE:")
+                print("=" * 60)
+                
+                builtin = api_doc.get("builtin", {})
+                print(f"Built-in tools ({builtin.get('tool_count', 0)}):")
+                for tool in builtin.get("tools", [])[:5]:  # Show first 5
+                    print(f"  - {tool.get('name', 'Unknown')}")
+                if builtin.get('tool_count', 0) > 5:
+                    print(f"  ... and {builtin.get('tool_count', 0) - 5} more")
+                
+                print(f"\nExternal servers ({len(api_doc.get('servers', {}))}):")
+                for server_name, server_info in api_doc.get("servers", {}).items():
+                    print(f"  - {server_name}: {server_info.get('tool_count', 0)} tools")
+                
+                print(f"\nDiscovery patterns available in documentation:")
+                for pattern_name, pattern in api_doc.get("discovery_patterns", {}).items():
+                    print(f"  - {pattern_name}: {pattern}")
+                
+                # Clean up if method exists
+                if hasattr(browser, 'cleanup'):
+                    await browser.cleanup()
+                elif hasattr(browser, 'close'):
+                    await browser.close()
+                elif hasattr(browser, 'shutdown'):
+                    await browser.shutdown()
+                
+            except Exception as e:
+                print(f"✗ Failed to generate API documentation: {e}")
+                import traceback
+                traceback.print_exc()
+                sys.exit(1)
+        
+        asyncio.run(generate_docs())
+
+
 # Read long description
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -213,6 +312,7 @@ setup(
     cmdclass={
         'aidocs': GenerateAIDocs,
         'test': TestCommand,
+        'gen_apidoc': GenerateApiDocs,
     },
     license="GPL-3.0-or-later",
     classifiers=[
