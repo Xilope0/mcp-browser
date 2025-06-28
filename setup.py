@@ -182,18 +182,55 @@ class GenerateApiDocs(Command):
             from pathlib import Path
             
             try:
-                # Initialize MCP Browser with built-in servers
-                browser = MCPBrowser(enable_builtin_servers=True)
+                from pathlib import Path
+                import os
                 
-                # Wait for initialization and force tool discovery
+                # Initialize MCP Browser with config from standard location
+                config_path = Path.home() / ".claude" / "mcp-browser" / "config.yaml"
+                
+                print(f"Loading config from: {config_path}")
+                if not config_path.exists():
+                    print(f"⚠ Config file not found, creating default")
+                    config_path.parent.mkdir(parents=True, exist_ok=True)
+                
+                # Initialize with config and built-in servers
+                browser = MCPBrowser(
+                    config_path=config_path if config_path.exists() else None,
+                    enable_builtin_servers=True
+                )
+                
+                print("Waiting for server initialization...")
+                # Wait for initialization of servers
                 await asyncio.sleep(3)
                 
-                # Try to trigger tool discovery
-                if hasattr(browser, 'discover_tools'):
-                    await browser.discover_tools()
-                elif hasattr(browser, 'multi_server') and browser.multi_server:
-                    # Force refresh of tools from built-in servers
-                    await browser.multi_server.refresh_tools()
+                # Perform tool discovery using the browser's call method
+                print("Discovering tools from all servers...")
+                try:
+                    tools_response = await browser.call({
+                        "jsonrpc": "2.0",
+                        "id": 1,
+                        "method": "tools/list"
+                    })
+                    print(f"Tools response: {len(tools_response.get('result', {}).get('tools', []))} tools found")
+                except Exception as e:
+                    print(f"Warning: Could not discover tools: {e}")
+                
+                print(f"Registry has {len(browser.registry.raw_tool_list)} tools")
+                
+                # Set server metadata for documentation
+                if hasattr(browser, 'config') and browser.config:
+                    server_metadata = {
+                        "servers": {}
+                    }
+                    for name, config in browser.config.servers.items():
+                        server_metadata["servers"][name] = {
+                            "command": getattr(config, 'command', []),
+                            "description": getattr(config, 'description', ''),
+                            "status": "configured",
+                            "env": getattr(config, 'env', {}),
+                            "tools": []  # Will be populated by get_full_api_documentation
+                        }
+                    browser.registry.set_metadata(server_metadata)
                 
                 # Get comprehensive API documentation
                 api_doc = browser.registry.get_full_api_documentation()
@@ -204,8 +241,8 @@ class GenerateApiDocs(Command):
                     server_status = {}
                     for name, server in browser.multi_server.servers.items():
                         server_status[name] = {
-                            "status": "active" if server.is_running() else "inactive",
-                            "pid": getattr(server, 'process', {}).get('pid') if hasattr(server, 'process') else None
+                            "status": "active" if hasattr(server, 'process') and server.process else "inactive",
+                            "pid": getattr(server.process, 'pid', None) if hasattr(server, 'process') and server.process else None
                         }
                     api_doc["runtime_status"] = server_status
                 
@@ -240,13 +277,8 @@ class GenerateApiDocs(Command):
                 for pattern_name, pattern in api_doc.get("discovery_patterns", {}).items():
                     print(f"  - {pattern_name}: {pattern}")
                 
-                # Clean up if method exists
-                if hasattr(browser, 'cleanup'):
-                    await browser.cleanup()
-                elif hasattr(browser, 'close'):
-                    await browser.close()
-                elif hasattr(browser, 'shutdown'):
-                    await browser.shutdown()
+                # Clean up
+                await browser.close()
                 
             except Exception as e:
                 print(f"✗ Failed to generate API documentation: {e}")
