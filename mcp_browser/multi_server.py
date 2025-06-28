@@ -28,10 +28,16 @@ class MultiServerManager:
         base_path = Path(__file__).parent.parent / "mcp_servers"
         
         return {
+            "builtin:tmux": MCPServerConfig(
+                command=["python3", str(base_path / "screen" / "tmux_server.py")],
+                name="tmux",
+                description="tmux session management"
+            ),
             "builtin:screen": MCPServerConfig(
                 command=["python3", str(base_path / "screen" / "screen_server.py")],
                 name="screen",
-                description="GNU screen session management"
+                description="GNU screen session management (legacy)",
+                enabled=False  # Disabled by default, tmux is preferred
             ),
             "builtin:memory": MCPServerConfig(
                 command=["python3", str(base_path / "memory" / "memory_server.py")],
@@ -53,6 +59,11 @@ class MultiServerManager:
     async def start_builtin_servers(self):
         """Start all built-in servers."""
         for name, config in self.builtin_servers.items():
+            # Skip disabled servers
+            if not config.enabled:
+                self.logger.info(f"Skipping disabled built-in server: {name}")
+                continue
+                
             self.logger.info(f"Starting built-in server: {name}")
             
             server = MCPServer(config, logger=get_logger(__name__, name))

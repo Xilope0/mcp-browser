@@ -22,6 +22,7 @@ class MCPServerConfig:
     env: Dict[str, str] = field(default_factory=dict)
     name: Optional[str] = None
     description: Optional[str] = None
+    enabled: bool = True
     
 
 @dataclass
@@ -88,7 +89,8 @@ class ConfigLoader:
                 args=server_config.get("args", []),
                 env=server_config.get("env", {}),
                 name=server_config.get("name", name),
-                description=server_config.get("description")
+                description=server_config.get("description"),
+                enabled=server_config.get("enabled", True)
             )
         
         self._config = MCPBrowserConfig(

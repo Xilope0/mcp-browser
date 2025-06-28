@@ -1,0 +1,165 @@
+{
+  "mcp_browser_version": "0.2.0",
+  "total_servers": 7,
+  "total_tools": 27,
+  "generation_timestamp": "2025-06-28T13:16:38.436458",
+  "servers": {
+    "default": {
+      "name": "default",
+      "description": "Default in-memory MCP server",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "status": "configured",
+      "tools": [],
+      "tool_count": 0,
+      "tool_names": [],
+      "environment": {},
+      "working_directory": null,
+      "capabilities": []
+    },
+    "claude-code": {
+      "name": "claude-code",
+      "description": "MCP interface to claude code started in /home/claude",
+      "command": [
+        "/home/claude/bin/claude"
+      ],
+      "status": "configured",
+      "tools": [],
+      "tool_count": 0,
+      "tool_names": [],
+      "environment": {},
+      "working_directory": null,
+      "capabilities": []
+    },
+    "brave-search": {
+      "name": "brave-search",
+      "description": "Brave Search API access",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "status": "configured",
+      "tools": [],
+      "tool_count": 0,
+      "tool_names": [],
+      "environment": {},
+      "working_directory": null,
+      "capabilities": []
+    },
+    "filesystem": {
+      "name": "filesystem",
+      "description": "File system access (/home/claude)",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/claude"
+      ],
+      "status": "configured",
+      "tools": [],
+      "tool_count": 0,
+      "tool_names": [],
+      "environment": {},
+      "working_directory": null,
+      "capabilities": []
+    },
+    "github": {
+      "name": "github",
+      "description": "GitHub API access",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "status": "configured",
+      "tools": [],
+      "tool_count": 0,
+      "tool_names": [],
+      "environment": {},
+      "working_directory": null,
+      "capabilities": []
+    },
+    "memory": {
+      "name": "memory",
+      "description": "Persistent memory and notes",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "status": "configured",
+      "tools": [],
+      "tool_count": 0,
+      "tool_names": [],
+      "environment": {},
+      "working_directory": null,
+      "capabilities": []
+    },
+    "builtin-only": {
+      "name": "builtin-only",
+      "description": "Use only built-in Python servers",
+      "command": null,
+      "status": "configured",
+      "tools": [],
+      "tool_count": 0,
+      "tool_names": [],
+      "environment": {},
+      "working_directory": null,
+      "capabilities": []
+    }
+  },
+  "builtin": {
+    "name": "builtin",
+    "description": "Built-in MCP Browser servers (screen, memory, patterns, onboarding)",
+    "status": "active",
+    "tools": [],
+    "tool_count": 0,
+    "capabilities": [
+      "screen_management",
+      "memory_storage",
+      "pattern_matching",
+      "onboarding_management"
+    ]
+  },
+  "discovery_patterns": {
+    "all_tools": "$.tools[*]",
+    "all_tool_names": "$.tools[*].name",
+    "tools_by_server": "$.servers[*].tools[*]",
+    "tool_schemas": "$.tools[*].inputSchema",
+    "memory_tools": "$.tools[?(@.name =~ /memory|task|pattern|knowledge/i)]",
+    "screen_tools": "$.tools[?(@.name =~ /screen|session/i)]",
+    "find_tool_by_name": "$.tools[?(@.name=='TOOL_NAME')]",
+    "server_capabilities": "$.servers[*].capabilities"
+  },
+  "sparse_mode_info": {
+    "visible_tools": [
+      "mcp_discover",
+      "mcp_call",
+      "onboarding"
+    ],
+    "hidden_tools": 27,
+    "purpose": "Context optimization - full MCP API accessible via proxy tools"
+  },
+  "runtime_status": {
+    "builtin:screen": {
+      "status": "active",
+      "pid": 589886
+    },
+    "builtin:memory": {
+      "status": "active",
+      "pid": 589890
+    },
+    "builtin:patterns": {
+      "status": "active",
+      "pid": 589905
+    },
+    "builtin:onboarding": {
+      "status": "active",
+      "pid": 589908
+    }
+  }
+}

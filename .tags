@@ -18,6 +18,7 @@ DEFAULT_CONFIGS	mcp_browser/default_configs.py	/^DEFAULT_CONFIGS = {$/;"	v
 Decision	build/lib/mcp_servers/memory/memory_server.py	/^class Decision:$/;"	c
 Decision	mcp_servers/memory/memory_server.py	/^class Decision:$/;"	c
 GenerateAIDocs	setup.py	/^class GenerateAIDocs(Command):$/;"	c
+InteractiveMCPClient	mcp_browser/interactive_client.py	/^class InteractiveMCPClient:$/;"	c
 JSONRPCTestClient	tests/test_integration.py	/^class JSONRPCTestClient:$/;"	c
 JsonRpcBuffer	build/lib/mcp_browser/buffer.py	/^class JsonRpcBuffer:$/;"	c
 JsonRpcBuffer	mcp_browser/buffer.py	/^class JsonRpcBuffer:$/;"	c
@@ -55,7 +56,10 @@ TRACE	build/lib/mcp_browser/logging_config.py	/^TRACE = 5$/;"	v
 TRACE	mcp_browser/logging_config.py	/^TRACE = 5$/;"	v
 Task	build/lib/mcp_servers/memory/memory_server.py	/^class Task:$/;"	c
 Task	mcp_servers/memory/memory_server.py	/^class Task:$/;"	c
+TestCmemIntegration	tests/test_cmem_integration.py	/^class TestCmemIntegration:$/;"	c
 TestCommand	setup.py	/^class TestCommand(Command):$/;"	c
+TestInteractiveMCPClient	tests/test_interactive_client.py	/^class TestInteractiveMCPClient:$/;"	c
+TestInteractiveMCPClientIntegration	tests/test_interactive_client.py	/^class TestInteractiveMCPClientIntegration:$/;"	c
 TestMCPBrowser	tests/test_basic.py	/^class TestMCPBrowser:$/;"	c
 TestMessageFilter	tests/test_basic.py	/^class TestMessageFilter:$/;"	c
 TestToolRegistry	tests/test_basic.py	/^class TestToolRegistry:$/;"	c
@@ -103,12 +107,13 @@ __init__	mcp_browser/daemon.py	/^    def __init__(self, socket_path: Path):$/;"	
 __init__	mcp_browser/default_configs.py	/^    def __init__(self, config_dir: Optional[Path] = None):$/;"	m	class:ConfigManager
 __init__	mcp_browser/filter.py	/^    def __init__(self, registry: ToolRegistry, server_callback: Callable):$/;"	m	class:VirtualToolHandler
 __init__	mcp_browser/filter.py	/^    def __init__(self, registry: ToolRegistry, sparse_mode: bool = True):$/;"	m	class:MessageFilter
+__init__	mcp_browser/interactive_client.py	/^    def __init__(self, server_name: Optional[str] = None, use_daemon: bool = True):$/;"	m	class:InteractiveMCPClient
 __init__	mcp_browser/multi_server.py	/^    def __init__(self, logger=None):$/;"	m	class:MultiServerManager
 __init__	mcp_browser/proxy.py	/^    def __init__(self, config_path: Optional[Path] = None, server_name: Optional[str] = None,$/;"	m	class:MCPBrowser
 __init__	mcp_browser/registry.py	/^    def __init__(self):$/;"	m	class:ToolRegistry
 __init__	mcp_browser/server.py	/^    def __init__(self, config: MCPServerConfig, logger: Optional[logging.Logger] = None):$/;"	m	class:MCPServer
 __init__	mcp_servers/base.py	/^    def __init__(self, name: str, version: str = "1.0.0"):$/;"	m	class:BaseMCPServer
-__init__	mcp_servers/memory/memory_server.py	/^    def __init__(self):$/;"	m	class:MemoryServer
+__init__	mcp_servers/memory/memory_server.py	/^    def __init__(self, identity: str = "default"):$/;"	m	class:MemoryServer
 __init__	mcp_servers/onboarding/onboarding_server.py	/^    def __init__(self):$/;"	m	class:OnboardingServer
 __init__	mcp_servers/pattern_manager/pattern_server.py	/^    def __init__(self):$/;"	m	class:PatternServer
 __init__	mcp_servers/screen/screen_server.py	/^    def __init__(self):$/;"	m	class:ScreenServer
@@ -119,20 +124,35 @@ __version__	build/lib/mcp_browser/__init__.py	/^__version__ = "0.1.0"$/;"	v
 __version__	mcp_browser/__init__.py	/^__version__ = "0.1.0"$/;"	v
 _add_pattern	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    async def _add_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
 _add_pattern	mcp_servers/pattern_manager/pattern_server.py	/^    async def _add_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
+_add_user	build/lib/mcp_servers/screen/screen_server.py	/^    async def _add_user(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
+_add_user	mcp_servers/screen/screen_server.py	/^    async def _add_user(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
+_attach_multiuser	build/lib/mcp_servers/screen/screen_server.py	/^    async def _attach_multiuser(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
+_attach_multiuser	mcp_servers/screen/screen_server.py	/^    async def _attach_multiuser(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
 _calculate_checksum	build/lib/mcp_browser/default_configs.py	/^    def _calculate_checksum(self, filepath: Path) -> str:$/;"	m	class:ConfigManager
 _calculate_checksum	mcp_browser/default_configs.py	/^    def _calculate_checksum(self, filepath: Path) -> str:$/;"	m	class:ConfigManager
+_call_mcp	mcp_browser/interactive_client.py	/^    async def _call_mcp(self, request: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:InteractiveMCPClient
+_call_tool	mcp_browser/interactive_client.py	/^    async def _call_tool(self, args: List[str]):$/;"	f
+_call_tool_direct	mcp_browser/interactive_client.py	/^    async def _call_tool_direct(self, tool_name: str, args: List[str]):$/;"	f
+_completer	mcp_browser/interactive_client.py	/^    def _completer(self, text: str, state: int) -> Optional[str]:$/;"	m	class:InteractiveMCPClient
+_create_cmem_bridges	mcp_servers/memory/memory_server.py	/^    def _create_cmem_bridges(self, identity_dir: Path, session_dir: Path):$/;"	m	class:MemoryServer
 _create_session	build/lib/mcp_servers/screen/screen_server.py	/^    async def _create_session(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
 _create_session	mcp_servers/screen/screen_server.py	/^    async def _create_session(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
 _decision_add	build/lib/mcp_servers/memory/memory_server.py	/^    async def _decision_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _decision_add	mcp_servers/memory/memory_server.py	/^    async def _decision_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _delete_onboarding	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    async def _delete_onboarding(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
 _delete_onboarding	mcp_servers/onboarding/onboarding_server.py	/^    async def _delete_onboarding(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
+_discover_tools	mcp_browser/interactive_client.py	/^    async def _discover_tools(self, args: List[str]):$/;"	f
+_display_result	mcp_browser/interactive_client.py	/^    def _display_result(self, result: Any):$/;"	f
+_enable_multiuser	build/lib/mcp_servers/screen/screen_server.py	/^    async def _enable_multiuser(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
+_enable_multiuser	mcp_servers/screen/screen_server.py	/^    async def _enable_multiuser(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
 _ensure_config_file	build/lib/mcp_browser/default_configs.py	/^    def _ensure_config_file(self, filename: str, config_data: Dict[str, str]) -> None:$/;"	m	class:ConfigManager
 _ensure_config_file	mcp_browser/default_configs.py	/^    def _ensure_config_file(self, filename: str, config_data: Dict[str, str]) -> None:$/;"	m	class:ConfigManager
 _execute_command	build/lib/mcp_servers/screen/screen_server.py	/^    async def _execute_command(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
+_execute_command	mcp_browser/interactive_client.py	/^    async def _execute_command(self, line: str):$/;"	m	class:InteractiveMCPClient
 _execute_command	mcp_servers/screen/screen_server.py	/^    async def _execute_command(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:ScreenServer
 _execute_pattern	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    async def _execute_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
 _execute_pattern	mcp_servers/pattern_manager/pattern_server.py	/^    async def _execute_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
+_execute_tool_call	mcp_browser/interactive_client.py	/^    async def _execute_tool_call(self, tool_name: str, arguments: Dict[str, Any]):$/;"	f
 _export_onboarding	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    async def _export_onboarding(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
 _export_onboarding	mcp_servers/onboarding/onboarding_server.py	/^    async def _export_onboarding(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:OnboardingServer
 _filter_tools_response	build/lib/mcp_browser/filter.py	/^    def _filter_tools_response(self, message: dict) -> dict:$/;"	m	class:MessageFilter
@@ -141,6 +161,7 @@ _format_onboarding	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    d
 _format_onboarding	mcp_servers/onboarding/onboarding_server.py	/^    def _format_onboarding(self, identity: str, data: Dict[str, Any]) -> str:$/;"	m	class:OnboardingServer
 _forward_to_server	build/lib/mcp_browser/proxy.py	/^    async def _forward_to_server(self, request: dict) -> dict:$/;"	m	class:MCPBrowser
 _forward_to_server	mcp_browser/proxy.py	/^    async def _forward_to_server(self, request: dict) -> dict:$/;"	m	class:MCPBrowser
+_generate_sample_args	mcp_browser/interactive_client.py	/^    def _generate_sample_args(self, schema: Dict[str, Any]) -> Dict[str, Any]:$/;"	f
 _get_builtin_servers	build/lib/mcp_browser/multi_server.py	/^    def _get_builtin_servers(self) -> Dict[str, MCPServerConfig]:$/;"	m	class:MultiServerManager
 _get_builtin_servers	mcp_browser/multi_server.py	/^    def _get_builtin_servers(self) -> Dict[str, MCPServerConfig]:$/;"	m	class:MultiServerManager
 _handle_call	build/lib/mcp_browser/filter.py	/^    async def _handle_call(self, message: dict) -> dict:$/;"	m	class:VirtualToolHandler
@@ -169,12 +190,14 @@ _list_patterns	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    asy
 _list_patterns	mcp_servers/pattern_manager/pattern_server.py	/^    async def _list_patterns(self) -> Dict[str, Any]:$/;"	m	class:PatternServer
 _list_sessions	build/lib/mcp_servers/screen/screen_server.py	/^    async def _list_sessions(self) -> Dict[str, Any]:$/;"	m	class:ScreenServer
 _list_sessions	mcp_servers/screen/screen_server.py	/^    async def _list_sessions(self) -> Dict[str, Any]:$/;"	m	class:ScreenServer
+_list_tools	mcp_browser/interactive_client.py	/^    async def _list_tools(self, args: List[str]):$/;"	f
 _load_json	build/lib/mcp_servers/memory/memory_server.py	/^    def _load_json(self, filename: str, default: Any) -> Any:$/;"	m	class:MemoryServer
 _load_json	mcp_servers/memory/memory_server.py	/^    def _load_json(self, filename: str, default: Any) -> Any:$/;"	m	class:MemoryServer
 _load_memory	build/lib/mcp_servers/memory/memory_server.py	/^    def _load_memory(self):$/;"	m	class:MemoryServer
 _load_memory	mcp_servers/memory/memory_server.py	/^    def _load_memory(self):$/;"	m	class:MemoryServer
 _load_patterns	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    def _load_patterns(self) -> Dict[str, Dict[str, Any]]:$/;"	m	class:PatternServer
 _load_patterns	mcp_servers/pattern_manager/pattern_server.py	/^    def _load_patterns(self) -> Dict[str, Dict[str, Any]]:$/;"	m	class:PatternServer
+_manage_onboarding	mcp_browser/interactive_client.py	/^    async def _manage_onboarding(self, args: List[str]):$/;"	f
 _mark_offline	build/lib/mcp_browser/server.py	/^    def _mark_offline(self):$/;"	m	class:MCPServer
 _mark_offline	mcp_browser/server.py	/^    def _mark_offline(self):$/;"	m	class:MCPServer
 _matches_pattern	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    def _matches_pattern(self, text: str, trigger: List[str]) -> bool:$/;"	m	class:PatternServer
@@ -201,6 +224,7 @@ _read_stderr	build/lib/mcp_browser/server.py	/^    async def _read_stderr(self):
 _read_stderr	mcp_browser/server.py	/^    async def _read_stderr(self):$/;"	m	class:MCPServer
 _read_stdout	build/lib/mcp_browser/server.py	/^    async def _read_stdout(self):$/;"	m	class:MCPServer
 _read_stdout	mcp_browser/server.py	/^    async def _read_stdout(self):$/;"	m	class:MCPServer
+_refresh_tools	mcp_browser/interactive_client.py	/^    async def _refresh_tools(self):$/;"	m	class:InteractiveMCPClient
 _register_tools	build/lib/mcp_servers/memory/memory_server.py	/^    def _register_tools(self):$/;"	m	class:MemoryServer
 _register_tools	build/lib/mcp_servers/onboarding/onboarding_server.py	/^    def _register_tools(self):$/;"	m	class:OnboardingServer
 _register_tools	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    def _register_tools(self):$/;"	m	class:PatternServer
@@ -219,10 +243,17 @@ _save_json	build/lib/mcp_servers/memory/memory_server.py	/^    def _save_json(se
 _save_json	mcp_servers/memory/memory_server.py	/^    def _save_json(self, filename: str, data: Any):$/;"	m	class:MemoryServer
 _save_patterns	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    def _save_patterns(self):$/;"	m	class:PatternServer
 _save_patterns	mcp_servers/pattern_manager/pattern_server.py	/^    def _save_patterns(self):$/;"	m	class:PatternServer
+_setup_cmem_integration	mcp_servers/memory/memory_server.py	/^    def _setup_cmem_integration(self) -> bool:$/;"	m	class:MemoryServer
+_setup_readline	mcp_browser/interactive_client.py	/^    def _setup_readline(self):$/;"	m	class:InteractiveMCPClient
+_show_help	mcp_browser/interactive_client.py	/^    def _show_help(self):$/;"	m	class:InteractiveMCPClient
+_show_status	mcp_browser/interactive_client.py	/^    async def _show_status(self):$/;"	f
 _signal_handler	build/lib/mcp_browser/daemon.py	/^    def _signal_handler(self, signum, frame):$/;"	m	class:MCPBrowserDaemon
 _signal_handler	mcp_browser/daemon.py	/^    def _signal_handler(self, signum, frame):$/;"	m	class:MCPBrowserDaemon
 _start_config_watcher	build/lib/mcp_browser/proxy.py	/^    async def _start_config_watcher(self):$/;"	m	class:MCPBrowser
 _start_config_watcher	mcp_browser/proxy.py	/^    async def _start_config_watcher(self):$/;"	m	class:MCPBrowser
+_sync_decision_to_cmem	mcp_servers/memory/memory_server.py	/^    async def _sync_decision_to_cmem(self, decision: Decision):$/;"	m	class:MemoryServer
+_sync_pattern_to_cmem	mcp_servers/memory/memory_server.py	/^    async def _sync_pattern_to_cmem(self, pattern: Pattern, action: str):$/;"	m	class:MemoryServer
+_sync_task_to_cmem	mcp_servers/memory/memory_server.py	/^    async def _sync_task_to_cmem(self, task: Task, action: str):$/;"	m	class:MemoryServer
 _task_add	build/lib/mcp_servers/memory/memory_server.py	/^    async def _task_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _task_add	mcp_servers/memory/memory_server.py	/^    async def _task_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _task_list	build/lib/mcp_servers/memory/memory_server.py	/^    async def _task_list(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
@@ -231,6 +262,7 @@ _task_update	build/lib/mcp_servers/memory/memory_server.py	/^    async def _task
 _task_update	mcp_servers/memory/memory_server.py	/^    async def _task_update(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _test_pattern	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    async def _test_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
 _test_pattern	mcp_servers/pattern_manager/pattern_server.py	/^    async def _test_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
+_test_tool	mcp_browser/interactive_client.py	/^    async def _test_tool(self, args: List[str]):$/;"	f
 _update_server_configs	build/lib/mcp_browser/proxy.py	/^    def _update_server_configs(self):$/;"	m	class:MCPBrowser
 _update_server_configs	mcp_browser/proxy.py	/^    def _update_server_configs(self):$/;"	m	class:MCPBrowser
 add_message_handler	build/lib/mcp_browser/server.py	/^    def add_message_handler(self, handler: Callable[[dict], None]):$/;"	m	class:MCPServer
@@ -258,6 +290,7 @@ call	mcp_browser/proxy.py	/^    async def call(self, jsonrpc_object: Dict[str, A
 call_tool	build/lib/mcp_browser/__main__.py	/^    call_tool = subparsers.add_parser("tools-call", help="Call a tool")$/;"	v
 call_tool	mcp_browser/__main__.py	/^    call_tool = subparsers.add_parser("tools-call", help="Call a tool")$/;"	v
 classifiers	setup.py	/^    classifiers=[$/;"	v
+cleanup	mcp_browser/interactive_client.py	/^    async def cleanup(self):$/;"	f
 clear	build/lib/mcp_browser/buffer.py	/^    def clear(self):$/;"	m	class:JsonRpcBuffer
 clear	mcp_browser/buffer.py	/^    def clear(self):$/;"	m	class:JsonRpcBuffer
 close	build/lib/mcp_browser/daemon.py	/^    async def close(self):$/;"	m	class:MCPBrowserClient
@@ -379,6 +412,7 @@ help	mcp_browser/__main__.py	/^                       help="Test connection to s
 include_package_data	setup.py	/^    include_package_data=True,$/;"	v
 initialize	build/lib/mcp_browser/proxy.py	/^    async def initialize(self):$/;"	m	class:MCPBrowser
 initialize	examples/ai_optimized.py	/^    async def initialize(self):$/;"	m	class:AIAssistant
+initialize	mcp_browser/interactive_client.py	/^    async def initialize(self):$/;"	m	class:InteractiveMCPClient
 initialize	mcp_browser/proxy.py	/^    async def initialize(self):$/;"	m	class:MCPBrowser
 initialize_options	setup.py	/^    def initialize_options(self):$/;"	m	class:GenerateAIDocs
 initialize_options	setup.py	/^    def initialize_options(self):$/;"	m	class:TestCommand
@@ -396,6 +430,7 @@ jsonrpc	mcp_browser/__main__.py	/^    jsonrpc = subparsers.add_parser("jsonrpc",
 keywords	setup.py	/^    keywords="mcp model-context-protocol ai llm tools json-rpc",$/;"	v
 kill_daemon_with_children	build/lib/mcp_browser/daemon.py	/^def kill_daemon_with_children(socket_path: Path) -> bool:$/;"	f
 kill_daemon_with_children	mcp_browser/daemon.py	/^def kill_daemon_with_children(socket_path: Path) -> bool:$/;"	f
+license	setup.py	/^    license="GPL-3.0-or-later",$/;"	v
 load	build/lib/mcp_browser/config.py	/^    def load(self) -> MCPBrowserConfig:$/;"	m	class:ConfigLoader
 load	mcp_browser/config.py	/^    def load(self) -> MCPBrowserConfig:$/;"	m	class:ConfigLoader
 load_config	build/lib/mcp_browser/default_configs.py	/^    def load_config(self) -> dict:$/;"	m	class:ConfigManager
@@ -414,11 +449,13 @@ main	examples/basic_usage.py	/^async def main():$/;"	f
 main	mcp_browser/__main__.py	/^def main():$/;"	f
 main	mcp_browser/client_main.py	/^def main():$/;"	f
 main	mcp_browser/daemon_main.py	/^def main():$/;"	f
+main	mcp_browser/interactive_client.py	/^async def main():$/;"	f
 main	test_mcp_protocol.py	/^async def main():$/;"	f
 main	tests/test_browser_functionality.py	/^def main():$/;"	f
 main	tests/test_integration.py	/^async def main():$/;"	f
 mark_handled	build/lib/mcp_browser/filter.py	/^    def mark_handled(self, request_id: Union[str, int]):$/;"	m	class:MessageFilter
 mark_handled	mcp_browser/filter.py	/^    def mark_handled(self, request_id: Union[str, int]):$/;"	m	class:MessageFilter
+mock_call	tests/test_interactive_client.py	/^        def mock_call(request):$/;"	f	function:TestInteractiveMCPClientIntegration.test_full_workflow_mock
 name	setup.py	/^    name="mcp-browser",$/;"	v
 package_data	setup.py	/^    package_data={$/;"	v
 packages	setup.py	/^    packages=find_packages(include=['mcp_browser*', 'mcp_servers*']),$/;"	v
@@ -437,6 +474,7 @@ route_tool_call	mcp_browser/multi_server.py	/^    async def route_tool_call(self
 run	build/lib/mcp_browser/client_main.py	/^        async def run():$/;"	f	function:main
 run	build/lib/mcp_servers/base.py	/^    async def run(self):$/;"	m	class:BaseMCPServer
 run	mcp_browser/client_main.py	/^        async def run():$/;"	f	function:main
+run	mcp_browser/interactive_client.py	/^    async def run(self):$/;"	m	class:InteractiveMCPClient
 run	mcp_servers/base.py	/^    async def run(self):$/;"	m	class:BaseMCPServer
 run	setup.py	/^    def run(self):$/;"	m	class:GenerateAIDocs
 run	setup.py	/^    def run(self):$/;"	m	class:TestCommand
@@ -475,6 +513,8 @@ set_onboarding_text	build/lib/mcp_browser/default_configs.py	/^    def set_onboa
 set_onboarding_text	mcp_browser/default_configs.py	/^    def set_onboarding_text(self, text: str, identity: Optional[str] = None) -> None:$/;"	m	class:ConfigManager
 setup_logging	build/lib/mcp_browser/logging_config.py	/^def setup_logging(debug: bool = False, log_file: Optional[Path] = None, $/;"	f
 setup_logging	mcp_browser/logging_config.py	/^def setup_logging(debug: bool = False, log_file: Optional[Path] = None, $/;"	f
+setup_method	tests/test_cmem_integration.py	/^    def setup_method(self):$/;"	m	class:TestCmemIntegration
+setup_method	tests/test_interactive_client.py	/^    def setup_method(self):$/;"	m	class:TestInteractiveMCPClient
 show_available_servers	build/lib/mcp_browser/__main__.py	/^def show_available_servers(config_path: Optional[str] = None):$/;"	f
 show_available_servers	mcp_browser/__main__.py	/^def show_available_servers(config_path: Optional[str] = None):$/;"	f
 show_configuration	build/lib/mcp_browser/__main__.py	/^def show_configuration(config_path: Optional[str] = None):$/;"	f
@@ -509,24 +549,57 @@ test_basic_flow	tests/test_integration.py	/^async def test_basic_flow():$/;"	f
 test_brave_search_integration	tests/test_brave_search.py	/^async def test_brave_search_integration():$/;"	f
 test_browser_without_servers	tests/test_basic.py	/^    async def test_browser_without_servers(self):$/;"	m	class:TestMCPBrowser
 test_browser_without_servers	tests/test_browser_functionality.py	/^async def test_browser_without_servers():$/;"	f
+test_call_mcp_browser	tests/test_interactive_client.py	/^    async def test_call_mcp_browser(self):$/;"	m	class:TestInteractiveMCPClient
+test_call_mcp_client	tests/test_interactive_client.py	/^    async def test_call_mcp_client(self):$/;"	m	class:TestInteractiveMCPClient
 test_claude_connection	tests/test_claude_connection.py	/^async def test_claude_connection():$/;"	f
+test_completer_commands	tests/test_interactive_client.py	/^    def test_completer_commands(self):$/;"	m	class:TestInteractiveMCPClient
+test_completer_tools	tests/test_interactive_client.py	/^    def test_completer_tools(self):$/;"	m	class:TestInteractiveMCPClient
+test_create_cmem_bridges	tests/test_cmem_integration.py	/^    def test_create_cmem_bridges(self):$/;"	m	class:TestCmemIntegration
 test_daemon_initialization	test_mcp_protocol.py	/^async def test_daemon_initialization():$/;"	f
 test_direct_initialization	test_mcp_protocol.py	/^async def test_direct_initialization():$/;"	f
 test_discover_jsonpath	tests/test_basic.py	/^    def test_discover_jsonpath(self):$/;"	m	class:TestToolRegistry
 test_discovery	test_discovery.py	/^async def test_discovery():$/;"	f
+test_display_result_image_content	tests/test_interactive_client.py	/^    def test_display_result_image_content(self):$/;"	m	class:TestInteractiveMCPClient
+test_display_result_raw_data	tests/test_interactive_client.py	/^    def test_display_result_raw_data(self):$/;"	m	class:TestInteractiveMCPClient
+test_display_result_text_content	tests/test_interactive_client.py	/^    def test_display_result_text_content(self):$/;"	m	class:TestInteractiveMCPClient
 test_double_handshake_issue	test_mcp_protocol.py	/^async def test_double_handshake_issue():$/;"	f
 test_duplicate_error_filtering	tests/test_basic.py	/^    def test_duplicate_error_filtering(self):$/;"	m	class:TestMessageFilter
 test_error_handling	tests/test_integration.py	/^async def test_error_handling():$/;"	f
+test_execute_command_help	tests/test_interactive_client.py	/^    async def test_execute_command_help(self):$/;"	m	class:TestInteractiveMCPClient
+test_execute_command_list	tests/test_interactive_client.py	/^    async def test_execute_command_list(self):$/;"	m	class:TestInteractiveMCPClient
+test_execute_command_refresh	tests/test_interactive_client.py	/^    async def test_execute_command_refresh(self):$/;"	m	class:TestInteractiveMCPClient
+test_execute_command_unknown_tool	tests/test_interactive_client.py	/^    async def test_execute_command_unknown_tool(self):$/;"	m	class:TestInteractiveMCPClient
+test_execute_tool_call	tests/test_interactive_client.py	/^    async def test_execute_tool_call(self):$/;"	m	class:TestInteractiveMCPClient
+test_execute_tool_call_error	tests/test_interactive_client.py	/^    async def test_execute_tool_call_error(self):$/;"	m	class:TestInteractiveMCPClient
+test_full_workflow_mock	tests/test_interactive_client.py	/^    async def test_full_workflow_mock(self):$/;"	m	class:TestInteractiveMCPClientIntegration
+test_generate_sample_args_examples	tests/test_interactive_client.py	/^    def test_generate_sample_args_examples(self):$/;"	m	class:TestInteractiveMCPClient
+test_generate_sample_args_string	tests/test_interactive_client.py	/^    def test_generate_sample_args_string(self):$/;"	m	class:TestInteractiveMCPClient
+test_generate_sample_args_types	tests/test_interactive_client.py	/^    def test_generate_sample_args_types(self):$/;"	m	class:TestInteractiveMCPClient
+test_initialization	tests/test_interactive_client.py	/^    def test_initialization(self):$/;"	m	class:TestInteractiveMCPClient
+test_memory_server_initialization_custom_identity	tests/test_cmem_integration.py	/^    def test_memory_server_initialization_custom_identity(self):$/;"	m	class:TestCmemIntegration
+test_memory_server_initialization_default	tests/test_cmem_integration.py	/^    def test_memory_server_initialization_default(self):$/;"	m	class:TestCmemIntegration
 test_message_filter	tests/test_simple.py	/^def test_message_filter():$/;"	f
 test_onboarding	tests/test_onboarding.py	/^async def test_onboarding():$/;"	f
+test_refresh_tools	tests/test_interactive_client.py	/^    async def test_refresh_tools(self):$/;"	m	class:TestInteractiveMCPClient
+test_screen_multiuser	test_screen_multiuser.py	/^async def test_screen_multiuser():$/;"	f
 test_screen_utf8	test_screen_utf8.py	/^async def test_screen_utf8():$/;"	f
 test_server_connection	build/lib/mcp_browser/__main__.py	/^async def test_server_connection(browser: MCPBrowser, server_name: Optional[str] = None):$/;"	f
 test_server_connection	mcp_browser/__main__.py	/^async def test_server_connection(browser: MCPBrowser, server_name: Optional[str] = None):$/;"	f
 test_server_mode_initialization	test_mcp_protocol.py	/^async def test_server_mode_initialization():$/;"	f
 test_server_mode_timeout	test_claude_desktop_flow.py	/^async def test_server_mode_timeout():$/;"	f
+test_setup_cmem_integration_available	tests/test_cmem_integration.py	/^    def test_setup_cmem_integration_available(self):$/;"	m	class:TestCmemIntegration
+test_setup_cmem_integration_no_cmem	tests/test_cmem_integration.py	/^    def test_setup_cmem_integration_no_cmem(self):$/;"	m	class:TestCmemIntegration
 test_sparse_mode	tests/test_simple.py	/^def test_sparse_mode():$/;"	f
 test_sparse_mode_filtering	tests/test_basic.py	/^    def test_sparse_mode_filtering(self):$/;"	m	class:TestMessageFilter
 test_sparse_tools	tests/test_basic.py	/^    def test_sparse_tools(self):$/;"	m	class:TestToolRegistry
+test_sync_decision_to_cmem	tests/test_cmem_integration.py	/^    async def test_sync_decision_to_cmem(self):$/;"	m	class:TestCmemIntegration
+test_sync_error_handling	tests/test_cmem_integration.py	/^    async def test_sync_error_handling(self):$/;"	m	class:TestCmemIntegration
+test_sync_pattern_to_cmem	tests/test_cmem_integration.py	/^    async def test_sync_pattern_to_cmem(self):$/;"	m	class:TestCmemIntegration
+test_sync_task_to_cmem_add	tests/test_cmem_integration.py	/^    async def test_sync_task_to_cmem_add(self):$/;"	m	class:TestCmemIntegration
+test_sync_task_to_cmem_complete	tests/test_cmem_integration.py	/^    async def test_sync_task_to_cmem_complete(self):$/;"	m	class:TestCmemIntegration
+test_sync_with_integration_disabled	tests/test_cmem_integration.py	/^    async def test_sync_with_integration_disabled(self):$/;"	m	class:TestCmemIntegration
+test_task_add_with_sync	tests/test_cmem_integration.py	/^    async def test_task_add_with_sync(self):$/;"	m	class:TestCmemIntegration
+test_task_update_completion_with_sync	tests/test_cmem_integration.py	/^    async def test_task_update_completion_with_sync(self):$/;"	m	class:TestCmemIntegration
 test_tool_registry	tests/test_simple.py	/^def test_tool_registry():$/;"	f
 test_update_tools	tests/test_basic.py	/^    def test_update_tools(self):$/;"	m	class:TestToolRegistry
 test_virtual_tool_handling	tests/test_basic.py	/^    async def test_virtual_tool_handling(self):$/;"	m	class:TestMCPBrowser

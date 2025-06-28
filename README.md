@@ -33,7 +33,8 @@ MCP Browser acts as a smart proxy between AI systems and MCP servers, providing:
    - Configuration-driven server management
 
 4. **Built-in Servers**
-   - **Screen**: GNU screen session management for persistent processes
+   - **Tmux**: tmux session management for persistent processes (default)
+   - **Screen**: GNU screen session management (legacy, disabled by default)
    - **Memory**: Project memory, tasks, decisions, and knowledge management
    - **Patterns**: Auto-response pattern management for automation
    - **Onboarding**: Identity-aware onboarding for AI contexts
@@ -53,7 +54,7 @@ mcp-browser/
 │   └── config.py         # Configuration management
 ├── mcp_servers/          # Built-in MCP servers
 │   ├── base.py           # Base server implementation
-│   ├── screen/           # Screen session management
+│   ├── screen/           # Session management (tmux + screen)
 │   ├── memory/           # Memory and context management
 │   ├── pattern_manager/  # Pattern automation
 │   └── onboarding/       # Identity-aware onboarding

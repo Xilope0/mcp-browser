@@ -6,6 +6,7 @@
   test_claude_desktop_flow.py
   test_discovery.py
   test_mcp_protocol.py
+  test_screen_multiuser.py
   test_screen_utf8.py
   mcp_browser.egg-info/
   systemd/
@@ -55,7 +56,9 @@
     test_brave_search.py
     test_browser_functionality.py
     test_claude_connection.py
+    test_cmem_integration.py
     test_integration.py
+    test_interactive_client.py
     test_onboarding.py
     test_simple.py
   config/
@@ -84,6 +87,7 @@
     daemon_main.py
     default_configs.py
     filter.py
+    interactive_client.py
     logging_config.py
     multi_server.py
     proxy.py

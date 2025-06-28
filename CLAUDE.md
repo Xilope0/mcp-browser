@@ -40,8 +40,9 @@ python setup.py aidocs
 
 1. **Virtual Tools**: `mcp_discover`, `mcp_call`, and `onboarding` exist only in the browser layer
 2. **Tool Namespacing**: Format is `server::tool` or `mcp__namespace__tool` 
-3. **Multi-Server**: Built-in servers (screen, memory, patterns, onboarding) start automatically
+3. **Multi-Server**: Built-in servers (tmux, memory, patterns, onboarding) start automatically
 4. **Identity-Aware**: Onboarding tool accepts identity parameter for context-specific instructions
+5. **Session Management**: Tmux preferred over screen for better multi-user support
 
 ### Architecture Overview
 
@@ -55,7 +56,7 @@ mcp_browser/
 
 mcp_servers/
 ├── base.py           # Base class for Python MCP servers
-├── screen/           # GNU screen session management
+├── screen/           # Session management (tmux preferred, screen legacy)
 ├── memory/           # Persistent memory and tasks
 ├── patterns/         # Auto-response patterns
 └── onboarding/       # Identity-aware onboarding
