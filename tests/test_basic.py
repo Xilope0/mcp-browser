@@ -54,7 +54,7 @@ class TestToolRegistry:
         assert sparse[0]["name"] == "mcp_discover"
         assert sparse[1]["name"] == "mcp_call"
         assert sparse[2]["name"] == "onboarding"
-        assert "2 tools available" in sparse[0]["description"]
+        assert "2 hidden tools" in sparse[0]["description"]
 
 
 class TestMessageFilter:

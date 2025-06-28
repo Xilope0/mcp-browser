@@ -54,13 +54,14 @@ class Pattern:
 
 
 class MemoryServer(BaseMCPServer):
-    """MCP server for memory and context management."""
+    """MCP server for memory and context management with cmem integration."""
     
-    def __init__(self):
+    def __init__(self, identity: str = "default"):
         super().__init__("memory-server", "1.0.0")
         self.memory_dir = Path.home() / ".mcp-memory"
         self.memory_dir.mkdir(exist_ok=True)
-        self.current_project = "default"
+        self.current_project = identity
+        self.cmem_integration = self._setup_cmem_integration()
         self._register_tools()
         self._load_memory()
     
@@ -211,6 +212,53 @@ class MemoryServer(BaseMCPServer):
         self.patterns = self._load_json("patterns.json", {})
         self.knowledge = self._load_json("knowledge.json", {})
     
+    def _setup_cmem_integration(self) -> bool:
+        """Setup integration with cmem by creating identity-specific directories."""
+        try:
+            # Check if cmem is available
+            import subprocess
+            result = subprocess.run(['cmem', 'stats'], capture_output=True, text=True, timeout=5)
+            if result.returncode != 0:
+                return False
+            
+            # Create identity-specific directory
+            identity_dir = self.memory_dir / self.current_project
+            identity_dir.mkdir(exist_ok=True)
+            
+            # Check if we should symlink to cmem storage
+            claude_dir = Path.home() / ".claude"
+            if claude_dir.exists():
+                # Try to find cmem session data
+                cmem_session_dirs = list(claude_dir.glob("sessions/*/"))
+                if cmem_session_dirs:
+                    # Use the most recent session
+                    latest_session = max(cmem_session_dirs, key=lambda p: p.stat().st_mtime)
+                    
+                    # Create symlinks for task/pattern/decision integration
+                    self._create_cmem_bridges(identity_dir, latest_session)
+                    return True
+            
+            return False
+        except Exception as e:
+            # Fail silently - cmem integration is optional
+            return False
+    
+    def _create_cmem_bridges(self, identity_dir: Path, session_dir: Path):
+        """Create bridge files to sync with cmem."""
+        # Create bridge files that can sync with cmem format
+        bridge_dir = identity_dir / "cmem_bridge"
+        bridge_dir.mkdir(exist_ok=True)
+        
+        # Store reference to cmem session for potential sync
+        bridge_info = {
+            "session_dir": str(session_dir),
+            "last_sync": datetime.now().isoformat(),
+            "integration_active": True
+        }
+        
+        with open(bridge_dir / "info.json", 'w') as f:
+            json.dump(bridge_info, f, indent=2)
+    
     def _load_json(self, filename: str, default: Any) -> Any:
         """Load JSON file or return default."""
         filepath = self.project_dir / filename
@@ -263,6 +311,9 @@ class MemoryServer(BaseMCPServer):
         self.tasks[task.id] = asdict(task)
         self._save_json("tasks.json", self.tasks)
         
+        # Try to sync with cmem if integration is active
+        await self._sync_task_to_cmem(task, "add")
+        
         return self.content_text(f"Added task: {task.id[:8]} - {task.content}")
     
     async def _task_list(self, args: Dict[str, Any]) -> Dict[str, Any]:
@@ -298,6 +349,9 @@ class MemoryServer(BaseMCPServer):
         self.tasks[full_id]["status"] = new_status
         if new_status == "completed":
             self.tasks[full_id]["completed_at"] = datetime.now().isoformat()
+            # Sync completion to cmem
+            task_obj = Task(**self.tasks[full_id])
+            await self._sync_task_to_cmem(task_obj, "complete")
         
         self._save_json("tasks.json", self.tasks)
         
@@ -315,6 +369,9 @@ class MemoryServer(BaseMCPServer):
         self.decisions[decision.id] = asdict(decision)
         self._save_json("decisions.json", self.decisions)
         
+        # Try to sync with cmem
+        await self._sync_decision_to_cmem(decision)
+        
         return self.content_text(f"Recorded decision: {decision.choice}")
     
     async def _pattern_add(self, args: Dict[str, Any]) -> Dict[str, Any]:
@@ -329,6 +386,9 @@ class MemoryServer(BaseMCPServer):
         
         self.patterns[pattern.id] = asdict(pattern)
         self._save_json("patterns.json", self.patterns)
+        
+        # Try to sync with cmem
+        await self._sync_pattern_to_cmem(pattern, "add")
         
         return self.content_text(f"Added pattern: {pattern.pattern}")
     
@@ -438,6 +498,89 @@ Total Knowledge Items: {sum(len(items) for items in self.knowledge.values())}
 """
         
         return self.content_text(summary)
+    
+    async def _sync_task_to_cmem(self, task: Task, action: str):
+        """Sync task with cmem if integration is active."""
+        if not self.cmem_integration:
+            return
+        
+        try:
+            import subprocess
+            import asyncio
+            
+            if action == "add":
+                # Map our priority to cmem priority
+                priority_map = {"low": "low", "medium": "medium", "high": "high"}
+                cmem_priority = priority_map.get(task.priority, "medium")
+                
+                # Add task to cmem
+                cmd = ['cmem', 'task', 'add', task.content, '--priority', cmem_priority]
+                if task.assignee:
+                    cmd.extend(['--assignee', task.assignee])
+                
+                result = await asyncio.create_subprocess_exec(
+                    *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+                )
+                await result.communicate()
+                
+            elif action == "complete":
+                # Try to find and complete corresponding cmem task
+                # This is best-effort since we don't have direct ID mapping
+                cmd = ['cmem', 'task', 'complete', task.content[:50]]  # Use content prefix
+                result = await asyncio.create_subprocess_exec(
+                    *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+                )
+                await result.communicate()
+        
+        except Exception:
+            # Fail silently - cmem sync is optional
+            pass
+    
+    async def _sync_pattern_to_cmem(self, pattern: Pattern, action: str):
+        """Sync pattern with cmem if integration is active."""
+        if not self.cmem_integration:
+            return
+        
+        try:
+            import subprocess
+            import asyncio
+            
+            if action == "add":
+                # Add pattern to cmem
+                cmd = ['cmem', 'pattern', 'add', pattern.pattern, pattern.description]
+                if pattern.priority != "medium":
+                    cmd.extend(['--priority', pattern.priority])
+                
+                result = await asyncio.create_subprocess_exec(
+                    *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+                )
+                await result.communicate()
+        
+        except Exception:
+            # Fail silently - cmem sync is optional
+            pass
+    
+    async def _sync_decision_to_cmem(self, decision: Decision):
+        """Sync decision with cmem if integration is active."""
+        if not self.cmem_integration:
+            return
+        
+        try:
+            import subprocess
+            import asyncio
+            
+            # Add decision to cmem
+            alternatives_str = ', '.join(decision.alternatives)
+            cmd = ['cmem', 'decision', decision.choice, decision.reasoning, alternatives_str]
+            
+            result = await asyncio.create_subprocess_exec(
+                *cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+            )
+            await result.communicate()
+        
+        except Exception:
+            # Fail silently - cmem sync is optional
+            pass
 
 
 if __name__ == "__main__":

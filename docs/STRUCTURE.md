@@ -3,6 +3,10 @@
 ```
 ./
   setup.py
+  test_claude_desktop_flow.py
+  test_discovery.py
+  test_mcp_protocol.py
+  test_screen_utf8.py
   mcp_browser.egg-info/
   systemd/
   build/

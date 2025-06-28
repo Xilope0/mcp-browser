@@ -85,7 +85,10 @@ pip install git+https://github.com/Xilope0/mcp-browser.git
 ## Quick Start
 
 ```bash
-# Run interactive mode
+# Run enhanced interactive mode (NEW!)
+./mcp-browser-interactive
+
+# Run basic interactive mode
 mcp-browser
 
 # Run as MCP server (for chaining)
@@ -138,6 +141,39 @@ In sparse mode (default), only 3 tools are initially visible:
 3. **onboarding**: Get/set identity-specific instructions
 
 All other tools (potentially hundreds) are hidden but fully accessible through these meta-tools.
+
+## Enhanced Interactive Mode
+
+The new `./mcp-browser-interactive` provides a much better testing and exploration experience:
+
+**Features:**
+- **Tab completion** for commands and tool names
+- **Command history** with readline support  
+- **Smart argument parsing** with key=value syntax
+- **Built-in help** and tool discovery
+- **Test mode** to try tools with sample data
+- **Direct tool calls** without verbose JSON-RPC syntax
+
+**Interactive Commands:**
+```bash
+help                    # Show available commands
+list [pattern]          # List tools (with optional filter)
+discover <jsonpath>     # Explore using JSONPath
+call <tool> key=value   # Call tool with arguments
+test <tool>             # Test tool with sample data
+<tool> key=value        # Direct tool call (shortcut)
+onboard <identity>      # Manage onboarding instructions
+status                  # Show connection status
+```
+
+**Example Session:**
+```bash
+mcp> list bash                              # Find bash-related tools
+mcp> discover $.tools[*].name               # List all tool names  
+mcp> test Bash                              # Test Bash tool
+mcp> Bash command="ls -la"                  # Direct tool call
+mcp> onboard Claude "Focus on code quality" # Set onboarding
+```
 
 ## Design Principles
 

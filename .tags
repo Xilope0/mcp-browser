@@ -221,6 +221,8 @@ _save_patterns	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    def
 _save_patterns	mcp_servers/pattern_manager/pattern_server.py	/^    def _save_patterns(self):$/;"	m	class:PatternServer
 _signal_handler	build/lib/mcp_browser/daemon.py	/^    def _signal_handler(self, signum, frame):$/;"	m	class:MCPBrowserDaemon
 _signal_handler	mcp_browser/daemon.py	/^    def _signal_handler(self, signum, frame):$/;"	m	class:MCPBrowserDaemon
+_start_config_watcher	build/lib/mcp_browser/proxy.py	/^    async def _start_config_watcher(self):$/;"	m	class:MCPBrowser
+_start_config_watcher	mcp_browser/proxy.py	/^    async def _start_config_watcher(self):$/;"	m	class:MCPBrowser
 _task_add	build/lib/mcp_servers/memory/memory_server.py	/^    async def _task_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _task_add	mcp_servers/memory/memory_server.py	/^    async def _task_add(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _task_list	build/lib/mcp_servers/memory/memory_server.py	/^    async def _task_list(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
@@ -229,6 +231,8 @@ _task_update	build/lib/mcp_servers/memory/memory_server.py	/^    async def _task
 _task_update	mcp_servers/memory/memory_server.py	/^    async def _task_update(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:MemoryServer
 _test_pattern	build/lib/mcp_servers/pattern_manager/pattern_server.py	/^    async def _test_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
 _test_pattern	mcp_servers/pattern_manager/pattern_server.py	/^    async def _test_pattern(self, args: Dict[str, Any]) -> Dict[str, Any]:$/;"	m	class:PatternServer
+_update_server_configs	build/lib/mcp_browser/proxy.py	/^    def _update_server_configs(self):$/;"	m	class:MCPBrowser
+_update_server_configs	mcp_browser/proxy.py	/^    def _update_server_configs(self):$/;"	m	class:MCPBrowser
 add_message_handler	build/lib/mcp_browser/server.py	/^    def add_message_handler(self, handler: Callable[[dict], None]):$/;"	m	class:MCPServer
 add_message_handler	mcp_browser/server.py	/^    def add_message_handler(self, handler: Callable[[dict], None]):$/;"	m	class:MCPServer
 add_server	build/lib/mcp_browser/multi_server.py	/^    async def add_server(self, name: str, config: MCPServerConfig):$/;"	m	class:MultiServerManager
@@ -264,8 +268,6 @@ close	mcp_browser/proxy.py	/^    async def close(self):$/;"	m	class:MCPBrowser
 cmdclass	setup.py	/^    cmdclass={$/;"	v
 completion	build/lib/mcp_browser/__main__.py	/^    completion = subparsers.add_parser("completion", help="Get completion")$/;"	v
 completion	mcp_browser/__main__.py	/^    completion = subparsers.add_parser("completion", help="Get completion")$/;"	v
-config	build/lib/mcp_browser/__main__.py	/^        config = loader.load()$/;"	v
-config	mcp_browser/__main__.py	/^        config = loader.load()$/;"	v
 config_path	build/lib/mcp_browser/__main__.py	/^        config_path=config_path,$/;"	v
 config_path	build/lib/mcp_browser/__main__.py	/^    config_path = Path(args.config) if args.config else None$/;"	v
 config_path	mcp_browser/__main__.py	/^        config_path=config_path,$/;"	v
@@ -394,18 +396,13 @@ jsonrpc	mcp_browser/__main__.py	/^    jsonrpc = subparsers.add_parser("jsonrpc",
 keywords	setup.py	/^    keywords="mcp model-context-protocol ai llm tools json-rpc",$/;"	v
 kill_daemon_with_children	build/lib/mcp_browser/daemon.py	/^def kill_daemon_with_children(socket_path: Path) -> bool:$/;"	f
 kill_daemon_with_children	mcp_browser/daemon.py	/^def kill_daemon_with_children(socket_path: Path) -> bool:$/;"	f
-list_prompts	build/lib/mcp_browser/__main__.py	/^    list_prompts = subparsers.add_parser("prompts-list", help="List available prompts")$/;"	v
-list_prompts	mcp_browser/__main__.py	/^    list_prompts = subparsers.add_parser("prompts-list", help="List available prompts")$/;"	v
-list_resources	build/lib/mcp_browser/__main__.py	/^    list_resources = subparsers.add_parser("resources-list", help="List available resources")$/;"	v
-list_resources	mcp_browser/__main__.py	/^    list_resources = subparsers.add_parser("resources-list", help="List available resources")$/;"	v
-list_tools	build/lib/mcp_browser/__main__.py	/^    list_tools = subparsers.add_parser("tools-list", help="List available tools")$/;"	v
-list_tools	mcp_browser/__main__.py	/^    list_tools = subparsers.add_parser("tools-list", help="List available tools")$/;"	v
 load	build/lib/mcp_browser/config.py	/^    def load(self) -> MCPBrowserConfig:$/;"	m	class:ConfigLoader
 load	mcp_browser/config.py	/^    def load(self) -> MCPBrowserConfig:$/;"	m	class:ConfigLoader
 load_config	build/lib/mcp_browser/default_configs.py	/^    def load_config(self) -> dict:$/;"	m	class:ConfigManager
 load_config	mcp_browser/default_configs.py	/^    def load_config(self) -> dict:$/;"	m	class:ConfigManager
 loader	build/lib/mcp_browser/__main__.py	/^        loader = ConfigLoader()$/;"	v
 loader	mcp_browser/__main__.py	/^        loader = ConfigLoader()$/;"	v
+log_test	test_mcp_protocol.py	/^def log_test(msg):$/;"	f
 long_description	setup.py	/^    long_description = fh.read()$/;"	v
 long_description	setup.py	/^    long_description=long_description,$/;"	v
 long_description_content_type	setup.py	/^    long_description_content_type="text\/markdown",$/;"	v
@@ -417,6 +414,7 @@ main	examples/basic_usage.py	/^async def main():$/;"	f
 main	mcp_browser/__main__.py	/^def main():$/;"	f
 main	mcp_browser/client_main.py	/^def main():$/;"	f
 main	mcp_browser/daemon_main.py	/^def main():$/;"	f
+main	test_mcp_protocol.py	/^async def main():$/;"	f
 main	tests/test_browser_functionality.py	/^def main():$/;"	f
 main	tests/test_integration.py	/^async def main():$/;"	f
 mark_handled	build/lib/mcp_browser/filter.py	/^    def mark_handled(self, request_id: Union[str, int]):$/;"	m	class:MessageFilter
@@ -512,19 +510,27 @@ test_brave_search_integration	tests/test_brave_search.py	/^async def test_brave_
 test_browser_without_servers	tests/test_basic.py	/^    async def test_browser_without_servers(self):$/;"	m	class:TestMCPBrowser
 test_browser_without_servers	tests/test_browser_functionality.py	/^async def test_browser_without_servers():$/;"	f
 test_claude_connection	tests/test_claude_connection.py	/^async def test_claude_connection():$/;"	f
+test_daemon_initialization	test_mcp_protocol.py	/^async def test_daemon_initialization():$/;"	f
+test_direct_initialization	test_mcp_protocol.py	/^async def test_direct_initialization():$/;"	f
 test_discover_jsonpath	tests/test_basic.py	/^    def test_discover_jsonpath(self):$/;"	m	class:TestToolRegistry
+test_discovery	test_discovery.py	/^async def test_discovery():$/;"	f
+test_double_handshake_issue	test_mcp_protocol.py	/^async def test_double_handshake_issue():$/;"	f
 test_duplicate_error_filtering	tests/test_basic.py	/^    def test_duplicate_error_filtering(self):$/;"	m	class:TestMessageFilter
 test_error_handling	tests/test_integration.py	/^async def test_error_handling():$/;"	f
 test_message_filter	tests/test_simple.py	/^def test_message_filter():$/;"	f
 test_onboarding	tests/test_onboarding.py	/^async def test_onboarding():$/;"	f
+test_screen_utf8	test_screen_utf8.py	/^async def test_screen_utf8():$/;"	f
 test_server_connection	build/lib/mcp_browser/__main__.py	/^async def test_server_connection(browser: MCPBrowser, server_name: Optional[str] = None):$/;"	f
 test_server_connection	mcp_browser/__main__.py	/^async def test_server_connection(browser: MCPBrowser, server_name: Optional[str] = None):$/;"	f
+test_server_mode_initialization	test_mcp_protocol.py	/^async def test_server_mode_initialization():$/;"	f
+test_server_mode_timeout	test_claude_desktop_flow.py	/^async def test_server_mode_timeout():$/;"	f
 test_sparse_mode	tests/test_simple.py	/^def test_sparse_mode():$/;"	f
 test_sparse_mode_filtering	tests/test_basic.py	/^    def test_sparse_mode_filtering(self):$/;"	m	class:TestMessageFilter
 test_sparse_tools	tests/test_basic.py	/^    def test_sparse_tools(self):$/;"	m	class:TestToolRegistry
 test_tool_registry	tests/test_simple.py	/^def test_tool_registry():$/;"	f
 test_update_tools	tests/test_basic.py	/^    def test_update_tools(self):$/;"	m	class:TestToolRegistry
 test_virtual_tool_handling	tests/test_basic.py	/^    async def test_virtual_tool_handling(self):$/;"	m	class:TestMCPBrowser
+test_with_logging	test_claude_desktop_flow.py	/^async def test_with_logging():$/;"	f
 to_json	build/lib/mcp_browser/registry.py	/^    def to_json(self) -> str:$/;"	m	class:ToolRegistry
 to_json	mcp_browser/registry.py	/^    def to_json(self) -> str:$/;"	m	class:ToolRegistry
 trace	build/lib/mcp_browser/logging_config.py	/^def trace(self, message, *args, **kwargs):$/;"	f
@@ -539,3 +545,5 @@ user_options	setup.py	/^    user_options = []$/;"	v	class:TestCommand
 version	build/lib/mcp_browser/__main__.py	/^                       version=f"%(prog)s {__version__}",$/;"	v
 version	mcp_browser/__main__.py	/^                       version=f"%(prog)s {__version__}",$/;"	v
 version	setup.py	/^    version="0.1.0",$/;"	v
+watch_config	build/lib/mcp_browser/proxy.py	/^        async def watch_config():$/;"	f	function:MCPBrowser._start_config_watcher
+watch_config	mcp_browser/proxy.py	/^        async def watch_config():$/;"	f	function:MCPBrowser._start_config_watcher

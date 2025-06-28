@@ -49,7 +49,7 @@ def test_sparse_mode():
     assert sparse[2]["name"] == "onboarding"
     
     # Check tool count in description
-    assert "5 tools available" in sparse[0]["description"]
+    assert "5 hidden tools" in sparse[0]["description"]
     
     print("✓ Sparse mode tests passed")
 

@@ -91,13 +91,13 @@ class ToolRegistry:
         sparse_tools = [
             {
                 "name": "mcp_discover",
-                "description": f"Discover available tools and servers using JSONPath. {tool_count} tools from {server_count} servers available.",
+                "description": f"🔍 PROXY META-TOOL: Discover {tool_count} hidden tools from {server_count} MCP servers without loading them into context. This prevents context explosion while enabling full tool access via JSONPath queries. Use this to explore what's available before calling specific tools.",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
                         "jsonpath": {
                             "type": "string",
-                            "description": "JSONPath expression (e.g., '$.tools[*].name')"
+                            "description": "JSONPath expression to query tool catalog. Examples: '$.tools[*].name' (list all), '$.tools[?(@.name=='Bash')]' (find specific), '$.servers[*]' (list servers)"
                         }
                     },
                     "required": ["jsonpath"]
@@ -105,17 +105,17 @@ class ToolRegistry:
             },
             {
                 "name": "mcp_call",
-                "description": "Execute any MCP tool by constructing a JSON-RPC call.",
+                "description": f"🚀 PROXY META-TOOL: Execute any of the {tool_count} available MCP tools by constructing JSON-RPC calls. This is the universal interface to all hidden tools - you can call ANY tool discovered via mcp_discover without it being loaded into your context.",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
                         "method": {
                             "type": "string",
-                            "description": "JSON-RPC method (e.g., 'tools/call')"
+                            "description": "JSON-RPC method to call. For tool execution use 'tools/call'. Other methods: 'tools/list', 'prompts/list', 'resources/list'"
                         },
                         "params": {
                             "type": "object",
-                            "description": "Method parameters"
+                            "description": "Method parameters. For 'tools/call': {'name': 'tool_name', 'arguments': {...}}. The arguments object contains the actual tool parameters."
                         }
                     },
                     "required": ["method", "params"]
@@ -123,21 +123,21 @@ class ToolRegistry:
             },
             {
                 "name": "onboarding",
-                "description": "Get or set identity-specific onboarding instructions for AI contexts.",
+                "description": "📋 BUILT-IN TOOL: Manage persistent, identity-aware onboarding instructions. This tool lets AI instances leave instructions for future contexts based on identity (project name, user, etc). Perfect for maintaining context across sessions without consuming tokens.",
                 "inputSchema": {
                     "type": "object",
                     "properties": {
                         "identity": {
                             "type": "string",
-                            "description": "Identity for onboarding (e.g., 'Claude', project name)"
+                            "description": "Identity key for onboarding instructions (e.g., 'Claude', 'MyProject', 'WebDev'). Each identity can have separate instructions."
                         },
                         "instructions": {
                             "type": "string",
-                            "description": "Optional: Set new instructions. If omitted, retrieves existing."
+                            "description": "Optional: New instructions to store. If omitted, retrieves existing instructions for this identity. Use this to leave notes for future AI sessions."
                         },
                         "append": {
                             "type": "boolean",
-                            "description": "Append to existing instructions instead of replacing",
+                            "description": "If true, append to existing instructions instead of replacing them entirely",
                             "default": False
                         }
                     },

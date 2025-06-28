@@ -1,27 +1,48 @@
 # MCP Browser - Universal Model Context Protocol Proxy
 
-Welcome to MCP Browser! This tool acts as a proxy between AI systems and MCP servers, providing:
+Welcome to MCP Browser! This tool solves the **context explosion problem** by acting as a smart proxy between AI systems and potentially hundreds of MCP tools.
 
-## Core Capabilities
+## The Context Problem MCP Browser Solves
 
-### 1. **Proxy Mode**
-MCP Browser acts as a transparent proxy to external MCP servers configured in `~/.claude/mcp-browser/config.yaml`. You can:
-- Connect to any MCP server (filesystem, brave-search, github, etc.)
-- Add new servers at runtime without restarting
-- Access all tools from configured servers through the proxy
+Traditional MCP setups expose ALL tools to the AI context immediately, which can easily consume thousands of tokens. MCP Browser implements a **minimal-to-maximal interface pattern**:
 
-### 2. **Built-in Tools**
-Always available, regardless of external servers:
-- **Screen Management** - Create/manage GNU screen sessions
-- **Memory & Tasks** - Persistent memory and task tracking
-- **Pattern Manager** - Auto-response patterns
-- **Onboarding** - Context-specific instructions (this tool)
+- **What AI sees**: Only 3 simple meta-tools (minimal context usage)
+- **What AI can access**: All tools from all configured MCP servers (maximal functionality)
+- **How it works**: JSONRPC proxy that filters and routes tool calls transparently
 
-### 3. **Sparse Mode Optimization**
-To minimize context usage, only 3 meta-tools are shown initially:
-- `mcp_discover` - Discover all available tools using JSONPath
+## Core Architecture: Minimal Interface → Maximal Backend
+
+### 1. **Sparse Mode Frontend** (What AI Sees)
+Only 3 meta-tools are exposed, preventing context explosion:
+- `mcp_discover` - Explore available tools without loading them into context
 - `mcp_call` - Execute any tool by constructing JSON-RPC calls
-- `onboarding` - Get/set identity-specific instructions
+- `onboarding` - Identity-aware persistent instructions
+
+### 2. **Transparent JSONRPC Proxy** (How It Works)
+- **Intercepts** `tools/list` responses and replaces full catalogs with sparse tools
+- **Routes** tool calls to appropriate internal or external MCP servers  
+- **Transforms** meta-tool calls into actual JSONRPC requests
+- **Buffers** responses and handles async message routing
+
+### 3. **Multi-Server Backend** (What's Available)
+- **Built-in Servers**: Screen, Memory, Patterns, Onboarding (always available)
+- **External Servers**: Any MCP server configured in `~/.claude/mcp-browser/config.yaml`
+- **Runtime Discovery**: New servers added without restart via config monitoring
+
+## Key Insight: Tool Discovery Without Context Pollution
+
+Instead of loading hundreds of tool descriptions into context, AI can discover them on-demand:
+
+```python
+# Explore what's available (uses 0 additional context)
+mcp_discover(jsonpath="$.tools[*].name")
+
+# Get specific tool details only when needed  
+mcp_discover(jsonpath="$.tools[?(@.name=='brave_web_search')]")
+
+# Execute discovered tools
+mcp_call(method="tools/call", params={"name": "brave_web_search", "arguments": {...}})
+```
 
 ## Discovery Examples
 
