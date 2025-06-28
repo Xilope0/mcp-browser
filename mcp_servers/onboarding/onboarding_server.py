@@ -125,17 +125,21 @@ class OnboardingServer(BaseMCPServer):
                 content = self._format_onboarding(identity, data)
                 return self.content_text(content)
             else:
+                # Try to load predefined markdown files first
+                predefined_file = Path(__file__).parent / f"{identity}.md"
+                if predefined_file.exists():
+                    with open(predefined_file) as f:
+                        predefined_content = f.read()
+                    
+                    return self.content_text(predefined_content)
+                
                 # Try to load default onboarding
-                default_file = self.onboarding_dir / "default.md"
+                default_file = Path(__file__).parent / "default.md"
                 if default_file.exists():
                     with open(default_file) as f:
                         default_content = f.read()
                     
-                    return self.content_text(
-                        f"# Onboarding for {identity}\n\n"
-                        f"No specific onboarding found. Using default:\n\n"
-                        f"{default_content}"
-                    )
+                    return self.content_text(default_content)
                 else:
                     return self.content_text(
                         f"# Onboarding for {identity}\n\n"

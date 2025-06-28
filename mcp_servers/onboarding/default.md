@@ -46,6 +46,17 @@ mcp_call(method="tools/call", params={"name": "brave_web_search", "arguments": {
 
 ## Discovery Examples
 
+### Listing Available Servers
+```python
+# First, discover what MCP servers are available
+mcp_discover(jsonpath="$.servers[*].name")
+# Returns: ["builtin", "claude-code", "filesystem", etc.]
+
+# Get detailed info about servers
+mcp_discover(jsonpath="$.servers[*]")
+```
+
+### Basic Tool Discovery
 ```python
 # Discover all available tools (built-in + external servers)
 mcp_discover(jsonpath="$.tools[*].name")
@@ -53,11 +64,18 @@ mcp_discover(jsonpath="$.tools[*].name")
 # Get tools from specific server
 mcp_discover(jsonpath="$.servers.brave-search.tools[*].name")
 
-# Get all configured servers
-mcp_discover(jsonpath="$.servers[*].name")
-
 # Get tool details
 mcp_discover(jsonpath="$.tools[?(@.name=='brave_web_search')]")
+```
+
+### Server-Specific Tool Discovery
+```python
+# Example: Get all Claude Code tools
+mcp_discover(jsonpath="$.servers['claude-code'].tools[*].name")
+# Returns: ["read_file", "write_file", "list_directory", etc.]
+
+# Get details of a specific tool from claude-code server
+mcp_discover(jsonpath="$.servers['claude-code'].tools[?(@.name=='read_file')]")
 ```
 
 ## Using External Server Tools
@@ -80,6 +98,29 @@ mcp_call(
     params={
         "name": "search_repositories",
         "arguments": {"query": "mcp-browser"}
+    }
+)
+
+# Example: Using Claude Code server to read a file
+mcp_call(
+    method="tools/call",
+    params={
+        "name": "claude-code::read_file",
+        "arguments": {
+            "path": "/path/to/file.py",
+            "start_line": 1,
+            "end_line": 50
+        }
+    }
+)
+
+# Alternative syntax for server-namespaced tools
+mcp_call(
+    method="tools/call",
+    params={
+        "name": "read_file",
+        "arguments": {"path": "/path/to/file.py"},
+        "server": "claude-code"
     }
 )
 ```
