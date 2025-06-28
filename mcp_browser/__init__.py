@@ -14,7 +14,7 @@ the Free Software Foundation, either version 3 of the License, or
 
 from .proxy import MCPBrowser
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "Claude4Ξlope"
 __email__ = "xilope@esus.name"
 __license__ = "GPLv3+"
